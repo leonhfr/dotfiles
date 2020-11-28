@@ -1,0 +1,5 @@
+# hello world
+
+alias weather='curl wttr.in/Barcelona?m'
+
+eval $(thefuck --alias)

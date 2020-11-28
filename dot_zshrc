@@ -1,5 +1,3 @@
-export NVM_DIR="$HOME/.nvm"
-
 # Install antigen if it's missing.
 [[ ! -d "$HOME/.antigen" ]] && git clone https://github.com/zsh-users/antigen.git "$HOME/.antigen"
 source "$HOME/.antigen/antigen.zsh"
@@ -7,15 +5,23 @@ source "$HOME/.antigen/antigen.zsh"
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
+# Bundles.
+# help to remember aliases
+antigen bundle djui/alias-tips
 antigen bundle git
 antigen bundle node
-antigen bundle npm
+# better completion for npm
+antigen bundle lukechilds/zsh-better-npm-completion
+# antigen bundle npm
+# colorize man pages
+antigen bundle zlsun/solarized-man
+# strips the dollar sign from the beginning of the terminal command
+antigen bundle zpm-zsh/undollar 
+# cycle through recent directories
 antigen bundle z
-# antigen bundle heroku
-# antigen bundle pip
-# antigen bundle lein
-# antigen bundle command-not-found
+
+# For SSH, starting ssh-agent is annoying
+# antigen bundle ssh-agent
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -25,3 +31,6 @@ antigen theme agnoster
 
 # Tell Antigen that you're done.
 antigen apply
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
