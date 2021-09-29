@@ -1,0 +1,95 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+if ! type_exists 'brew'; then
+    p_header "Installing Homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    [[ $? ]] && p_success "Done"
+fi
+
+p_header "- Updating Homebrew"
+brew update
+[[ $? ]] && p_success "Done"
+
+p_header "- Ugrading existing cask and formulae"
+brew upgrade
+[[ $? ]] && p_success "Done"
+
+#TODO: franz, direnv
+# ffmpeg, gnu-units, golangci-lint, goreleaser, xz, hammerspoon
+# alfred, vagrant, helm, minikube, packer, wabt
+# google drive, odrive?, hemingway, grammarly, mongodb-compass
+# jitouch: customize trackpad gestures, timing, unarchiver,
+# pocket, amphetamine, tomighty (pomodoro)
+# mou (other typora)
+# nordvpn cli
+# https://github.com/cheat/cheat
+
+p_header "- Installing missing brews and casks"
+brew bundle --no-lock --file=- <<EOF
+tap "homebrew/cask-fonts"
+brew "awscli"
+brew "awscurl"
+brew "bat"
+brew "borgbackup"
+brew "chezmoi"
+brew "diff-so-fancy"
+brew "dockutil"
+brew "exa"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "git-lfs"
+brew "git-secrets"
+brew "gist"
+brew "gnupg"
+brew "go"
+brew "hugo"
+brew "jq"
+brew "kind"
+brew "micro"
+brew "pandoc"
+brew "ripgrep"
+brew "rustup"
+brew "nvm"
+brew "sqlite"
+brew "thefuck"
+brew "the_silver_searcher"
+brew "wallpaper"
+brew "wireshark"
+brew "youtube-dl"
+cask "1password"
+cask "anki"
+cask "amethyst"
+cask "calibre"
+cask "docker"
+cask "firefox"
+cask "font-jetbrains-mono"
+cask "gitkraken"
+cask "google-chrome"
+cask "graphql-playground"
+cask "insomnia"
+cask "iterm2"
+cask "karabiner-elements"
+cask "nosql-workbench"
+cask "postman"
+cask "signal"
+cask "slack"
+cask "spotify"
+cask "transmission"
+cask "tunnelblick"
+cask "typora"
+cask "vlc"
+cask "visual-studio-code"
+cask "whatsapp"
+cask "zoom"
+EOF
+[[ $? ]] && p_success "Done"
+
+p_header "- Clean up"
+brew cleanup
+[[ $? ]] && p_success "Done"
+
+{{ end -}}

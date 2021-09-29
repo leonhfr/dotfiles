@@ -1,0 +1,70 @@
+source ~/.profile
+
+# TODO: https://blog.lftechnology.com/command-line-productivity-with-zsh-aliases-28b7cebfdff9
+# TODO: https://github.com/broucz/dotfiles/blob/master/shell/.config/fish/config.fish
+# TODO: https://github.com/twpayne/dotfiles/blob/master/private_dot_config/git/config.tmpl
+
+# antigen
+
+[[ ! -d "$HOME/.antigen" ]] && git clone https://github.com/zsh-users/antigen.git "$HOME/.antigen"
+source "$HOME/.antigen/antigen.zsh"
+
+antigen use oh-my-zsh
+
+# https://github.com/djui/alias-tips
+antigen bundle djui/alias-tips
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
+antigen bundle git
+# https://github.com/lukechilds/zsh-better-npm-completion
+antigen bundle lukechilds/zsh-better-npm-completion
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/npm
+antigen bundle npm
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
+antigen bundle ssh-agent
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/thefuck
+antigen bundle thefuck
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/z
+antigen bundle z
+# https://github.com/zlsun/solarized-man
+antigen bundle zlsun/solarized-man
+# https://github.com/zpm-zsh/undollar
+antigen bundle zpm-zsh/undollar
+# https://github.com/zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen theme agnoster
+antigen apply
+
+# aliases
+
+alias foam="code ~/leonhfr/foam"
+
+# list all global npm packages
+alias npmg="npm list -g --depth 0"
+
+# list all `node_modules` in a directory
+alias nodels="find . -name 'node_modules' -type d -prune | xargs du -chs"
+
+# remove all `node_modules` in a directory
+alias noderm="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
+
+# update everything weekly
+weekly() {
+  source $(chezmoi source-path)/.lib/utils.sh
+
+  p_header "- Checking op"
+  op update
+  [[ $? ]] && p_success "Done"
+
+  p_header "- Updating Homebrew"
+  brew update
+  [[ $? ]] && p_success "Done"
+
+  p_header "- Ugrading existing cask and formulae"
+  brew upgrade
+  [[ $? ]] && p_success "Done"
+
+  p_header "- Ugrading global npm packages"
+  npm update -g
+  [[ $? ]] && p_success "Done"
+}

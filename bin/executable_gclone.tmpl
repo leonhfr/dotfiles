@@ -1,0 +1,43 @@
+#!/bin/zsh
+### gclone - git clone to multiple profiles
+###
+### Usage:
+###   gclone <profile> <ssh url>
+###
+### Options:
+###   <profile>  Predefined profile: uz, lh
+###   <ssh url>  Github SSH URL, ie: git@github.com:user/repository.git
+###   -h         Show this message.
+
+# defining profiles
+USER_NAME="{{ .general.name }}"
+declare -A PROFILES
+PROFILES[uz]="{{ .github.userzoom }}"
+PROFILES[lh]="{{ .github.personal }}"
+declare -A EMAILS
+EMAILS[uz]="{{ .email.userzoom }}"
+EMAILS[lh]="{{ .email.personal }}"
+
+if [[ $# = 0 ]] || [[ "$1" = "-h" ]]; then
+  sed -rn '/^### ?/p' "${0:a}"
+  exit 0
+fi
+
+PROFILE=$1
+SSH_URL=$2
+
+if [[ $PROFILES[$PROFILE] = "" ]] || [[ $EMAILS[$PROFILE] = "" ]]; then
+  echo "Profile $PROFILE is not defined!"
+  exit 1
+fi
+
+HOST="github.com-${PROFILES[$PROFILE]}"
+NEW_SSH_URL=${SSH_URL/github.com/$HOST}
+DIRECTORY_GIT=$(echo $SSH_URL | awk '{split($0,a,"/"); print a[2]}')
+DIRECTORY=${DIRECTORY_GIT/.git/}
+
+git clone $NEW_SSH_URL
+cd $DIRECTORY
+git config user.name "$USER_NAME"
+git config user.email "$EMAILS[$PROFILE]"
+cd ..

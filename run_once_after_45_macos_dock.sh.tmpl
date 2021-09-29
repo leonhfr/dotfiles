@@ -1,0 +1,48 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+p_header "- Setting up Dock"
+
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 1
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+defaults write com.apple.dock expose-group-by-app -bool false
+defaults write com.apple.dock launchanim -bool true # Don't animate opening applications from the Dock
+defaults write com.apple.dock minimize-to-application -bool false # Minimize windows into their application's icon
+defaults write com.apple.dock mouse-over-hilite-stack -bool true
+defaults write com.apple.dock mru-spaces -bool false
+defaults write com.apple.dock orientation left
+defaults write com.apple.dock showhidden -bool true
+defaults write com.apple.dock show-process-indicators -bool true
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock tilesize -int 42 #pixels
+
+dockutil --no-restart --remove all
+dockutil --no-restart --add "/System/Applications/Launchpad.app"
+dockutil --no-restart --add "/Applications/Google Chrome.app"
+dockutil --no-restart --add "/Applications/Visual Studio Code.app"
+dockutil --no-restart --add "/Applications/Typora.app"
+dockutil --no-restart --add "/Applications/iTerm.app"
+dockutil --no-restart --add "/Applications/GitKraken.app"
+dockutil --no-restart --add "/Applications/Tunnelblick.app"
+dockutil --no-restart --add "/Applications/NoSQL Workbench.app"
+dockutil --no-restart --add "/Applications/Insomnia.app"
+dockutil --no-restart --add "/Applications/Postman.app"
+dockutil --no-restart --add "/Applications/Slack.app"
+dockutil --no-restart --add "/Applications/zoom.us.app"
+dockutil --no-restart --add "/Applications/Firefox.app"
+dockutil --no-restart --add "/Applications/calibre.app"
+dockutil --no-restart --add "/Applications/CGoban.app"
+dockutil --no-restart --add "/Applications/Spotify.app"
+dockutil --no-restart --add "/Applications/VLC.app"
+dockutil --no-restart --add "/Applications/Signal.app"
+dockutil --no-restart --add "/Applications/Whatsapp.app"
+
+killall Dock
+
+p_success "Done"
+
+{{ end -}}

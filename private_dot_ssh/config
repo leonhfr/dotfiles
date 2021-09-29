@@ -1,0 +1,15 @@
+#lhollender-uz
+Host github.com-lhollender-uz
+  HostName github.com
+  User git
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/github-lhollender-uz
+
+#leonhfr
+Host github.com-leonhfr
+  HostName github.com
+  User git
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/github-leonhfr

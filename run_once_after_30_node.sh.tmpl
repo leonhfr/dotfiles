@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+source ~/.profile
+
+p_header "- Installing Node 14"
+# Create nvm working directory if it doesn't already exist
+mkdir -p ~/.nvm
+nvm install 14
+nvm use node
+[[ $? ]] && p_success "Done"
+
+p_header "- Installing global Node packages"
+npm install --global \
+    npm-check-updates \
+    typescript \
+    yarn
+[[ $? ]] && p_success "Done"

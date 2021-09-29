@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "bin/executable_gclone.tmpl": "shellscript",
+    "dot_profile.tmpl": "shellscript",
+    "dot_zshrc.tmpl": "shellscript",
+    "*.sh.tmpl": "shellscript"
+  }
+}

@@ -1,0 +1,16 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+if ! type_exists 'rustup'; then
+    p_header "- Installing Rust"
+    rustup-init
+    [[ $? ]] && p_success "Done"
+fi
+
+if [ ! -d ~/.cargo-target ]; then
+    mkdir "${HOME}/.cargo-target"
+fi
+
+ w{{ end -}}

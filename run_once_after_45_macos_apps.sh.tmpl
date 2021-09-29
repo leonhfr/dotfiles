@@ -1,0 +1,90 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+p_header "- Setting up Apps Preferences"
+
+# Finder
+
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+defaults write NSGlobalDomain com.apple.springing.delay -float 0
+defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder DisableAllAnimations -bool true
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # Other view modes: `icnv`, `clmv`, `glyv`
+defaults write com.apple.finder QuitMenuItem -bool true
+defaults write com.apple.finder NewWindowTarget -string "PfDe"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
+defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder WarnOnEmptyTrash -bool false
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Expand the following File Info panes: "General", "Open with", and "Sharing & Permissions"
+defaults write com.apple.finder FXInfoPanesExpanded -dict \
+	General -bool true \
+	OpenWith -bool true \
+	Privileges -bool true
+
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+
+# Photos
+
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+# iTerm 2
+
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
+# Time Machine
+
+# Prevent Time Machine from prompting to use new hard drives as backup volume
+defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+# Activity Monitor
+
+defaults write com.apple.ActivityMonitor IconType -int 5
+defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+# Google Chrome
+
+defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
+defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool false
+
+p_success "Done"
+
+# Kill affected applications
+p_header "- Kill affected applications"
+apps=(
+	"Activity Monitor"
+	Finder
+	"Google Chrome"
+	Photos
+)
+for app in ${apps[@]}; do
+	killall "${app}" &> /dev/null
+done
+p_success "Done"
+
+{{ end -}}

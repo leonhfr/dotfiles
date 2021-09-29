@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+p_header "- Check OnePassord"
+
+if ! type_exists 'op'; then
+  p_error "Please install the OnePassord CLI first"
+  exit 1
+fi
+
+if ! [ $(op get account) ]; then
+  p_error "Please sign in to the OnePassword CLI"
+  exit 1
+fi
+
+p_success "Signed in to OnePassword"

@@ -1,0 +1,16 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
+
+p_header "- Installing Powerline fonts"
+
+git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+
+[[ $? ]] && p_success "Done"
+
+{{ end -}}

@@ -1,18 +1,38 @@
 # github.com/leonhfr/dotfiles
 
-leonhfr's dotfiles, managed with [`chezmoi`](https://github.com/twpayne/chezmoi)
+your dotfiles are how you personalize your system, these are mine
 
-Install:
+managed with [`chezmoi`](https://github.com/twpayne/chezmoi)
 
+install:
+
+1. install [1password cli](https://1password.com/downloads/command-line/) and move `op` to `/usr/local/bin` or somewhere in the PATH
+
+2. in a terminal:
+
+```sh
+# sign in
+op signin my.1password.com hello@leonhfr.fr
+
+# set environment variable
+eval $(op signin my)
+
+# install chezmoi, pull this repo and apply the changes
+sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply leonhfr
+
+# in the future, pull and apply the latest changes
+chezmoi update
 ```
-# Will install it in `~./bin`
-curl -sfL https://git.io/chezmoi | sh
-chezmoi init https://github.com/leonhfr/dotfiles.git
-```
 
-Locally, the dotfiles source directory lives in `~/.local/share/chezmoi`.
+locally, the dotfiles source directory lives in `~/.local/share/chezmoi`
 
-Inspired by:
-- [broucz's dotfiles](https://github.com/broucz/dotfiles)
-- [twpayne's dotfiles](https://github.com/twpayne/dotfiles)
+inspired by dotfiles from:
 
+- [broucz](https://github.com/broucz/dotfiles)
+- [twpayne](https://github.com/twpayne/dotfiles)
+- [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
+
+## after
+
+- [install cgoban](https://www.gokgs.com/download.jsp)
+- [install bypass paywalls](https://github.com/iamadamdev/bypass-paywalls-chrome)
