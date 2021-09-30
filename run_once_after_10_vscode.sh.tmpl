@@ -8,32 +8,33 @@ source {{ joinPath .chezmoi.sourceDir ".lib/utils.sh" }}
 p_header "- Setting up VSCode extensions"
 
 extensions=(
-	bungcip.better-toml
-    christian-kohler.path-intellisense
     #cssho.vscode-svgviewer
     #dbaeumer.vscode-eslint
     #denoland.vscode-deno
-    #dtsvet.vscode-wasm
+    #ianjsikes.md-graph
+    #mikestead.dotenv
+    #ms-python.python
+    #philipbe.theme-gray-matter
+    #ronnidc.nunjucks
+    #tchayen.markdown-links
+    #vadimcn.vscode-lldb
+    bungcip.better-toml
+    christian-kohler.path-intellisense
+    dtsvet.vscode-wasm
     eamodio.gitlens
     esbenp.prettier-vscode
     foam.foam-vscode
     golang.go
     Gruntfuggly.todo-tree
-    #ianjsikes.md-graph
-    #kortina.vscode-markdown-notes
+    kortina.vscode-markdown-notes
     matklad.rust-analyzer
-    #mikestead.dotenv
-    #ms-python.python
-    #ms-toolsai.jupyter
-    #philipbe.theme-gray-matter
+    ms-azuretools.vscode-docker
+    ms-toolsai.jupyter
     PKief.material-icon-theme
-    #ronnidc.nunjucks
-    #serayuzgur.crates
+    serayuzgur.crates
     streetsidesoftware.code-spell-checker
-    #tchayen.markdown-links
     Tyriar.sort-lines
-    #vadimcn.vscode-lldb
-    #yzhang.markdown-all-in-one
+    yzhang.markdown-all-in-one
 )
 
 for extension in ${extensions[@]}; do
