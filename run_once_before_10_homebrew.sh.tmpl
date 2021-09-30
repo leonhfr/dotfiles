@@ -17,14 +17,10 @@ p_header "- Ugrading existing cask and formulae"
 brew upgrade
 [[ $? ]] && p_success "Done"
 
-#TODO: franz, direnv
-# ffmpeg, gnu-units, golangci-lint, goreleaser, xz, hammerspoon
-# alfred, vagrant, helm, minikube, packer, wabt
-# google drive, odrive?, hemingway, grammarly, mongodb-compass
-# jitouch: customize trackpad gestures, timing, unarchiver,
-# pocket, amphetamine, tomighty (pomodoro)
-# mou (other typora)
-# nordvpn cli
+# gnu-units, golangci-lint, goreleaser, xz
+# vagrant, minikube, packer
+# grammarly, unarchiver
+# tomighty (pomodoro), nordvpn cli
 # https://github.com/cheat/cheat
 
 p_header "- Installing missing brews and casks"
@@ -38,6 +34,7 @@ brew "chezmoi"
 brew "diff-so-fancy"
 brew "dockutil"
 brew "exa"
+brew "ffmpeg"
 brew "fzf"
 brew "gh"
 brew "git"
@@ -46,9 +43,12 @@ brew "git-secrets"
 brew "gist"
 brew "gnupg"
 brew "go"
+brew "helm"
 brew "hugo"
 brew "jq"
+brew "k9s"
 brew "kind"
+brew "kubectl"
 brew "micro"
 brew "pandoc"
 brew "ripgrep"
@@ -57,6 +57,7 @@ brew "nvm"
 brew "sqlite"
 brew "thefuck"
 brew "the_silver_searcher"
+brew "wabt"
 brew "wallpaper"
 brew "wireshark"
 brew "youtube-dl"
@@ -73,6 +74,7 @@ cask "graphql-playground"
 cask "insomnia"
 cask "iterm2"
 cask "karabiner-elements"
+cask "mongodb-compass"
 cask "nosql-workbench"
 cask "postman"
 cask "signal"
