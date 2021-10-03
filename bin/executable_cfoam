@@ -1,0 +1,34 @@
+#!/bin/bash
+
+INSIDE_GIT_REPO="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+TODAY="$(date +'%Y-%m-%d')"
+
+if [ ! "$INSIDE_GIT_REPO" ]; then
+  echo "Not in a git repository."
+  exit 1
+fi
+
+GIT_STATUS="$(git status --porcelain)"
+GIT_LAST_COMMIT="$(git log -1 --pretty=%B)"
+
+if [ -z "$GIT_STATUS" ]; then
+  # Working directory clean
+  echo "Nothing to commit."
+  exit 0
+fi
+
+if [ "$GIT_LAST_COMMIT" == "$TODAY" ]; then
+  # We already have a commit for today
+  git add .
+  GIT_COMMIT="$(git commit --amend --no-edit)"
+  echo "$GIT_COMMIT"
+  git push origin master -f
+else
+  # There is no commit for today
+  git add .
+  GIT_COMMIT="$(git commit -m $TODAY)"
+  echo "$GIT_COMMIT"
+  git push origin master
+fi
+
+exit 0
