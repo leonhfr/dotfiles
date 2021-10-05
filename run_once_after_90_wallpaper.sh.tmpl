@@ -3,5 +3,5 @@
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
 p_header "- Setting up wallpaper"
-wallpaper {{ joinPath .chezmoi.sourceDir "images/asa-steinarsdottir-volcano.jpg" }}
+wallpaper set {{ joinPath .chezmoi.sourceDir "images/asa-steinarsdottir-volcano.jpg" }}
 [[ $? ]] && p_success "Done"
