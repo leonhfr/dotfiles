@@ -14,4 +14,4 @@ if ! [ $(op get account) ]; then
   exit 1
 fi
 
-p_success "Signed in to OnePassword"
+[[ $? ]] && p_success "Signed in to OnePassword"
