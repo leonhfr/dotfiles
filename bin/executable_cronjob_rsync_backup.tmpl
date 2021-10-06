@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export BORG_PASSPHRASE={{ (onepasswordItemFields "hiracdbrhfgopncgodestpn7y4").credential.v }}
+export BORG_REPO=zh1820@zh1820.rsync.net:macos/Official
+borg create ::$(hostname)-$(date '+%Y-%m-%d') ~/Official
