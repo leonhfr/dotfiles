@@ -1,17 +1,19 @@
 {
   "cSpell.userWords": [
+    "borgbackup",
     "dotfiles",
+    "hollender",
+    "keychain",
     "leonh",
     "leonhfr",
     "lhollender",
-    "hollender",
     "microservice"
   ],
   "editor.codeActionsOnSave": {},
   "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 12,
   "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.insertSpaces": true,
   "editor.minimap.enabled": false,
   "editor.renderIndentGuides": false,
