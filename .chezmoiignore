@@ -1,6 +1,6 @@
-.vscode/**/*
+.vscode
 docs
-lib/**/*
-images/**/*
+lib
+images
 LICENSE
 **/*.md
