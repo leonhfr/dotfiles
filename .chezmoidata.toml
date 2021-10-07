@@ -8,3 +8,17 @@
   personal = "leonhfr"
 [macos]
   computer_name = "lhollender-macbook"
+[borgbackup]
+  exclude = [
+    "bin",
+    "Desktop",
+    "Documents",
+    "Downloads",
+    "go",
+    "leonhfr",
+    "Library",
+    "Movies",
+    "Music",
+    "Public",
+    "uz"
+  ]
