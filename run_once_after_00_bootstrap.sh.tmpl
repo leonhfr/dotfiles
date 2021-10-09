@@ -4,8 +4,9 @@ source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
 p_header "- Setting up cron jobs"
 
+crontab -r
 crontab - <<EOF
-0 7 * * * $HOME/.local/bin/cronjob_rsync_backup &> $HOME/.cron.log
+30 9 * * * $HOME/.local/bin/cronjob_backup &> $HOME/.cron.backup.log
 EOF
 
 [[ $? ]] && p_success "Done"

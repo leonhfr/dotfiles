@@ -9,16 +9,15 @@
 [macos]
   computer_name = "lhollender-macbook"
 [borgbackup]
+  include = [
+    "calibre-kobo",
+    "calibre-tablet",
+    "Official",
+    "Pictures"
+  ]
   exclude = [
-    "bin",
-    "Desktop",
-    "Documents",
-    "Downloads",
     "go",
     "leonhfr",
     "Library",
-    "Movies",
-    "Music",
-    "Public",
     "uz"
   ]
