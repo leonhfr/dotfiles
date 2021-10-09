@@ -1,4 +1,19 @@
 {
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[rust]": {
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "cSpell.userWords": [
     "borgbackup",
     "dotfiles",
@@ -30,12 +45,14 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "markdown.extension.toc.updateOnSave": false,
   "prettier.singleQuote": true,
+  "redhat.telemetry.enabled": false,
   "security.workspace.trust.untrustedFiles": "open",
-  "telemetry.enableTelemetry": false,
+  "telemetry.telemetryLevel": "off",
   "terminal.explorerKind": "external",
   "terminal.external.osxExec": "iTerm.app",
   "terminal.integrated.fontSize": 12,
-  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+  "terminal.integrated.macOptionIsMeta": true,
+  "terminal.integrated.sendKeybindingsToShell": true,
   "todo-tree.general.tags": [
     "BUG",
     "HACK",
@@ -53,6 +70,7 @@
       "background": "#00ff0080"
     }
   },
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "window.newWindowDimensions": "maximized",
   "window.title": "${activeEditorShort}",
@@ -68,20 +86,5 @@
   "workbench.tree.indent": 16,
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
-  "zenMode.hideTabs": false,
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[rust]": {
-    "editor.tabSize": 4
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "zenMode.hideTabs": false
 }
