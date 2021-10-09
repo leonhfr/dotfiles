@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
+
+p_header "- Checking op"
+op update
+[[ $? ]] && p_success "Done"
+
+p_header "- Updating Homebrew"
+brew update
+[[ $? ]] && p_success "Done"
+
+p_header "- Ugrading existing cask and formulae"
+brew upgrade
+[[ $? ]] && p_success "Done"
+
+p_header "- Ugrading global npm packages"
+npm update -g
+[[ $? ]] && p_success "Done"
+

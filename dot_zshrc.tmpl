@@ -43,24 +43,3 @@ alias nodels="find . -name 'node_modules' -type d -prune | xargs du -chs"
 
 # remove all `node_modules` in a directory
 alias noderm="find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
-
-# update everything weekly
-weekly() {
-  source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
-
-  p_header "- Checking op"
-  op update
-  [[ $? ]] && p_success "Done"
-
-  p_header "- Updating Homebrew"
-  brew update
-  [[ $? ]] && p_success "Done"
-
-  p_header "- Ugrading existing cask and formulae"
-  brew upgrade
-  [[ $? ]] && p_success "Done"
-
-  p_header "- Ugrading global npm packages"
-  npm update -g
-  [[ $? ]] && p_success "Done"
-}

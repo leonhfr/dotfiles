@@ -2,6 +2,7 @@
   "files.associations": {
     "executable_cfoam": "shellscript",
     "executable_cronjob_backup.tmpl": "shellscript",
+    "executable_cronjob_update.tmpl": "shellscript",
     "executable_gclone.tmpl": "shellscript",
     "dot_zprofile.tmpl": "shellscript",
     "dot_zshrc.tmpl": "shellscript",

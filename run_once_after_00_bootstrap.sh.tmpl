@@ -7,6 +7,7 @@ p_header "- Setting up cron jobs"
 crontab -r
 crontab - <<EOF
 30 9 * * * $HOME/.local/bin/cronjob_backup &> $HOME/.cron.backup.log
+45 9 * * * $HOME/.local/bin/cronjob_update &> $HOME/.cron.update.log
 EOF
 
 [[ $? ]] && p_success "Done"
