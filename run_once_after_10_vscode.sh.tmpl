@@ -25,12 +25,19 @@ extensions=(
     esbenp.prettier-vscode
     foam.foam-vscode
     golang.go
+    GraphQL.vscode-graphql
     Gruntfuggly.todo-tree
     kortina.vscode-markdown-notes
     matklad.rust-analyzer
     ms-azuretools.vscode-docker
+    ms-kubernetes-tools.vscode-kubernetes-tools
     ms-toolsai.jupyter
+    ms-toolsai.jupyter-keymap
+    ms-toolsai.jupyter-renderers
+    ms-vscode-remote.remote-containers
     PKief.material-icon-theme
+    redhat.vscode-yaml
+    richie5um2.vscode-sort-json
     serayuzgur.crates
     streetsidesoftware.code-spell-checker
     Tyriar.sort-lines
@@ -38,7 +45,7 @@ extensions=(
 )
 
 for extension in ${extensions[@]}; do
-	code --force --install-extension $extension
+    code --force --install-extension $extension
 done
 
 [[ $? ]] && p_success "Done"
