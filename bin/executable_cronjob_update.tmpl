@@ -2,10 +2,6 @@
 
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
-p_header "- Checking op"
-op update
-[[ $? ]] && p_success "Done"
-
 p_header "- Updating Homebrew"
 brew update
 [[ $? ]] && p_success "Done"
