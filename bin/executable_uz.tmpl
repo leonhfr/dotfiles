@@ -1,0 +1,92 @@
+#!/bin/bash
+### uz - manage userzoom repositories
+###
+### Usage: uz [options] <subcommand>
+###
+### Options:
+###   -h,--help: Show this message.
+###
+### Subcommands:
+
+set -e
+source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
+
+# Config
+TARGET="IntelliZoomPlatform"
+REPO_LIMIT="10"
+UZ_DIR="$HOME/uz"
+VSCODE_SETTINGS="$UZ_DIR/.vscode/settings.json"
+
+### help: Show this message.
+sub_help() {
+  sed -rn 's/^### ?//p' "$0"
+}
+
+### clone: clone all repos from the target
+sub_clone() {
+  REPOS=$(gh repo list $TARGET --source --limit $REPO_LIMIT --json name --jq 'sort_by(.name) | .[] | .name')
+  pushd $UZ_DIR
+  for REPO in $REPOS; do
+    if [ -d "$REPO" ]; then
+      p_header "Repository $REPO already exists. Skipping..."
+    else
+      p_warn "Repository $REPO does not exist. Cloning..."
+      gclone uz "git@github.com:$TARGET/$REPO.git"
+      [[ $? ]] && p_success "Cloned $REPO."
+    fi
+  done;
+  popd
+}
+
+### master: checkout master or main on all repositories
+sub_master() {
+  for D in $UZ_DIR/*/; do
+    p_header "Checking out repository $D"
+    (cd "$UZ_DIR/$D"; git checkout master -f || git checkout main -f)
+  done
+}
+
+### main: alias for master
+sub_main() {
+  sub_master
+}
+
+### prune: prune the local references of branches that were deleted on the remote
+sub_prune() {
+  for D in $UZ_DIR/*/; do
+    p_header "Pruning repository $D"
+    (cd "$UZ_DIR/$D"; git checkout master -f || git checkout main -f)
+    (cd "$UZ_DIR/$D"; git remote prune origin)
+  done
+}
+
+### vscode: create symlinks to vscode settings for all repositories
+sub_vscode() {
+  if ! [[ -f "$UZ_DIR/.vscode" ]]; then
+    p_error "VSCode settings file not found. Expected to be in $VSCODE_SETTINGS"
+    exit 1
+  fi
+
+  for D in $UZ_DIR/*/; do
+    p_header "Creating VSCode settings symlink in repository $D"
+    mkdir -p "$UZ_DIR/.vscode"
+    ln -s -f $VSCODE_SETTINGS "$UZ_DIR/.vscode/settings.json"
+  done
+}
+
+# main entry point
+SUBCOMMAND=$1
+case $SUBCOMMAND in
+  "" | "-h" | "--help")
+    sub_help
+    ;;
+  *)
+    shift
+    sub_${SUBCOMMAND} $@
+    if [ $? = 127 ]; then
+      echo "Error: '$SUBCOMMAND' is not a known subcommand." >&2
+      echo "       Run 'uz help' for a list of known subcommands." >&2
+      exit 1
+    fi
+    ;;
+esac

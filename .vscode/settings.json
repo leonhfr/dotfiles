@@ -8,6 +8,7 @@
     "executable_cfoam": "shellscript",
     "executable_cronjob_backup.tmpl": "shellscript",
     "executable_cronjob_update.tmpl": "shellscript",
-    "executable_gclone.tmpl": "shellscript"
+    "executable_gclone.tmpl": "shellscript",
+    "executable_uz.tmpl": "shellscript"
   }
 }

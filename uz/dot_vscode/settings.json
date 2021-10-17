@@ -1,0 +1,18 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": [
+      "source.formatModified",
+      "source.fixAll.eslint"
+    ]
+  },
+  "cSpell.words": [
+    "España",
+    "grpc",
+    "intellizoomplatform",
+    "sucursal",
+    "userzoom"
+  ]
+}
