@@ -1,6 +1,6 @@
 [user]
   name = {{ .general.name }}
-  email = {{ .email.userzoom }}
+  email = {{ .email.personal }}
   signingkey = C5921865E3B9418D
 [alias]
   tags = tag -l
@@ -8,12 +8,17 @@
   configs = config --list --show-origin
   remotes = remote -v
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+[core]
+  excludesfile = ~/.gitignore
+  whitespace = trailing-space,space-before-tab
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[includeIf "gitdir:~/uz"]
+  path = ~/uz/.gitconfig
+[includeIf "gitdir:~/uz-build"]
+  path = ~/uz-build/.gitconfig
+
 [diff]
   pager = diff-so-fancy
-[core]
-  excludesfile = ~/.config/git/ignore
-	whitespace = trailing-space,space-before-tab
-  pager = diff-so-fancy | less --tabs=4 -RFX
 [interactive]
   diffFilter = diff-so-fancy --patch
 [fetch]
@@ -25,15 +30,15 @@
 [color]
   ui = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	func = 146 bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = 11
+  frag = magenta bold
+  func = 146 bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse

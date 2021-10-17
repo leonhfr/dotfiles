@@ -1,11 +1,13 @@
 {
   "files.associations": {
+    "*.sh.tmpl": "shellscript",
+    "dot_gitconfig": "gitconfig",
+    "dot_gitconfig.tmpl": "gitconfig",
+    "dot_zprofile.tmpl": "shellscript",
+    "dot_zshrc.tmpl": "shellscript",
     "executable_cfoam": "shellscript",
     "executable_cronjob_backup.tmpl": "shellscript",
     "executable_cronjob_update.tmpl": "shellscript",
-    "executable_gclone.tmpl": "shellscript",
-    "dot_zprofile.tmpl": "shellscript",
-    "dot_zshrc.tmpl": "shellscript",
-    "*.sh.tmpl": "shellscript"
+    "executable_gclone.tmpl": "shellscript"
   }
 }
