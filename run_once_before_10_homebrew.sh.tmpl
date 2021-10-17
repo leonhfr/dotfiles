@@ -1,5 +1,5 @@
-{{ if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
+{{ if (eq .chezmoi.os "darwin") -}}
 
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
@@ -13,7 +13,7 @@ p_header "- Updating Homebrew"
 brew update
 [[ $? ]] && p_success "Done"
 
-p_header "- Ugrading existing cask and formulae"
+p_header "- Upgrading existing cask and formulae"
 brew upgrade
 [[ $? ]] && p_success "Done"
 
