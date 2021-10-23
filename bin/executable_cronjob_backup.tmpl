@@ -3,7 +3,7 @@
 export BORG_PASSPHRASE="{{ (onepasswordItemFields "hiracdbrhfgopncgodestpn7y4").credential.v }}"
 export BORG_REPO="zh1820@zh1820.rsync.net:macos"
 echo $(date '+%Y-%m-%d')
-borg create \
+{{ lookPath "borg" }} create \
   --remote-path=borg1 \
   --pattern=!**/.* \
   --pattern=-**/.* \
@@ -11,7 +11,7 @@ borg create \
  {{ range .borgbackup.exclude }} --pattern=!{{ $.chezmoi.homeDir }}/{{ . }}{{ end }} \
   --pattern=-{{ .chezmoi.homeDir }} \
   ::$(hostname)-$(date '+%Y-%m-%d') {{ .chezmoi.homeDir }}
-borg prune \
+{{ lookPath "borg" }} prune \
   --keep-daily 7 \
   --keep-weekly 8 \
   --keep-monthly 12

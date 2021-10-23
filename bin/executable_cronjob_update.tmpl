@@ -3,14 +3,13 @@
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
 p_header "- Updating Homebrew"
-brew update
+{{ lookPath "brew" }} update
 [[ $? ]] && p_success "Done"
 
 p_header "- Ugrading existing cask and formulae"
-brew upgrade
+{{ lookPath "brew" }} upgrade
 [[ $? ]] && p_success "Done"
 
 p_header "- Ugrading global npm packages"
-npm update -g
+{{ lookPath "npm" }} update -g
 [[ $? ]] && p_success "Done"
-
