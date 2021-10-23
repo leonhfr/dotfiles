@@ -34,3 +34,7 @@ export BORG_PASSPHRASE="passphrase"
 export BORG_REPO="zh1820@zh1820.rsync.net:macos/Official"
 borg create ::$(hostname)-$(date '+%Y-%m-%d') ~/Official
 ```
+
+## alternatives
+
+- [tarsnap](https://www.tarsnap.com/)
