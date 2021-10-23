@@ -13,7 +13,7 @@ source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
 # Config
 TARGET="IntelliZoomPlatform"
-REPO_LIMIT="10"
+REPO_LIMIT="1000"
 UZ_DIR="$HOME/uz"
 VSCODE_SETTINGS="$UZ_DIR/.vscode/settings.json"
 
@@ -24,8 +24,8 @@ sub_help() {
 
 ### clone: clone all repos from the target
 sub_clone() {
-  REPOS=$(gh repo list $TARGET --source --limit $REPO_LIMIT --json name --jq 'sort_by(.name) | .[] | .name')
-  pushd $UZ_DIR
+  REPOS=$(gh repo list $TARGET --source --no-archived --limit $REPO_LIMIT --json name --jq 'sort_by(.name) | .[] | .name')
+  cd $UZ_DIR
   for REPO in $REPOS; do
     if [ -d "$REPO" ]; then
       p_header "Repository $REPO already exists. Skipping..."
@@ -35,14 +35,14 @@ sub_clone() {
       [[ $? ]] && p_success "Cloned $REPO."
     fi
   done;
-  popd
 }
 
 ### master: checkout master or main on all repositories
 sub_master() {
   for D in $UZ_DIR/*/; do
-    p_header "Checking out repository $D"
-    (cd "$UZ_DIR/$D"; git checkout master -f || git checkout main -f)
+    REPO=$(basename $D)
+    p_header "Checking out repository $REPO"
+    (cd $D; git checkout master --force || git checkout main --force)
   done
 }
 
@@ -54,15 +54,16 @@ sub_main() {
 ### prune: prune the local references of branches that were deleted on the remote
 sub_prune() {
   for D in $UZ_DIR/*/; do
-    p_header "Pruning repository $D"
-    (cd "$UZ_DIR/$D"; git checkout master -f || git checkout main -f)
-    (cd "$UZ_DIR/$D"; git remote prune origin)
+    REPO=$(basename $D)
+    p_header "Pruning repository $REPO"
+    (cd $D; git checkout master --quiet --force || git checkout main --quiet --force)
+    (cd $D; git remote prune origin)
   done
 }
 
 ### vscode: create symlinks to vscode settings for all repositories
 sub_vscode() {
-  if ! [[ -f "$UZ_DIR/.vscode" ]]; then
+  if ! [[ -f "$VSCODE_SETTINGS" ]]; then
     p_error "VSCode settings file not found. Expected to be in $VSCODE_SETTINGS"
     exit 1
   fi
