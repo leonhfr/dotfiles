@@ -9,7 +9,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.wordBasedSuggestions": false,
+    "editor.suggest.showSnippets": false
   },
   "[rust]": {
     "editor.tabSize": 4
@@ -28,21 +35,26 @@
     "microservice"
   ],
   "editor.codeActionsOnSave": {},
+  "editor.emptySelectionClipboard": false,
   "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 12,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   "editor.minimap.enabled": false,
+  "editor.quickSuggestionsDelay": 1,
   "editor.renderIndentGuides": false,
   "editor.renderWhitespace": "all",
   "editor.scrollBeyondLastLine": false,
+  "editor.multiCursorModifier": "ctrlCmd",
   "editor.tabSize": 2,
+  "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
   "explorer.compactFolders": false,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.openEditors.visible": 0,
   "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
   "go.formatTool": "goimports",
   "javascript.updateImportsOnFileMove.enabled": "always",
