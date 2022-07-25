@@ -1,12 +1,17 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
-    "editor.formatOnSave": false,
     "editor.codeActionsOnSave": [
       "source.formatModified",
       "source.fixAll.eslint"
-    ]
+    ],
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": [
+      "source.formatModified",
+      "source.fixAll.eslint"
+    ],
+    "editor.formatOnSave": false
   },
   "cSpell.words": [
     "España",
@@ -14,5 +19,8 @@
     "intellizoomplatform",
     "sucursal",
     "userzoom"
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.printWidth": 80
 }

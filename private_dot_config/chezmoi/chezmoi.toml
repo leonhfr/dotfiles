@@ -1,3 +1,0 @@
-[diff]
-  command = "code --wait"
-  args = ["--diff", "{{ .Destination }}", "{{ .Target }}"]

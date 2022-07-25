@@ -14,6 +14,10 @@ source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 # Config
 TARGET="IntelliZoomPlatform"
 REPO_LIMIT="1000"
+REPO_EXCLUDE=(
+  "panel-portal"
+  "sourcing-engine"
+)
 UZ_DIR="$HOME/uz"
 VSCODE_SETTINGS="$UZ_DIR/.vscode/settings.json"
 
@@ -27,7 +31,9 @@ sub_clone() {
   REPOS=$(gh repo list $TARGET --source --no-archived --limit $REPO_LIMIT --json name --jq 'sort_by(.name) | .[] | .name')
   cd $UZ_DIR
   for REPO in $REPOS; do
-    if [ -d "$REPO" ]; then
+    if [[ "${REPO_EXCLUDE[*]}" =~ "$REPO" ]]; then
+      continue
+    elif [ -d "$REPO" ]; then
       p_header "Repository $REPO already exists. Skipping..."
     else
       p_warn "Repository $REPO does not exist. Cloning..."
@@ -42,7 +48,7 @@ sub_master() {
   for D in $UZ_DIR/*/; do
     REPO=$(basename $D)
     p_header "Checking out repository $REPO"
-    (cd $D; git checkout master --force || git checkout main --force)
+    (cd $D; git checkout master --force || git checkout main --force; git pull)
   done
 }
 
@@ -69,9 +75,39 @@ sub_vscode() {
   fi
 
   for D in $UZ_DIR/*/; do
-    p_header "Creating VSCode settings symlink in repository $D"
-    mkdir -p "$UZ_DIR/.vscode"
-    ln -s -f $VSCODE_SETTINGS "$UZ_DIR/.vscode/settings.json"
+    REPO=$(basename $D)
+    p_header "Creating VSCode settings symlink in repository $REPO"
+    mkdir -p "$D/.vscode"
+    ln -s -f $VSCODE_SETTINGS "$D/.vscode/settings.json"
+  done
+}
+
+### stats: create stats of languages for all repositories
+###        requires tokei, jq
+sub_stats() {
+  if ! type_exists 'tokei'; then
+    p_error "Please install tokei first."
+    exit 1
+  fi
+
+  if ! type_exists 'jq'; then
+    p_error "Please install jq first."
+    exit 1
+  fi
+
+  # TODO: args: number of days to go back to
+  for D in $UZ_DIR/*/; do
+    cd $D
+    REPO=$(basename $D)
+    p_header "- Gathering LOC stats in repository $REPO"
+    git checkout master --quiet --force || git checkout main --quiet --force
+    for INDEX in $(seq 0 10); do
+      DATE=$(date -v -"$INDEX"d '+%Y-%m-%d')
+      # master|main
+      LAST_COMMIT=$(git rev-list -n 1 --first-parent --before="$DATE" master)
+      echo $LAST_COMMIT
+    done
+    # tokei -o json ./campaign-service/ | jq '. | map_values(. = .code)'
   done
 }
 
