@@ -25,6 +25,9 @@ pbcopy < ~/.ssh/github-lhollender-uz.pub
 pbcopy < ~/.ssh/github-leonhfr.pub
 ssh-add -K ~/.ssh/github-lhollender-uz
 ssh-add -K ~/.ssh/github-leonhfr
+
+# make sure the ssh agent is running
+eval `ssh-agent`
 ```
 
 ### Clean git repository
