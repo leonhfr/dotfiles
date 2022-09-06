@@ -2,7 +2,7 @@
 
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 
-p_header "- Check OnePassord"
+p_header "- Check OnePassword"
 
 if ! type_exists 'op'; then
   p_error "Please install the OnePassord CLI first"

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo powermetrics --samplers smc --sample-count 1 --format plist | \
+  sed -rn 's/^<key>cpu_die<\/key><real>(.*)<\/real>$/\1/p' | \
+  xargs -0 printf "$(date +%T) %s" \
+  >> "{{ .chezmoi.homeDir }}/.cron/temperature.$(date +%F).log" 2>&1

@@ -34,7 +34,7 @@ sub_clone() {
     if [[ "${REPO_EXCLUDE[*]}" =~ "$REPO" ]]; then
       continue
     elif [ -d "$REPO" ]; then
-      p_header "Repository $REPO already exists. Skipping..."
+      p_header "- Repository $REPO already exists. Skipping..."
     else
       p_warn "Repository $REPO does not exist. Cloning..."
       gclone uz "git@github.com:$TARGET/$REPO.git"
@@ -47,8 +47,9 @@ sub_clone() {
 sub_master() {
   for D in $UZ_DIR/*/; do
     REPO=$(basename $D)
-    p_header "Checking out repository $REPO"
-    (cd $D; git checkout master --force || git checkout main --force; git pull)
+    p_header "- Checking out repository $REPO"
+    (cd $D; git checkout main --force || git checkout master --force; git fetch)
+    p_success "Checked out $REPO"
   done
 }
 
@@ -61,9 +62,10 @@ sub_main() {
 sub_prune() {
   for D in $UZ_DIR/*/; do
     REPO=$(basename $D)
-    p_header "Pruning repository $REPO"
-    (cd $D; git checkout master --quiet --force || git checkout main --quiet --force)
+    p_header "- Pruning repository $REPO"
+    (cd $D; git checkout main --quiet --force || git checkout master --quiet --force)
     (cd $D; git remote prune origin)
+    p_success "Pruned $REPO"
   done
 }
 
@@ -76,7 +78,7 @@ sub_vscode() {
 
   for D in $UZ_DIR/*/; do
     REPO=$(basename $D)
-    p_header "Creating VSCode settings symlink in repository $REPO"
+    p_header "- Creating VSCode settings symlink in repository $REPO"
     mkdir -p "$D/.vscode"
     ln -s -f $VSCODE_SETTINGS "$D/.vscode/settings.json"
   done
