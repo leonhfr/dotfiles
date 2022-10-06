@@ -57,9 +57,13 @@
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "go.formatTool": "goimports",
+  "go.formatTool": "gofumpt",
   "go.lintTool": "golangci-lint",
   "go.lintFlags": ["--fast"],
+  "go.useLanguageServer": true,
+  "gopls": {
+    "formatting.gofumpt": true
+  },
   "javascript.updateImportsOnFileMove.enabled": "always",
   "markdown.extension.toc.updateOnSave": false,
   "prettier.singleQuote": true,
