@@ -6,13 +6,14 @@ source ~/.zprofile
 p_header "- Installing Node 14"
 # Create nvm working directory if it doesn't already exist
 mkdir -p ~/.nvm
-nvm install 14
+nvm install 18
 nvm use node
 [[ $? ]] && p_success "Done"
 
+# npm list -g --depth 0
 p_header "- Installing global Node packages"
 npm install --global \
     npm-check-updates \
     typescript \
-    yarn
+    typeync
 [[ $? ]] && p_success "Done"
