@@ -1,5 +1,7 @@
 source "$HOME/.cargo/env"
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # PATH
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
