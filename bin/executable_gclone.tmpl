@@ -19,7 +19,7 @@ EMAILS[uz]="{{ .email.userzoom }}"
 EMAILS[lh]="{{ .email.personal }}"
 
 if [[ $# = 0 ]] || [[ "$1" = "-h" ]]; then
-  sed -rn '/^### ?/p' "${0:a}"
+  sed -rn 's/^### ?//p' "${0:a}"
   exit 0
 fi
 

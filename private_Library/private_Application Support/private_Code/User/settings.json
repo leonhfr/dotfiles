@@ -25,7 +25,11 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.userWords": [
+    "bitboard",
+    "bitboards",
     "borgbackup",
+    "codemod",
+    "codemods",
     "dotfiles",
     "hollender",
     "keychain",
@@ -33,7 +37,9 @@
     "leonhfr",
     "lhollender",
     "microservice",
-    "negamax"
+    "negamax",
+    "perft",
+    "zobrist"
   ],
   "editor.codeActionsOnSave": {},
   "editor.emptySelectionClipboard": false,

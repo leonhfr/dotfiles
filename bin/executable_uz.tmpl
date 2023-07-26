@@ -48,7 +48,7 @@ sub_master() {
   for D in $UZ_DIR/*/; do
     REPO=$(basename $D)
     p_header "- Checking out repository $REPO"
-    (cd $D; git checkout main --force || git checkout master --force; git fetch)
+    (cd $D; git checkout main --force || git checkout master --force; git pull)
     p_success "Checked out $REPO"
   done
 }
