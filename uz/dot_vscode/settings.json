@@ -21,6 +21,6 @@
     "userzoom"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "prettier.printWidth": 80
 }

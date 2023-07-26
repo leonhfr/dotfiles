@@ -45,8 +45,6 @@
   "editor.emptySelectionClipboard": false,
   "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 12,
-  "editor.formatOnPaste": false,
-  "editor.formatOnSave": true,
   "editor.guides.indentation": false,
   "editor.insertSpaces": true,
   "editor.minimap.enabled": false,

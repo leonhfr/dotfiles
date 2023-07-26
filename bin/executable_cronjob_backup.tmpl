@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export BORG_PASSPHRASE="{{ (onepasswordItemFields "hiracdbrhfgopncgodestpn7y4").credential.v }}"
+export BORG_PASSPHRASE="{{ (onepasswordDetailsFields "hiracdbrhfgopncgodestpn7y4").credential.value }}"
 export BORG_REPO="zh1820@zh1820.rsync.net:macos"
 echo $(date '+%Y-%m-%d')
 {{ lookPath "borg" }} create \

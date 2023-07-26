@@ -9,9 +9,9 @@ if ! type_exists 'op'; then
   exit 1
 fi
 
-if ! [ $(op get account) ]; then
-  p_error "Please sign in to the OnePassword CLI"
-  exit 1
-fi
+# if ! [ $(op account get) ]; then
+#   p_error "Please sign in to the OnePassword CLI"
+#   exit 1
+# fi
 
 [[ $? ]] && p_success "Signed in to OnePassword"
