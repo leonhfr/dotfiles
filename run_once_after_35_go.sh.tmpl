@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
+source ~/.zprofile
+
+p_header "- Installing Go tools"
+go install golang.org/x/tools/cmd/godoc@latest
+[[ $? ]] && p_success "Done"

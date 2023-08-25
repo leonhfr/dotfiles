@@ -3,7 +3,7 @@
 source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
 source ~/.zprofile
 
-p_header "- Installing Node 14"
+p_header "- Installing Node 18"
 # Create nvm working directory if it doesn't already exist
 mkdir -p ~/.nvm
 nvm install 18
@@ -15,5 +15,5 @@ p_header "- Installing global Node packages"
 npm install --global \
     npm-check-updates \
     typescript \
-    typeync
+    typesync
 [[ $? ]] && p_success "Done"
