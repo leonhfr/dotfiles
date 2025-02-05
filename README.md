@@ -15,7 +15,7 @@ install:
 op signin my.1password.com hello@leonhfr.fr
 
 # set environment variable
-eval $(op signin my)
+eval $(op signin --account my)
 
 # install chezmoi, pull this repo and apply the changes
 sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply leonhfr
@@ -36,3 +36,4 @@ inspired by dotfiles from:
 
 - [install cgoban](https://www.gokgs.com/download.jsp)
 - [install bypass paywalls](https://github.com/iamadamdev/bypass-paywalls-chrome)
+- set up Rectangle

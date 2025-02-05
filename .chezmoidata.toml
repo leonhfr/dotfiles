@@ -1,24 +1,8 @@
 [general]
   name = "Léon Hollender"
 [email]
-  userzoom = "lhollender@usertesting.com"
   personal = "hello@leonh.fr"
 [github]
-  userzoom = "lhollender-ut"
   personal = "leonhfr"
 [macos]
   computer_name = "lhollender-macbook"
-[borgbackup]
-  include = [
-    "calibre-kobo",
-    "calibre-tablet",
-    "Official",
-    "Pictures"
-  ]
-  exclude = [
-    "go",
-    "leonhfr",
-    "Library",
-    "oss",
-    "uz"
-  ]

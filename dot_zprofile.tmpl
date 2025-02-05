@@ -31,17 +31,6 @@ export EDITOR="micro"
 # gpg key
 export GPG_TTY=$(tty)
 
-# userzoom keys and tokens
-export GITHUB_ACCESS_TOKEN={{ (onepasswordDetailsFields "2qaegfeerzcudgbx5zmdjtcjeu").credential.value }}
-
-# userzoom env variables
-export PX_PATH=/Users/leonh/uz
-export SE_PATH=/Users/leonh/uz
-export INFRASTRUCTURE_PATH=/Users/leonh/uz/local-environment
-
-# userzoom krew
-export PATH="${PATH}:${HOME}/.krew/bin"
-
 # go
 export GOPATH="$HOME/go"
 export PATH="$(go env GOPATH)/bin:$PATH"
