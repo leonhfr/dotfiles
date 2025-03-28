@@ -12,5 +12,7 @@
   excludesfile = ~/.gitignore
   whitespace = trailing-space,space-before-tab
   pager = diff-so-fancy | less --tabs=4 -RFX
-[includeIf "gitdir:~/uz/"]
-  path = ~/uz/.gitconfig
+[fetch]
+  prune = true
+[git-town]
+  github-token = {{ (onepasswordDetailsFields "zqxgjusglcbatv3ex2hpdyyy7i").credential.value }}

@@ -6,10 +6,10 @@ p_header "- Updating Homebrew"
 {{ lookPath "brew" }} update
 [[ $? ]] && p_success "Done"
 
-p_header "- Ugrading existing cask and formulae"
+p_header "- Upgrading existing cask and formulae"
 {{ lookPath "brew" }} upgrade
 [[ $? ]] && p_success "Done"
 
-p_header "- Ugrading global npm packages"
+p_header "- Upgrading global npm packages"
 {{ lookPath "npm" }} update -g
 [[ $? ]] && p_success "Done"
