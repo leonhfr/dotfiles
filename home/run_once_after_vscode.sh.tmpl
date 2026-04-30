@@ -1,0 +1,10 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+echo "[dotfiles] Installing VSCode extensions"
+
+{{ range .vscode.extensions -}}
+code --force --install-extension {{ . | quote }}
+{{ end -}}
+
+{{ end -}}

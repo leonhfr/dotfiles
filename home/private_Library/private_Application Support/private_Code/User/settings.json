@@ -1,0 +1,113 @@
+{
+  "cSpell.userWords": [
+    "dotfiles",
+    "hollender",
+    "leonh",
+    "leonhfr"
+  ],
+
+  "editor.emptySelectionClipboard": false,
+  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 12,
+  "editor.guides.indentation": false,
+  "editor.insertSpaces": true,
+  "editor.minimap.enabled": false,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.quickSuggestionsDelay": 1,
+  "editor.renderWhitespace": "all",
+  "editor.scrollBeyondLastLine": false,
+  "editor.tabSize": 2,
+  "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.openEditors.visible": 1,
+
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+
+  "go.useLanguageServer": true,
+
+  "markdown.extension.toc.updateOnSave": false,
+
+  "prettier.singleQuote": true,
+
+  "redhat.telemetry.enabled": false,
+
+  "security.workspace.trust.untrustedFiles": "open",
+
+  "telemetry.telemetryLevel": "off",
+
+  "terminal.explorerKind": "external",
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.macOptionIsMeta": true,
+  "terminal.integrated.sendKeybindingsToShell": true,
+
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "[ ]": {
+      "background": "#ff000080"
+    },
+    "[x]": {
+      "background": "#00ff0080"
+    }
+  },
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+
+  "window.newWindowDimensions": "maximized",
+  "window.title": "${dirty}${rootName}${separator}${activeEditorMedium}",
+
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#252526",
+    "statusBar.background": "#000000",
+    "titleBar.activeBackground": "#252526"
+  },
+  "workbench.fontAliasing": "antialiased",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.preferredLightColorTheme": "Dark+",
+  "workbench.startupEditor": "none",
+  "workbench.tree.indent": 16,
+
+  "zenMode.fullScreen": false,
+  "zenMode.hideLineNumbers": false,
+  "zenMode.hideTabs": false,
+
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "updateImportsOnFileMove.enabled": "always"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.suggest.showSnippets": false,
+    "editor.wordBasedSuggestions": false
+  },
+  "[rust]": {
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "updateImportsOnFileMove.enabled": "always"
+  }
+}

@@ -1,0 +1,5 @@
+repos:
+  - name: notes
+    path: notes
+  - name: blog
+    path: github/leonhfr/blog

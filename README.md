@@ -1,39 +1,37 @@
-# github.com/leonhfr/dotfiles
+# dotfiles
 
-your dotfiles are how you personalize your system, these are mine
+Your dotfiles are how you personalize your system, these are mine.
 
-managed with [`chezmoi`](https://github.com/twpayne/chezmoi)
-
-install:
-
-1. install [1password cli](https://1password.com/downloads/command-line/) and move `op` to `/usr/local/bin` or somewhere in the PATH
-
-2. in a terminal:
+Managed with [`chezmoi`](https://github.com/twpayne/chezmoi).
 
 ```sh
-# sign in
-op signin my.1password.com hello@leonhfr.fr
-
-# set environment variable
-eval $(op signin --account my)
-
-# install chezmoi, pull this repo and apply the changes
-sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply leonhfr
-
-# in the future, pull and apply the latest changes
-chezmoi update
+sh -c "$(curl -fsLS https://get.chezmoi.io)" -- init --apply leonhfr && source ~/.zprofile
 ```
 
-locally, the dotfiles source directory lives in `~/.local/share/chezmoi`
+Locally, the dotfiles source directory lives in `~/.local/share/chezmoi`.
 
-inspired by dotfiles from:
+## Sign in
 
-- [broucz](https://github.com/broucz/dotfiles)
-- [twpayne](https://github.com/twpayne/dotfiles)
-- [mathiasbynens](https://github.com/mathiasbynens/dotfiles)
+- 1Password
+- Firefox + Extensions
+- Spotify
+- Claude
+- Filen
 
-## after
+## Set up
 
-- [install cgoban](https://www.gokgs.com/download.jsp)
-- [install bypass paywalls](https://github.com/iamadamdev/bypass-paywalls-chrome)
-- set up Rectangle
+- Rectangle
+- 1Password: Settings -> Developer -> Use the SSH agent
+- Handy
+- Obsidian Notes
+- Filen
+  - Pictures
+  - Calibre Library
+- Calibre
+
+## TODO
+
+- Zed
+- git town
+- mochi
+- rhino

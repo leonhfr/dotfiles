@@ -1,0 +1,41 @@
+[user]
+  name = {{ .git.name }}
+  email = {{ .git.email }}
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmuZySFwX2YOmSSwRcTl6BEo1QxGZB5e2ZhyvL4c9tm
+
+[core]
+  editor = micro
+  autocrlf = input
+  excludesfile = ~/.gitignore
+  whitespace = trailing-space,space-before-tab
+  pager = diff-so-fancy | less --tabs=4 -RFX
+
+[init]
+  defaultBranch = main
+
+[pull]
+  rebase = true
+
+[push]
+  autoSetupRemote = true
+
+[fetch]
+  prune = true
+
+[alias]
+  configs = config --list --show-origin
+  hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+
+{{ if eq .chezmoi.os "darwin" -}}
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[commit]
+  gpgsign = true
+
+[tag]
+  gpgsign = true
+{{ end -}}

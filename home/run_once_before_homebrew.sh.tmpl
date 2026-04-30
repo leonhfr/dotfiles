@@ -1,0 +1,20 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+if ! command -v brew >/dev/null 2>&1; then
+    echo "[dotfiles] Installing Homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+echo "[dotfiles] Updating Homebrew"
+brew update
+
+echo "[dotfiles] Upgrading existing casks and formulae"
+brew upgrade
+
+echo "[dotfiles] Cleaning up"
+brew cleanup
+
+{{ end -}}

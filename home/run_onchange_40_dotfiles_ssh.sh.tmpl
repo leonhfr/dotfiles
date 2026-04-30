@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+# Switch chezmoi repo remote from HTTPS to SSH once SSH keys are set up
+if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+  git -C {{ .chezmoi.sourceDir }} remote set-url origin git@github.com:{{ .git.github }}/dotfiles.git
+  echo "[dotfiles] Switched dotfiles remote to SSH"
+else
+  echo "[dotfiles] SSH not authenticated with GitHub yet, skipping remote switch"
+fi
+
+{{ end -}}

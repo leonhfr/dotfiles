@@ -1,0 +1,10 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+if ! gh auth status >/dev/null 2>&1; then
+    echo "[dotfiles] GitHub CLI: not authenticated, launching login..."
+    gh auth login --git-protocol ssh --web
+else
+    echo "[dotfiles] GitHub CLI: already authenticated, skipping"
+fi
+{{ end -}}

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-source {{ joinPath .chezmoi.sourceDir "lib/utils.sh" }}
-
-p_header "- Setting up wallpaper"
-wallpaper set {{ joinPath .chezmoi.sourceDir "images/emma-francis-sea.jpg" }}
-[[ $? ]] && p_success "Done"

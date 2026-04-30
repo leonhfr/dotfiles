@@ -1,0 +1,19 @@
+# antigen
+
+[[ ! -d "$HOME/.antigen" ]] && git clone https://github.com/zsh-users/antigen.git "$HOME/.antigen"
+source "$HOME/.antigen/antigen.zsh"
+
+antigen use oh-my-zsh
+
+antigen bundle 1password                            # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/1password
+antigen bundle chezmoi                              # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/chezmoi
+antigen bundle djui/alias-tips                      # https://github.com/djui/alias-tips
+antigen bundle gh                                   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gh
+antigen bundle git                                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
+antigen bundle golang                               # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/golang
+antigen bundle zlsun/solarized-man                  # https://github.com/zlsun/solarized-man
+antigen bundle zpm-zsh/undollar                     # https://github.com/zpm-zsh/undollar
+antigen bundle zsh-users/zsh-syntax-highlighting    # https://github.com/zsh-users/zsh-syntax-highlighting
+
+antigen theme agnoster
+antigen apply
