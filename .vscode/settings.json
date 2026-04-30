@@ -1,10 +1,11 @@
 {
   "files.associations": {
     "*.sh.tmpl": "shellscript",
+    "*.json.tmpl": "json",
     "*.toml.tmpl": "toml",
     "*.yml.tmpl": "yaml",
     "dot_gitconfig.tmpl": "gitconfig",
     "dot_zprofile.tmpl": "shellscript",
-    "dot_zshrc.tmpl": "shellscript"
-  }
+    "dot_zshrc.tmpl": "shellscript",
+  },
 }

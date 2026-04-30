@@ -31,7 +31,7 @@ Locally, the dotfiles source directory lives in `~/.local/share/chezmoi`.
 
 ## TODO
 
-- Zed
 - git town
 - mochi
 - rhino
+- jujutsu

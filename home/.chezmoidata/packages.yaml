@@ -1,0 +1,51 @@
+# Remember to manually uninstall packages when removing them from this list.
+packages:
+  brews:
+    - cgoban
+    - chezmoi
+    - diff-so-fancy
+    - dockutil
+    - filen-cli
+    - gh
+    - git
+    - git-town
+    - go
+    - hugo
+    - micro
+    - ripgrep
+    - shellcheck
+    - wallpaper
+  casks:
+    - 1password
+    - 1password-cli
+    - calibre
+    - claude-code
+    - docker-desktop
+    - filen
+    - firefox
+    - font-jetbrains-mono
+    - font-powerline-symbols
+    - ghostty
+    - google-chrome
+    - handy
+    - mochi
+    - obsidian
+    - rectangle
+    - spotify
+    - visual-studio-code
+    - vlc
+    - zed
+  go:
+    - golang.org/x/tools/gopls@latest
+  zed:
+    - html
+    - toml
+  vscode:
+    - christian-kohler.path-intellisense
+    - github.vscode-github-actions
+    - golang.go
+    - gruntfuggly.todo-tree
+    - pkief.material-icon-theme
+    - streetsidesoftware.code-spell-checker
+    - tyriar.sort-lines
+    - tamasfe.even-better-toml
