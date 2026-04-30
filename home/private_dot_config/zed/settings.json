@@ -50,9 +50,8 @@
 
   // Extensions
   "auto_install_extensions": {
-    {{- range .packages.zed }}
-    {{ . | quote }}: true,
-    {{- end }}
+    "html": true,
+    "toml": true,
   },
 
   // Language-specific

@@ -59,9 +59,7 @@ alias left='ls -t -1'
 
 ## references
 
-- [install python](https://github.com/nicolashery/mac-dev-setup#python)
 - [general mac setup](https://sourabhbajaj.com/mac-setup/)
-- [vscode defaults](https://code.visualstudio.com/docs/getstarted/settings#_default-settings)
 
 ## todos
 

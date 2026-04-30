@@ -3,7 +3,6 @@
 - [install cgoban](https://www.gokgs.com/download.jsp)
 - [install bypass paywalls](https://github.com/iamadamdev/bypass-paywalls-chrome)
 - check adguard app https://adguard.com/en/compare.html?os=mac&_plc=en
-- gnu-units, xz
 - vagrant, minikube, packer
 - grammarly, unarchiver
 - tomighty (pomodoro), nordvpn cli
@@ -49,3 +48,10 @@ export NVM_DIR="$HOME/.nvm"
 ```
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 ```
+
+## tmux
+
+- https://github.com/tmux/tmux
+- https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/
+- https://danielmiessler.com/study/tmux/
+- https://thoughtbot.com/blog/a-tmux-crash-course

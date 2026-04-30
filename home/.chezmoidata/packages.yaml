@@ -12,8 +12,11 @@ packages:
     - go
     - hugo
     - micro
+    - mise
+    - pandoc
     - ripgrep
     - shellcheck
+    - tokei
     - wallpaper
   casks:
     - 1password
@@ -31,15 +34,13 @@ packages:
     - mochi
     - obsidian
     - rectangle
+    - slack
     - spotify
     - visual-studio-code
     - vlc
     - zed
   go:
     - golang.org/x/tools/gopls@latest
-  zed:
-    - html
-    - toml
   vscode:
     - christian-kohler.path-intellisense
     - github.vscode-github-actions
