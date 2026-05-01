@@ -1,6 +1,7 @@
 # Remember to manually uninstall packages when removing them from this list.
 packages:
   brews:
+    - cheat
     - chezmoi
     - diff-so-fancy
     - dockutil
