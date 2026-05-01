@@ -1,0 +1,16 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+echo "[dotfiles] Updating Homebrew"
+brew update
+
+echo "[dotfiles] Upgrading existing casks and formulae"
+brew upgrade
+
+echo "[dotfiles] Cleaning up"
+brew cleanup
+
+{{ end -}}
