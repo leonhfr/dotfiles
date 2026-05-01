@@ -41,6 +41,7 @@ packages:
       - golang.org/x/tools/gopls@latest
     vscode:
       - christian-kohler.path-intellisense
+      - eamodio.gitlens
       - github.vscode-github-actions
       - golang.go
       - gruntfuggly.todo-tree
