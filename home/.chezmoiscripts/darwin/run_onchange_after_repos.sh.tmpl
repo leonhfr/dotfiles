@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
 {{- $common := .repos.common | default (list) -}}
@@ -11,5 +10,4 @@ else
     echo "[dotfiles] {{ .name }} already exists, skipping"
 fi
 
-{{ end -}}
 {{ end -}}

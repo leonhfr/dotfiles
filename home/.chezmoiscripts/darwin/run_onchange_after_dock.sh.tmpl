@@ -1,4 +1,3 @@
-{{ if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
 
 echo "[dotfiles] Setting up Dock"
@@ -28,5 +27,3 @@ dockutil --no-restart --add "/Applications/{{ . }}.app"
 {{ end -}}
 
 killall Dock
-
-{{ end -}}

@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 # weekly: {{ now | date "2006-W01" }}
 
@@ -9,5 +8,3 @@ else
     echo "[dotfiles] Updating cheat community cheatsheets"
     git -C "${HOME}/.config/cheat/cheatsheets/community" pull
 fi
-
-{{ end -}}

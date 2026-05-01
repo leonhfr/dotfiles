@@ -1,4 +1,3 @@
-{{ if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
 # weekly: {{ now | date "2006-W01" }}
 
@@ -12,5 +11,3 @@ brew upgrade
 
 echo "[dotfiles] Cleaning up"
 brew cleanup
-
-{{ end -}}

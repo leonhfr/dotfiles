@@ -1,4 +1,3 @@
-{{ if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
 
 if ! xcode-select -p >/dev/null 2>&1; then
@@ -13,5 +12,3 @@ if ! command -v brew >/dev/null 2>&1; then
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
-
-{{ end -}}
