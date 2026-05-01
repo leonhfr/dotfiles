@@ -1,5 +1,8 @@
 repos:
-  - name: notes
-    path: notes
-  - name: blog
-    path: github/leonhfr/blog
+  common:
+    - name: notes
+      path: notes
+  personal:
+    - name: blog
+      path: github/leonhfr/blog
+  work: []

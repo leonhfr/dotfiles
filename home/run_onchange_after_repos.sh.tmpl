@@ -1,7 +1,9 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
-{{ range .repos -}}
+{{- $common := .repos.common | default (list) -}}
+{{- $machine := index .repos .machine | default (list) -}}
+{{ range concat $common $machine }}
 if [ ! -d "{{ .path }}" ]; then
     echo "[dotfiles] Cloning {{ .name }}..."
     git clone git@github.com:{{ $.git.github }}/{{ .name }}.git ~/{{ .path }}

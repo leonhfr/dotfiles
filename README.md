@@ -18,6 +18,7 @@ Locally, the dotfiles source directory lives in `~/.local/share/chezmoi`.
 - Spotify
 - Claude
 - Filen
+- NordVPN
 
 ## Set up
 

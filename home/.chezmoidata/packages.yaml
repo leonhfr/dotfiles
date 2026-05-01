@@ -1,53 +1,95 @@
 # Remember to manually uninstall packages when removing them from this list.
 packages:
-  brews:
-    - cheat
-    - chezmoi
-    - diff-so-fancy
-    - dockutil
-    - filen-cli
-    - gh
-    - git
-    - git-town
-    - go
-    - hugo
-    - micro
-    - mise
-    - pandoc
-    - ripgrep
-    - rustup
-    - shellcheck
-    - tokei
-    - wallpaper
-  casks:
-    - 1password
-    - 1password-cli
-    - calibre
-    - claude-code
-    - docker-desktop
-    - filen
-    - firefox
-    - font-jetbrains-mono
-    - font-powerline-symbols
-    - ghostty
-    - google-chrome
-    - handy
-    - mochi
-    - obsidian
-    - rectangle
-    - slack
-    - spotify
-    - visual-studio-code
-    - vlc
-    - zed
-  go:
-    - golang.org/x/tools/gopls@latest
-  vscode:
-    - christian-kohler.path-intellisense
-    - github.vscode-github-actions
-    - golang.go
-    - gruntfuggly.todo-tree
-    - pkief.material-icon-theme
-    - streetsidesoftware.code-spell-checker
-    - tyriar.sort-lines
-    - tamasfe.even-better-toml
+  common:
+    brews:
+      - cheat
+      - chezmoi
+      - diff-so-fancy
+      - dockutil
+      - gh
+      - git
+      - git-town
+      - go
+      - jj
+      - micro
+      - mise
+      - ripgrep
+      - shellcheck
+      - tokei
+      - tree
+      - wallpaper
+      # - witr
+    casks:
+      - 1password
+      - 1password-cli
+      - claude-code
+      - docker-desktop
+      - font-jetbrains-mono
+      - font-lato
+      - font-open-sans
+      - font-roboto
+      - font-powerline-symbols
+      - ghostty
+      - handy
+      - obsidian
+      - rectangle
+      - slack
+      - spotify
+      - visual-studio-code
+      - zed
+    go:
+      - golang.org/x/tools/gopls@latest
+    vscode:
+      - christian-kohler.path-intellisense
+      - github.vscode-github-actions
+      - golang.go
+      - gruntfuggly.todo-tree
+      - pkief.material-icon-theme
+      - streetsidesoftware.code-spell-checker
+      - tyriar.sort-lines
+      - tamasfe.even-better-toml
+  personal:
+    brews:
+      - filen-cli
+      - hugo
+      - pandoc
+      - rustup
+      # - syncthing
+    casks:
+      - calibre
+      - filen
+      - firefox
+      - mochi
+      - nordvpn
+      # - rhino-app
+      # - the-unarchiver
+      - vlc
+    go: []
+    vscode: []
+  work:
+    brews: []
+      # - act
+      # - awscli
+      # - bat
+      # - buf
+      # - helm
+      # - k9s
+      # - kind
+      # - kubectx
+      # - kubernetes-cli
+      # - pgcli
+      # - postgresql
+      # - terraform
+      # - tfswitch
+    casks:
+      # - beekeeper-studio
+      # - gitify
+      # - gitkraken
+      - google-chrome
+      # - grammarly
+      # - insomnia
+      - notion
+      # - pomatez
+      # - postman
+    go: []
+    vscode: []

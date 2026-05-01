@@ -3,34 +3,53 @@
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+{{- $commonPackages := .packages.common -}}
+{{- $machinePackages := index .packages .machine }}
+
 echo "[dotfiles] Installing packages"
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.brews -}}
+{{ range $commonPackages.brews -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range .packages.casks -}}
+{{ range $machinePackages.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range $commonPackages.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+{{ range $machinePackages.casks -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
 
-if ! command -v cargo >/dev/null 2>&1; then
-    echo "[dotfiles] Installing Rust"
-    rustup-init -y
-fi
+if command -v rustup >/dev/null 2>&1; then
+    if ! command -v cargo >/dev/null 2>&1; then
+        echo "[dotfiles] Installing Rust"
+        rustup-init -y
+    fi
 
-rustup component add rust-src
+    rustup component add rust-src
+fi
 
 echo "[dotfiles] Installing go packages"
 
-{{ range .packages.go -}}
+{{ range $commonPackages.go -}}
+go install {{ . }}
+{{ end -}}
+{{ range $machinePackages.go -}}
 go install {{ . }}
 {{ end -}}
 
-echo "[dotfiles] Installing VSCode extensions"
+if command -v code >/dev/null 2>&1; then
+    echo "[dotfiles] Installing VSCode extensions"
 
-{{ range .packages.vscode -}}
-code --force --install-extension {{ . | quote }}
-{{ end -}}
+    {{ range $commonPackages.vscode -}}
+    code --force --install-extension {{ . | quote }}
+    {{ end -}}
+    {{ range $machinePackages.vscode -}}
+    code --force --install-extension {{ . | quote }}
+    {{ end -}}
+fi
 
 {{ end -}}

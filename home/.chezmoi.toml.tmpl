@@ -1,2 +1,8 @@
+{{- $machineTypes := list "personal" "work" -}}
+{{- $machine := promptChoiceOnce . "machine" "What type of machine" $machineTypes -}}
+
+[data]
+  machine = {{ $machine | quote }}
+
 [hooks.read-source-state.pre]
 command = ".local/share/chezmoi/bin/.install-password-manager.sh"
