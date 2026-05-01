@@ -81,7 +81,6 @@
 
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
-  "zenMode.hideTabs": false,
 
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -101,7 +100,7 @@
       "strings": true
     },
     "editor.suggest.showSnippets": false,
-    "editor.wordBasedSuggestions": false
+    "editor.wordBasedSuggestions": "off"
   },
   "[rust]": {
     "editor.tabSize": 4

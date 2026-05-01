@@ -1,7 +1,6 @@
 # Remember to manually uninstall packages when removing them from this list.
 packages:
   brews:
-    - cgoban
     - chezmoi
     - diff-so-fancy
     - dockutil

@@ -10,8 +10,11 @@ graphql-playground
 insomnia
 iterm2
 karabiner-elements
+nordvpn
 nosql-workbench
 notion
+pomatez
 postman
 rhino-app
+the-unarchiver
 tunnelblick

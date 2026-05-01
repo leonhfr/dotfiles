@@ -1,3 +1,4 @@
+ack
 act
 awscli
 awscurl
@@ -10,10 +11,10 @@ fzf
 gist
 git-lfs
 git-secrets
-gnupg
 goreleaser
 helm
 imagemagick
+jj
 k9s
 kind
 kubectx
@@ -32,8 +33,10 @@ terraform
 tfswitch
 the_silver_searcher
 thefuck
+tree
 tmux
 wabt
 wget
 wireshark
+witr
 xz

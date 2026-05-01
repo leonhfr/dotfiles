@@ -11,6 +11,7 @@
   "ui_font_size": 16,
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 12,
+  "icon_theme": "Zed (Default)",
   "theme": {
     "mode": "system",
     "light": "One Light",
@@ -56,6 +57,10 @@
 
   // Language-specific
   "languages": {
+    "Go": {},
+    "Markdown": {
+      "format_on_save": "on",
+    },
     "Rust": {
       "tab_size": 4,
     },
