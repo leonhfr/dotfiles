@@ -17,7 +17,6 @@ packages:
       - shellcheck
       - tokei
       - tree
-      - wallpaper
       # - witr
     casks:
       - 1password
