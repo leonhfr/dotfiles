@@ -1,17 +1,13 @@
 beekeeper-studio
-chromium
 font-lato
 font-open-sans
 font-roboto
 gitify
 gitkraken
 grammarly
-graphql-playground
 insomnia
-iterm2
 karabiner-elements
 nordvpn
-nosql-workbench
 notion
 pomatez
 postman
