@@ -25,7 +25,6 @@ plantuml
 postgresql@14
 python@3.9
 rpm
-rustup
 sqlite
 stockfish
 syncthing
