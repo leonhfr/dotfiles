@@ -26,6 +26,7 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder FXRemoveOldTrashItems -bool true
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
@@ -45,18 +46,15 @@ defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
 # Photos
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
-# iTerm2
-defaults write com.googlecode.iterm2 PromptOnQuit -bool false
-
 # Time Machine
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # Activity Monitor
 defaults write com.apple.ActivityMonitor IconType -int 5
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
-defaults write com.apple.ActivityMonitor ShowCategory -int 0
+defaults write com.apple.ActivityMonitor ShowCategory -bool false
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
-defaults write com.apple.ActivityMonitor SortDirection -int 0
+defaults write com.apple.ActivityMonitor SortDirection -bool false
 
 # Google Chrome
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
