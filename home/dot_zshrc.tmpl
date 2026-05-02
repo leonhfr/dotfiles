@@ -1,20 +1,45 @@
+# XDG
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CACHE_HOME=$HOME/.cache
+
 # antigen
 
-[[ ! -d "$HOME/.antigen" ]] && git clone https://github.com/zsh-users/antigen.git "$HOME/.antigen"
+export ZSH_CACHE_DIR="$XDG_CACHE_HOME/oh-my-zsh"
+mkdir -p "$ZSH_CACHE_DIR/completions"
+
+HIST_STAMPS="yyyy-mm-dd"
+
 source "$HOME/.antigen/antigen.zsh"
 
 antigen use oh-my-zsh
 
-antigen bundle 1password                            # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/1password
 antigen bundle chezmoi                              # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/chezmoi
 antigen bundle djui/alias-tips                      # https://github.com/djui/alias-tips
-antigen bundle docker                               # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/docker
 antigen bundle gh                                   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gh
 antigen bundle git                                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
 antigen bundle golang                               # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/golang
 antigen bundle zlsun/solarized-man                  # https://github.com/zlsun/solarized-man
-antigen bundle zpm-zsh/undollar                     # https://github.com/zpm-zsh/undollar
 antigen bundle zsh-users/zsh-syntax-highlighting    # https://github.com/zsh-users/zsh-syntax-highlighting
 
 antigen theme agnoster
 antigen apply
+
+# options
+setopt autocd
+setopt histignorespace
+
+# prompt
+export DEFAULT_USER={{ .chezmoi.username }}
+
+# env
+export GPG_TTY=$(tty)
+export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead "op://Personal/chezmoi GitHub API Token/credential" | trim }}
+
+# aliases
+alias gt="git town"
+alias m="mise"
+alias mr="mise run"
+alias cat="bat"
+alias ls="eza"

@@ -1,11 +1,13 @@
 brews:
   common:
+    - bat
     - btop
     - cheat
     - chezmoi
     - croc
     - diff-so-fancy
     - dockutil
+    - eza
     - fd
     - gdu
     - gh
