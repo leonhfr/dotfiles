@@ -1,7 +1,7 @@
 [user]
   name = {{ .git.name }}
   email = {{ .git.email }}
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmuZySFwX2YOmSSwRcTl6BEo1QxGZB5e2ZhyvL4c9tm
+  signingkey = {{ onepasswordRead "op://Personal/GitHub SSH Key/public key" | trim }}
 
 [core]
   editor = micro
@@ -70,9 +70,6 @@
 {{ if eq .chezmoi.os "darwin" -}}
 [gpg]
   format = ssh
-
-[gpg "ssh"]
-  program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
 [commit]
   gpgsign = true

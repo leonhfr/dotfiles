@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+
 # Switch chezmoi repo remote from HTTPS to SSH once SSH keys are set up
 if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
   git -C {{ .chezmoi.sourceDir }} remote set-url origin git@github.com:{{ .git.github }}/dotfiles.git
