@@ -10,4 +10,12 @@ else
     echo "[dotfiles] {{ .name }} already exists, skipping"
 fi
 
+if [ ! -d "${HOME}/.config/cheat/cheatsheets/community" ]; then
+    echo "[dotfiles] Cloning cheat community cheatsheets"
+    git clone https://github.com/cheat/cheatsheets "${HOME}/.config/cheat/cheatsheets/community"
+else
+    echo "[dotfiles] Updating cheat community cheatsheets"
+    git -C "${HOME}/.config/cheat/cheatsheets/community" pull
+fi
+
 {{ end -}}
