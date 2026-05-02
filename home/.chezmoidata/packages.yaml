@@ -6,6 +6,7 @@ brews:
     - dockutil
     - gh
     - git
+    - git-lfs
     - git-town
     - go
     - jj

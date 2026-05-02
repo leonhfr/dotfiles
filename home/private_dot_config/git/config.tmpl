@@ -6,9 +6,31 @@
 [core]
   editor = micro
   autocrlf = input
-  excludesfile = ~/.gitignore
+  excludesfile = ~/git/ignore
   whitespace = trailing-space,space-before-tab
   pager = diff-so-fancy | less --tabs=4 -RFX
+
+[branch]
+  sort = -committerdate
+
+[column]
+  ui = auto
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+
+[merge]
+  conflictStyle = zdiff3
+
+[pager]
+  branch = false
+  grep = false
+
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
 
 [init]
   defaultBranch = main
@@ -26,23 +48,24 @@
   configs = config --list --show-origin
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   append = town append
-  compress = town compress
   continue = town continue
-  contribute = town contribute
   delete = town delete
   diff-parent = town diff-parent
   down = town down
   hack = town hack
-  observe = town observe
-  park = town park
   prepend = town prepend
   propose = town propose
   rename = town rename
-  repo = town repo
   set-parent = town set-parent
   ship = town ship
   sync = town sync
   up = town up
+
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
 
 {{ if eq .chezmoi.os "darwin" -}}
 [gpg]

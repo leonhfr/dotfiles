@@ -5,7 +5,7 @@
     "**/pgcli/config": "ini",
     "*.toml.tmpl": "toml",
     "*.yml.tmpl": "yaml",
-    "dot_gitconfig.tmpl": "gitconfig",
+    "**/git/config": "gitconfig",
     "dot_zprofile.tmpl": "shellscript",
     "dot_zshrc.tmpl": "shellscript",
   },
