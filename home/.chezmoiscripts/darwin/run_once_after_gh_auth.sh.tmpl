@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if ! gh auth status >/dev/null 2>&1; then
     echo "[dotfiles] GitHub CLI: not authenticated, launching login..."

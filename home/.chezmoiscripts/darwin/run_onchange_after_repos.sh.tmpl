@@ -1,4 +1,6 @@
 #!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
+set -euo pipefail
 
 {{- $common := .repos.common | default (list) -}}
 {{- $machine := index .repos .machine | default (list) -}}

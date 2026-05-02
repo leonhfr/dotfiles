@@ -1,5 +1,6 @@
 #!/bin/bash
 # weekly: {{ now | date "2006-W01" }}
+set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
