@@ -38,16 +38,6 @@ packages:
       - zed
     go:
       - golang.org/x/tools/gopls@latest
-    vscode:
-      - christian-kohler.path-intellisense
-      - eamodio.gitlens
-      - github.vscode-github-actions
-      - golang.go
-      - gruntfuggly.todo-tree
-      - pkief.material-icon-theme
-      - streetsidesoftware.code-spell-checker
-      - tyriar.sort-lines
-      - tamasfe.even-better-toml
   personal:
     brews:
       - filen-cli
@@ -62,10 +52,10 @@ packages:
       - mochi
       - nordvpn
       # - rhino-app
+      # - steam
       # - the-unarchiver
       - vlc
     go: []
-    vscode: []
   work:
     brews: []
       # - act
@@ -92,4 +82,3 @@ packages:
       # - pomatez
       # - postman
     go: []
-    vscode: []

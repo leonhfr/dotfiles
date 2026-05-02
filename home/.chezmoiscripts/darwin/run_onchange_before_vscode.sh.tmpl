@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if command -v code >/dev/null 2>&1; then
+    echo "[dotfiles] Installing VSCode extensions"
+
+    {{ range .vscode -}}
+    code --force --install-extension {{ . | quote }}
+    {{ end -}}
+fi

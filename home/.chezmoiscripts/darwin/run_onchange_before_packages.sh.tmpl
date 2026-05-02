@@ -2,22 +2,16 @@
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-{{- $commonPackages := .packages.common -}}
-{{- $machinePackages := index .packages .machine }}
+{{- $cp := .packages.common -}}
+{{- $mp := index .packages .machine -}}
 
 echo "[dotfiles] Installing packages"
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range $commonPackages.brews -}}
+{{ range concat $cp.brews $mp.brews -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range $machinePackages.brews -}}
-brew {{ . | quote }}
-{{ end -}}
-{{ range $commonPackages.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ range $machinePackages.casks -}}
+{{ range concat $cp.casks $mp.casks -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
@@ -33,20 +27,6 @@ fi
 
 echo "[dotfiles] Installing go packages"
 
-{{ range $commonPackages.go -}}
+{{ range concat $cp.go $mp.go -}}
 go install {{ . }}
 {{ end -}}
-{{ range $machinePackages.go -}}
-go install {{ . }}
-{{ end -}}
-
-if command -v code >/dev/null 2>&1; then
-    echo "[dotfiles] Installing VSCode extensions"
-
-    {{ range $commonPackages.vscode -}}
-    code --force --install-extension {{ . | quote }}
-    {{ end -}}
-    {{ range $machinePackages.vscode -}}
-    code --force --install-extension {{ . | quote }}
-    {{ end -}}
-fi
