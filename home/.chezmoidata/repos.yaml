@@ -5,4 +5,6 @@ repos:
   personal:
     - name: blog
       path: github/leonhfr/blog
+    - name: resume
+      path: github/leonhfr/resume
   work: []

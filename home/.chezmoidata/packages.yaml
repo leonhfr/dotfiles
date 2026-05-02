@@ -2,6 +2,7 @@ brews:
   common:
     - bat
     - btop
+    - ccusage
     - cheat
     - chezmoi
     - croc
@@ -58,8 +59,10 @@ casks:
     - font-powerline-symbols
     - ghostty
     - handy
+    # - nikitabobko/tap/aerospace
     # - notunes
     - obsidian
+    - openusage
     - rectangle
     - slack
     - spotify
@@ -89,5 +92,3 @@ casks:
 go:
   common:
     - golang.org/x/tools/gopls@latest
-  personal: []
-  work: []
