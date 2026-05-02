@@ -2,6 +2,7 @@
   "files.associations": {
     "*.sh.tmpl": "shellscript",
     "*.json.tmpl": "json",
+    "**/pgcli/config": "ini",
     "*.toml.tmpl": "toml",
     "*.yml.tmpl": "yaml",
     "dot_gitconfig.tmpl": "gitconfig",

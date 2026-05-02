@@ -22,7 +22,7 @@ brews:
     - pandoc
     - rustup
     # - syncthing
-  work: []
+  work:
     # - act
     # - awscli
     # - bat
@@ -32,7 +32,7 @@ brews:
     # - kind
     # - kubectx
     # - kubernetes-cli
-    # - pgcli
+    - pgcli
     # - postgresql
     # - terraform
     # - tfswitch

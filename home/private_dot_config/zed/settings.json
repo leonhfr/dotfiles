@@ -52,6 +52,7 @@
   // Extensions
   "auto_install_extensions": {
     "html": true,
+    "ini": true,
     "toml": true,
   },
 

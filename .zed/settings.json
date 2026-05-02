@@ -3,6 +3,7 @@
     "Git Config": ["dot_gitconfig.tmpl"],
     "Shell Script": ["*.sh.tmpl", "dot_zprofile.tmpl", "dot_zshrc.tmpl"],
     "JSON": ["*.json.tmpl"],
+    "INI": ["**/pgcli/config"],
     "YAML": ["*.yml.tmpl"],
     "TOML": ["*.toml.tmpl"],
   },

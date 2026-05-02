@@ -1,0 +1,5 @@
+[main]
+timing = True
+history_size = 65536
+table_format = unicode
+syntax_style = monokai
