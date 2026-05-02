@@ -1,84 +1,84 @@
-# Remember to manually uninstall packages when removing them from this list.
-packages:
+brews:
   common:
-    brews:
-      - cheat
-      - chezmoi
-      - diff-so-fancy
-      - dockutil
-      - gh
-      - git
-      - git-town
-      - go
-      - jj
-      - micro
-      - mise
-      - ripgrep
-      - shellcheck
-      - tokei
-      - tree
-      # - witr
-    casks:
-      - 1password
-      - 1password-cli
-      - claude-code
-      - docker-desktop
-      - font-jetbrains-mono
-      - font-lato
-      - font-open-sans
-      - font-roboto
-      - font-powerline-symbols
-      - ghostty
-      - handy
-      - obsidian
-      - rectangle
-      - slack
-      - spotify
-      - visual-studio-code
-      - zed
-    go:
-      - golang.org/x/tools/gopls@latest
+    - cheat
+    - chezmoi
+    - diff-so-fancy
+    - dockutil
+    - gh
+    - git
+    - git-town
+    - go
+    - jj
+    - micro
+    - mise
+    - ripgrep
+    - shellcheck
+    - tokei
+    - tree
+    # - witr
   personal:
-    brews:
-      - filen-cli
-      - hugo
-      - pandoc
-      - rustup
-      # - syncthing
-    casks:
-      - calibre
-      - filen
-      - firefox
-      - mochi
-      - nordvpn
-      # - rhino-app
-      # - steam
-      # - the-unarchiver
-      - vlc
-    go: []
+    - filen-cli
+    - hugo
+    - pandoc
+    - rustup
+    # - syncthing
+  work: []
+    # - act
+    # - awscli
+    # - bat
+    # - buf
+    # - helm
+    # - k9s
+    # - kind
+    # - kubectx
+    # - kubernetes-cli
+    # - pgcli
+    # - postgresql
+    # - terraform
+    # - tfswitch
+
+casks:
+  common:
+    - 1password
+    - 1password-cli
+    - claude-code
+    - docker-desktop
+    - font-jetbrains-mono
+    - font-lato
+    - font-open-sans
+    - font-roboto
+    - font-powerline-symbols
+    - ghostty
+    - handy
+    - obsidian
+    - rectangle
+    - slack
+    - spotify
+    - visual-studio-code
+    - zed
+  personal:
+    - calibre
+    - filen
+    - firefox
+    - mochi
+    - nordvpn
+    # - rhino-app
+    # - steam
+    # - the-unarchiver
+    - vlc
   work:
-    brews: []
-      # - act
-      # - awscli
-      # - bat
-      # - buf
-      # - helm
-      # - k9s
-      # - kind
-      # - kubectx
-      # - kubernetes-cli
-      # - pgcli
-      # - postgresql
-      # - terraform
-      # - tfswitch
-    casks:
-      # - beekeeper-studio
-      # - gitify
-      # - gitkraken
-      - google-chrome
-      # - grammarly
-      # - insomnia
-      - notion
-      # - pomatez
-      # - postman
-    go: []
+    # - beekeeper-studio
+    # - gitify
+    # - gitkraken
+    - google-chrome
+    # - grammarly
+    # - insomnia
+    - notion
+    # - pomatez
+    # - postman
+
+go:
+  common:
+    - golang.org/x/tools/gopls@latest
+  personal: []
+  work: []

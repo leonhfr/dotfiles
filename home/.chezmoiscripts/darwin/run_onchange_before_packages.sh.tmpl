@@ -3,16 +3,17 @@ set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-{{- $cp := .packages.common -}}
-{{- $mp := index .packages .machine -}}
+{{- $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) -}}
+{{- $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) -}}
+{{- $go := concat (.go.common | default (list)) (index .go .machine | default (list)) }}
 
 echo "[dotfiles] Installing packages"
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range concat $cp.brews $mp.brews -}}
+{{ range $brews | sortAlpha | uniq -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range concat $cp.casks $mp.casks -}}
+{{ range $casks | sortAlpha | uniq -}}
 cask {{ . | quote }}
 {{ end -}}
 EOF
@@ -26,8 +27,10 @@ if command -v rustup >/dev/null 2>&1; then
     rustup component add rust-src
 fi
 
-echo "[dotfiles] Installing go packages"
+if command -v go >/dev/null 2>&1; then
+    echo "[dotfiles] Installing go packages"
 
-{{ range concat $cp.go $mp.go -}}
-go install {{ . }}
-{{ end -}}
+    {{ range $go -}}
+    go install {{ . }}
+    {{ end -}}
+fi
