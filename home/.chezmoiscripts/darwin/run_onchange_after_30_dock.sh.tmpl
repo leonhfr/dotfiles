@@ -24,10 +24,22 @@ defaults write com.apple.dock workspaces-auto-swoosh -bool false
 
 echo "[dotfiles] Setting up Dock applications"
 
+apps=(
+    Firefox
+    Ghostty
+    Obsidian
+    "Visual Studio Code"
+    Zed
+    Spotify
+    VLC
+    Filen
+    Slack
+)
+
 dockutil --no-restart --remove all
 dockutil --no-restart --add "/System/Applications/Launchpad.app"
-{{ range .dock -}}
-dockutil --no-restart --add "/Applications/{{ . }}.app"
-{{ end -}}
+for app in "${apps[@]}"; do
+    dockutil --no-restart --add "/Applications/${app}.app"
+done
 
 killall Dock

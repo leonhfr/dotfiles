@@ -1,10 +1,24 @@
 #!/bin/bash
 set -euo pipefail
 
+extensions=(
+    "christian-kohler.path-intellisense"
+    "eamodio.gitlens"
+    "github.vscode-github-actions"
+    "golang.go"
+    "gruntfuggly.todo-tree"
+    "jinliming2.vscode-go-template"
+    "pkief.material-icon-theme"
+    "redhat.vscode-yaml"
+    "streetsidesoftware.code-spell-checker"
+    "tamasfe.even-better-toml"
+    "tyriar.sort-lines"
+    "yzhang.markdown-all-in-one"
+)
+
 if command -v code >/dev/null 2>&1; then
     echo "[dotfiles] Installing VSCode extensions"
-
-    {{ range .vscode -}}
-    code --force --install-extension {{ . | quote }}
-    {{ end -}}
+    for ext in "${extensions[@]}"; do
+        code --force --install-extension "$ext"
+    done
 fi
