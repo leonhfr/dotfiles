@@ -1,0 +1,12 @@
+#!/bin/sh
+
+case "$(uname -s)" in
+Darwin)
+    "$(dirname "$0")/.install-homebrew.sh"
+    "$(dirname "$0")/.install-password-manager.sh"
+    ;;
+*)
+    echo "[dotfiles] unsupported OS"
+    exit 1
+    ;;
+esac
