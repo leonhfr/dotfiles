@@ -7,6 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "tabs": {
+    "git_status": true,
+  },
   "cli_default_open_behavior": "new_window",
   "ui_font_size": 16,
   "buffer_font_family": "JetBrains Mono",
@@ -33,9 +36,7 @@
   "remove_trailing_whitespace_on_save": true,
 
   // Project panel
-  "project_panel": {
-    "auto_fold_dirs": false,
-  },
+  "project_panel": {},
 
   // Telemetry
   "telemetry": {
@@ -51,8 +52,11 @@
 
   // Extensions
   "auto_install_extensions": {
+    "dockerfile": true,
+    "git-firefly": true,
     "html": true,
     "ini": true,
+    "sql": true,
     "toml": true,
   },
 

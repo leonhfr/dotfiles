@@ -2,6 +2,7 @@
   "file_types": {
     "Shell Script": ["*.sh.tmpl", "dot_zprofile.tmpl", "dot_zshrc.tmpl"],
     "JSON": ["*.json.tmpl"],
+    "JSONC": ["**/zed/*.json"],
     "INI": ["**/pgcli/config", "**/git/config.tmpl"],
     "YAML": ["*.yml.tmpl"],
     "TOML": ["*.toml.tmpl"],
