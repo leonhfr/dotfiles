@@ -19,27 +19,39 @@ defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.dock showDesktopGestureEnabled -int 0
 defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
 defaults write com.apple.dock showMissionControlGestureEnabled -int 0
-defaults write com.apple.dock tilesize -int 42 #pixels
+defaults write com.apple.dock tilesize -int 42
 defaults write com.apple.dock workspaces-auto-swoosh -bool false
 
 echo "[dotfiles] Setting up Dock applications"
 
-apps=(
-    Firefox
-    Ghostty
-    Obsidian
-    "Visual Studio Code"
-    Zed
-    Spotify
-    VLC
-    Filen
-    Slack
-)
-
+{{ $dock := index .dock .machine -}}
+{{ $add := index $dock "add" | default list -}}
+{{ $remove := index $dock "remove" | default list -}}
+{{ $launchpad := index $dock "launchpad" | default false -}}
+{{ if eq $dock.mode "replace" -}}
 dockutil --no-restart --remove all
+{{ if $launchpad -}}
 dockutil --no-restart --add "/System/Applications/Launchpad.app"
-for app in "${apps[@]}"; do
-    dockutil --no-restart --add "/Applications/${app}.app"
-done
-
+{{ end -}}
+{{ range $dock.apps -}}
+dockutil --no-restart --add "/Applications/{{ . }}.app"
+{{ end -}}
+{{ else if eq $dock.mode "manage" -}}
+existing=$(dockutil --list | cut -f 1)
+{{ if $launchpad -}}
+if ! echo "$existing" | grep -qF "Launchpad"; then
+    dockutil --no-restart --add "/System/Applications/Launchpad.app"
+fi
+{{ end -}}
+{{ range $remove -}}
+if echo "$existing" | grep -qF "{{ . }}"; then
+    dockutil --no-restart --remove "{{ . }}"
+fi
+{{ end -}}
+{{ range $add -}}
+if ! echo "$existing" | grep -qF "{{ . }}"; then
+    dockutil --no-restart --add "/Applications/{{ . }}.app"
+fi
+{{ end -}}
+{{ end }}
 killall Dock

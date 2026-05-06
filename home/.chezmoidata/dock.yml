@@ -1,0 +1,27 @@
+dock:
+  personal:
+    mode: replace
+    launchpad: true
+    apps:
+      - Firefox
+      - Ghostty
+      - Obsidian
+      - "Visual Studio Code"
+      - Zed
+      - Spotify
+      - VLC
+      - Filen
+      - Slack
+      - 1Password
+  work:
+    mode: manage
+    add:
+      - Ghostty
+      - Obsidian
+      - "Visual Studio Code"
+      - Zed
+      - Spotify
+      - Slack
+      - 1Password
+    remove:
+      - iTerm2
