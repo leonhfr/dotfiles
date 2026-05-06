@@ -48,7 +48,6 @@ brews:
 
 casks:
   common:
-    - 1password
     - 1password-cli
     - claude-code
     - docker-desktop
@@ -64,17 +63,18 @@ casks:
     - obsidian
     - openusage
     - rectangle
-    - slack
     - spotify
     - visual-studio-code
     - zed
   personal:
+    - 1password
     - calibre
     - filen
     - firefox
     - mochi
     - nordvpn
     # - rhino-app
+    - slack
     # - steam
     # - the-unarchiver
     - vlc
@@ -82,7 +82,7 @@ casks:
     # - beekeeper-studio
     # - gitify
     # - gitkraken
-    - google-chrome
+    # - google-chrome
     # - grammarly
     # - insomnia
     - notion
