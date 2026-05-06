@@ -13,6 +13,7 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until this file has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+{{ if eq .machine "personal" -}}
 COMPUTER_NAME={{ .chezmoi.username }}-macbook
 
 sudo scutil --set ComputerName "$COMPUTER_NAME"
@@ -20,9 +21,8 @@ sudo scutil --set HostName "$COMPUTER_NAME"
 sudo scutil --set LocalHostName "$COMPUTER_NAME"
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$COMPUTER_NAME"
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
-sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true # Enable HiDPI display modes
+{{ end -}}
 
-defaults write NSGlobalDomain AppleFontSmoothing -int 1
 defaults write NSGlobalDomain AppleInterfaceStyle Dark
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
