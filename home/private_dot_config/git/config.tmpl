@@ -1,7 +1,7 @@
 [user]
   name = {{ .git.name }}
   email = {{ .git.email }}
-  signingkey = {{ onepasswordRead "op://Personal/GitHub SSH Key/public key" | trim }}
+  signingkey = {{ onepasswordRead .op.personal.ssh_public_key }}
 
 [core]
   editor = micro

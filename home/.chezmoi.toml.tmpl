@@ -1,8 +1,18 @@
 {{- $machineTypes := list "personal" "work" -}}
 {{- $machine := promptChoiceOnce . "machine" "What type of machine" $machineTypes -}}
+{{- $personalOpVault := promptStringOnce . "personal_op_vault" "Personal 1Password vault name" "Personal" -}}
 
 [data]
   machine = {{ $machine | quote }}
+  personal_op_vault = {{ $personalOpVault | quote }}
+
+[data.op.personal]
+  ssh_public_key = "op://{{ $personalOpVault }}/GitHub SSH Key/public key"
+  ssh_private_key = "op://{{ $personalOpVault }}/GitHub SSH Key/private key"
+  chezmoi_token = "op://{{ $personalOpVault }}/chezmoi GitHub API Token/credential"
+
+[data.op.work]
+  chezmoi_token = "op://Private/chezmoi GitHub API Token/credential"
 
 [hooks.read-source-state.pre]
   command = ".local/share/chezmoi/bin/.install-prerequisites.sh"
