@@ -77,3 +77,14 @@
 [tag]
   gpgsign = true
 {{ end -}}
+
+[url "git@github.com:{{ .git.github }}/"]
+  insteadOf = https://github.com/{{ .git.github }}/
+
+{{- $ghPath := lookPath "gh" -}}
+{{ if $ghPath -}}
+[credential "https://github.com"]
+  helper = !{{ $ghPath }} auth git-credential
+[credential "https://gist.github.com"]
+  helper = !{{ $ghPath }} auth git-credential
+{{ end -}}
