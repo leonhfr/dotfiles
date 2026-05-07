@@ -1,18 +1,35 @@
 {{- $machineTypes := list "personal" "work" -}}
 {{- $machine := promptChoiceOnce . "machine" "What type of machine" $machineTypes -}}
-{{- $personalOpVault := promptStringOnce . "personal_op_vault" "Personal 1Password vault name" "Personal" -}}
+
+{{- $personalOpVault := promptStringOnce .personal.op "vault" "Personal 1Password vault name" "Personal" -}}
+
+{{- $workOpAccount := "" -}}
+{{- $workOpVault := "" -}}
+
+{{- if eq $machine "work" -}}
+{{- $workOpAccount = promptStringOnce .work.op "account" "Work 1Password account shorthand" -}}
+{{- $workOpVault = promptStringOnce .work.op "vault" "Work 1Password vault name" "Private" -}}
+{{- end -}}
 
 [data]
   machine = {{ $machine | quote }}
-  personal_op_vault = {{ $personalOpVault | quote }}
 
-[data.op.personal]
+[data.personal]
+  name = "léon h"
+  email = "hello@leonh.fr"
+  github = "leonhfr"
+
+[data.personal.op]
+  account = "my"
+  vault = {{ $personalOpVault | quote }}
   ssh_public_key = "op://{{ $personalOpVault }}/GitHub SSH Key/public key"
   ssh_private_key = "op://{{ $personalOpVault }}/GitHub SSH Key/private key"
   chezmoi_token = "op://{{ $personalOpVault }}/chezmoi GitHub API Token/credential"
 
-[data.op.work]
-  chezmoi_token = "op://Private/chezmoi GitHub API Token/credential"
+[data.work.op]
+  account = {{ $workOpAccount | quote }}
+  vault = {{ $workOpVault | quote }}
+  chezmoi_token = "op://{{ $workOpVault }}/chezmoi GitHub API Token/credential"
 
 [hooks.read-source-state.pre]
   command = ".local/share/chezmoi/bin/.install-prerequisites.sh"

@@ -35,8 +35,8 @@ export DEFAULT_USER={{ .chezmoi.username }}
 
 # env
 export GPG_TTY=$(tty)
-{{ $chezmoiToken := eq .machine "work" | ternary .op.work.chezmoi_token .op.personal.chezmoi_token -}}
-export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead $chezmoiToken }}
+{{ $machineOp := eq .machine "work" | ternary .work.op .personal.op -}}
+export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead $machineOp.chezmoi_token $machineOp.account }}
 
 # aliases
 alias gt="git town"
