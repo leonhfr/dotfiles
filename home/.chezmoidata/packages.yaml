@@ -23,6 +23,7 @@ brews:
     - ripgrep
     - shellcheck
     - tokei
+    - transcrypt
     - tree
     # - witr
   personal:

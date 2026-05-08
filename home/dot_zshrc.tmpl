@@ -44,3 +44,7 @@ alias m="mise"
 alias mr="mise run"
 alias cat="bat"
 alias ls="eza"
+
+{{ if eq .machine "work" -}}
+[[ -f "$HOME/.zshrc_work.zsh" ]] && source "$HOME/.zshrc_work.zsh"
+{{ end -}}

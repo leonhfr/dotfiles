@@ -13,6 +13,8 @@
 {{- $workOpVault = promptStringOnce . "work_op_vault" "Work 1Password vault name" "Private" -}}
 {{- end -}}
 
+encryption = "transparent"
+
 [data]
   machine = {{ $machine | quote }}
   work_email = {{ $workEmail | quote }}

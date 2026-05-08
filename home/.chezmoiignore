@@ -3,6 +3,7 @@
 {{ end }}
 
 {{ if ne .machine "work" }}
+.zshrc_work.zsh
 .config/pgcli/**
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
