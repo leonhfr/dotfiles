@@ -1,0 +1,3 @@
+{{- if eq .machine "work" -}}
+{{- onepasswordRead .work.op.ssh_private_key .work.op.account -}}
+{{- end -}}

@@ -4,4 +4,6 @@
 
 {{ if ne .machine "work" }}
 .config/pgcli/**
+.ssh/id_ed25519_work
+.ssh/id_ed25519_work.pub
 {{ end }}

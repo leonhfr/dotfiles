@@ -1,9 +1,21 @@
+
 #!/bin/bash
 set -euo pipefail
 
-if ! gh auth status >/dev/null 2>&1; then
-    echo "[dotfiles] GitHub CLI: not authenticated, launching login..."
-    gh auth login --git-protocol ssh --web
-else
-    echo "[dotfiles] GitHub CLI: already authenticated, skipping"
+# Authenticate personal account
+if ! gh auth status --hostname github.com 2>/dev/null | grep -q "{{ .personal.github }}"; then
+    echo "[dotfiles] GitHub CLI: authenticating personal account ({{ .personal.github }})..."
+    gh auth login --hostname github.com --git-protocol ssh --web
 fi
+
+{{ if eq .machine "work" -}}
+# Authenticate work account
+if ! gh auth status --hostname github.com 2>/dev/null | grep -q "{{ .work.github }}"; then
+    echo "[dotfiles] GitHub CLI: authenticating work account ({{ .work.github }})..."
+    gh auth login --hostname github.com --git-protocol ssh --web
+fi
+
+# Set work as active account
+gh auth switch --hostname github.com --user {{ .work.github }}
+echo "[dotfiles] GitHub CLI: active account set to {{ .work.github }}"
+{{- end }}
