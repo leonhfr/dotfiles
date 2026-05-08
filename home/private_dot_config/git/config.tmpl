@@ -7,13 +7,20 @@
   autocrlf = input
   excludesfile = ~/git/ignore
   whitespace = trailing-space,space-before-tab
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = delta
 
 [branch]
   sort = -committerdate
 
 [column]
   ui = auto
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    dark = true
 
 [diff]
   algorithm = histogram

@@ -6,13 +6,13 @@ brews:
     - cheat
     - chezmoi
     - croc
-    - diff-so-fancy
     - dockutil
     - eza
     - fd
     - gdu
     - gh
     - git
+    - git-delta
     - git-lfs
     - git-town
     - go
