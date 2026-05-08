@@ -1,22 +1,24 @@
 {{- $machineTypes := list "personal" "work" -}}
 {{- $machine := promptChoiceOnce . "machine" "What type of machine" $machineTypes -}}
 
-{{- $personalOpVault := promptStringOnce .personal.op "vault" "Personal 1Password vault name" "Personal" -}}
-
 {{- $workEmail := "" -}}
 {{- $workGithub := "" -}}
 {{- $workOpAccount := "" -}}
 {{- $workOpVault := "" -}}
 
 {{- if eq $machine "work" -}}
-{{- $workEmail = promptStringOnce .work "email" "Work email address" -}}
-{{- $workGithub = promptStringOnce .work "github" "Work GitHub username" -}}
-{{- $workOpAccount = promptStringOnce .work.op "account" "Work 1Password account shorthand" -}}
-{{- $workOpVault = promptStringOnce .work.op "vault" "Work 1Password vault name" "Private" -}}
+{{- $workEmail = promptStringOnce . "work_email" "Work email address" -}}
+{{- $workGithub = promptStringOnce . "work_github" "Work GitHub username" -}}
+{{- $workOpAccount = promptStringOnce . "work_op_account" "Work 1Password account shorthand" -}}
+{{- $workOpVault = promptStringOnce . "work_op_vault" "Work 1Password vault name" "Private" -}}
 {{- end -}}
 
 [data]
   machine = {{ $machine | quote }}
+  work_email = {{ $workEmail | quote }}
+  work_github = {{ $workGithub | quote }}
+  work_op_account = {{ $workOpAccount | quote }}
+  work_op_vault = {{ $workOpVault | quote }}
 
 [data.personal]
   name = "léon h"
@@ -25,10 +27,9 @@
 
 [data.personal.op]
   account = "my"
-  vault = {{ $personalOpVault | quote }}
-  ssh_public_key = "op://{{ $personalOpVault }}/GitHub SSH Key/public key"
-  ssh_private_key = "op://{{ $personalOpVault }}/GitHub SSH Key/private key"
-  chezmoi_token = "op://{{ $personalOpVault }}/chezmoi GitHub API Token/credential"
+  ssh_public_key = "op://Personal/GitHub SSH Key/public key"
+  ssh_private_key = "op://Personal/GitHub SSH Key/private key"
+  chezmoi_token = "op://Personal/chezmoi GitHub API Token/credential"
 
 [data.work]
   name = "Léon Hollender"
@@ -37,7 +38,6 @@
 
 [data.work.op]
   account = {{ $workOpAccount | quote }}
-  vault = {{ $workOpVault | quote }}
   ssh_public_key = "op://{{ $workOpVault }}/GitHub SSH Key/public key"
   ssh_private_key = "op://{{ $workOpVault }}/GitHub SSH Key/private key"
   chezmoi_token = "op://{{ $workOpVault }}/chezmoi GitHub API Token/credential"
