@@ -1,6 +1,6 @@
 [user]
-  name = {{ .git.name }}
-  email = {{ .git.email }}
+  name = {{ .personal.name }}
+  email = {{ .personal.email }}
   signingkey = {{ onepasswordRead .personal.op.ssh_public_key .personal.op.account }}
 
 [core]
@@ -78,8 +78,8 @@
   gpgsign = true
 {{ end -}}
 
-[url "git@github.com:{{ .git.github }}/"]
-  insteadOf = https://github.com/{{ .git.github }}/
+[url "git@github.com:{{ .personal.github }}/"]
+  insteadOf = https://github.com/{{ .personal.github }}/
 
 {{- $ghPath := lookPath "gh" -}}
 {{ if $ghPath -}}

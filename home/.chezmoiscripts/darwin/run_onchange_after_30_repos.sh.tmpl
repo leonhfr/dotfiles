@@ -6,7 +6,7 @@ set -euo pipefail
 {{ range concat $common $machine }}
 if [ ! -d "{{ .path }}" ]; then
     echo "[dotfiles] Cloning {{ .name }}..."
-    git clone git@github.com:{{ $.git.github }}/{{ .name }}.git ~/{{ .path }}
+    git clone git@github.com:{{ $.personal.github }}/{{ .name }}.git ~/{{ .path }}
 else
     echo "[dotfiles] {{ .name }} already exists, skipping"
 fi
