@@ -16,8 +16,10 @@ brews:
     - git-lfs
     - git-town
     - go
+    - golangci-lint
     - jj
     - jless
+    # - lazygit
     - micro
     - mise
     - ripgrep

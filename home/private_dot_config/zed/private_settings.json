@@ -52,17 +52,39 @@
 
   // Extensions
   "auto_install_extensions": {
+    "codebook": true,
+    "docker-compose": false,
     "dockerfile": true,
     "git-firefly": true,
+    "go-snippets": false,
+    "golangci-lint": true,
     "html": true,
     "ini": true,
     "sql": true,
+    "terraform": false,
     "toml": true,
+  },
+
+  "lsp": {
+    "golangci-lint": {
+      "initialization_options": {
+        "command": [
+          "golangci-lint",
+          "run",
+          "--output.json.path",
+          "stdout",
+          "--show-stats=false",
+          "--output.text.path=",
+        ],
+      },
+    },
   },
 
   // Language-specific
   "languages": {
-    "Go": {},
+    "Go": {
+      "language_servers": ["gopls", "golangci-lint", "..."],
+    },
     "Markdown": {
       "format_on_save": "on",
     },
