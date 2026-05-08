@@ -13,5 +13,3 @@ fi
 
 echo "[dotfiles] Installing 1password-cli"
 brew install --cask 1password-cli
-
-"$(dirname "$0")/.check-password-manager-signin.sh"
