@@ -1,5 +1,4 @@
 {{- $user := ternary .work .personal (eq .machine "work") -}}
-[user]
 {{ template "git-user" $user -}}
 
 [core]
