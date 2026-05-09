@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 # Exit immediately if op is already in $PATH.
 type op >/dev/null 2>&1 && exit

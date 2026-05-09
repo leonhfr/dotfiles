@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -eu
 
 CHEZMOI_DIR="$HOME/.local/share/chezmoi"
 

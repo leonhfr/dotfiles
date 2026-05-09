@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 case "$(uname -s)" in
 Darwin)
