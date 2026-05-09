@@ -1,3 +1,7 @@
+[tasks.config]
+description = "Show the current chezmoi config"
+run = "bat ~/.config/chezmoi/chezmoi.toml"
+
 [tasks.setup]
 description = "Run all setup tasks"
 depends = ["filevault", "firewall"]
