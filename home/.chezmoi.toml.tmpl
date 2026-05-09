@@ -3,8 +3,8 @@
 
 {{- $workEmail := "" -}}
 {{- $workGithub := "" -}}
-{{- $workOpAccount := "" -}}
-{{- $workOpVault := "" -}}
+{{- $workOpAccount := "my" -}}
+{{- $workOpVault := "Private" -}}
 
 {{- if eq $machine "work" -}}
 {{- $workEmail = promptStringOnce . "work_email" "Work email address" -}}
@@ -14,6 +14,9 @@
 {{- end -}}
 
 encryption = "transparent"
+
+[diff]
+    exclude = ["scripts"]
 
 [data]
   machine = {{ $machine | quote }}
