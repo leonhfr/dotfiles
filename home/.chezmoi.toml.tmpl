@@ -49,11 +49,3 @@ encryption = "transparent"
 
 [hooks.read-source-state.pre]
   command = ".local/share/chezmoi/bin/.install-prerequisites.sh"
-
-[hooks.apply.pre]
-  command = "echo"
-  args = ["[dotfiles] Applying dotfiles..."]
-
-[hooks.apply.post]
-  command = "echo"
-  args = ["[dotfiles] Dotfiles applied"]
