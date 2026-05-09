@@ -23,15 +23,11 @@ Locally, the dotfiles source directory lives in `~/.local/share/chezmoi`.
 ## Set up
 
 ```sh
-# FileVault, store the recovery key in 1Password
-sudo fdesetup enable
-
-# Firewall
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+# Set up FileVault and enable firewall
+mise run setup
 ```
 
 - Rectangle
-- 1Password: Settings -> Developer -> Use the SSH agent
 - Handy
 - Obsidian Notes
 - Filen

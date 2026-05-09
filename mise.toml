@@ -1,0 +1,18 @@
+[tasks.setup]
+description = "Run all setup tasks"
+depends = ["filevault", "firewall"]
+
+[tasks.filevault]
+description = "Enable FileVault"
+run = """
+fdesetup status | grep -q 'FileVault is On.' && exit 0
+echo "Remember to store the recovery key in 1Password"
+sudo fdesetup enable
+"""
+
+[tasks.firewall]
+description = "Enable firewall"
+run = """
+/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate | grep -q 'enabled' && exit 0
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+"""
