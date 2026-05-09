@@ -45,6 +45,8 @@ alias mr="mise run"
 alias cat="bat"
 alias ls="eza"
 
+eval $(thefuck --alias)
+
 {{ if eq .machine "work" -}}
 [[ -f "$HOME/.zshrc_work.zsh" ]] && source "$HOME/.zshrc_work.zsh"
 {{ end -}}

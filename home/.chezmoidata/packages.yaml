@@ -24,6 +24,7 @@ brews:
     - mise
     - ripgrep
     - shellcheck
+    - thefuck
     - tokei
     - transcrypt
     - tree
