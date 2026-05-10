@@ -21,6 +21,7 @@ brews:
     - jj
     - jless
     # - lazygit
+    - mani
     - micro
     - mise
     - ripgrep

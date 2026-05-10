@@ -2,7 +2,12 @@
 .chezmoiscripts/darwin/**
 {{ end }}
 
+{{ if ne .machine "personal" }}
+GitHub/personal.yaml
+{{ end }}
+
 {{ if ne .machine "work" }}
+GitHub/work.yaml
 .zshrc_work.zsh
 .config/git/personal
 .config/pgcli/**

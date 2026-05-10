@@ -4,7 +4,7 @@
     "JSON": ["*.json.tmpl"],
     "JSONC": ["**/zed/*.json"],
     "INI": ["**/pgcli/config", "**/git/config.tmpl"],
-    "YAML": ["*.yml.tmpl"],
+    "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
     "TOML": ["*.toml.tmpl"],
   },
 }
