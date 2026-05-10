@@ -1,0 +1,17 @@
+#!/bin/sh
+### my-script — does one thing well
+###
+### Usage:
+###   my-script <input> <output>
+###
+### Options:
+###   <input>   Input file to read.
+###   <output>  Output file to write. Use '-' for stdout.
+###   -h        Show this message.
+
+set -eu
+
+if [[ $# == 0 ]] || [[ "$1" == "-h" ]]; then
+  sed -rn 's/^### ?//p' "$0"
+  exit 0
+fi

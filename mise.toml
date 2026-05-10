@@ -2,6 +2,19 @@
 description = "Show the current chezmoi config"
 run = "bat ~/.config/chezmoi/chezmoi.toml"
 
+[tasks.new-script]
+description = "Create a new script in ~/bin"
+run = """
+#!/bin/sh
+set -eu
+name="${1:?Usage: mise run new-script -- <name>}"
+dir="$MISE_PROJECT_ROOT/home/bin"
+target="$dir/executable_$name"
+cp "$dir/.template" "$target"
+echo "Created home/bin/executable_$name → ~/bin/$name"
+${EDITOR:-vi} "$target"
+"""
+
 [tasks.setup]
 description = "Run all setup tasks"
 depends = ["filevault", "firewall"]
