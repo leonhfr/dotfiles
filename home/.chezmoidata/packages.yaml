@@ -17,6 +17,7 @@ brews:
     - git-town
     - go
     - golangci-lint
+    - gopls
     - jj
     - jless
     # - lazygit
@@ -92,7 +93,3 @@ casks:
     - notion
     # - pomatez
     # - postman
-
-go:
-  common:
-    - golang.org/x/tools/gopls@latest

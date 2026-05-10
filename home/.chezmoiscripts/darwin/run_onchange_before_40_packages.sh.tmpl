@@ -5,7 +5,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 {{- $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) -}}
 {{- $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) -}}
-{{- $go := concat (.go.common | default (list)) (index .go .machine | default (list)) }}
 
 echo "[dotfiles] Installing packages"
 
@@ -25,12 +24,4 @@ if command -v rustup >/dev/null 2>&1; then
     fi
 
     rustup component add rust-src
-fi
-
-if command -v go >/dev/null 2>&1; then
-    echo "[dotfiles] Installing go packages"
-
-    {{ range $go -}}
-    go install {{ . }}
-    {{ end -}}
 fi
