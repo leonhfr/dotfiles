@@ -33,6 +33,7 @@ brews:
   personal:
     - filen-cli
     - hugo
+    - mole
     - pandoc
     - rustup
     # - syncthing
