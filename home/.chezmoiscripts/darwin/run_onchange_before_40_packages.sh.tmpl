@@ -8,7 +8,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 echo "[dotfiles] Installing packages"
 
-brew bundle --file=/dev/stdin <<EOF
+brew bundle --cleanup --file=/dev/stdin <<EOF
 {{ range $brews | sortAlpha | uniq -}}
 brew {{ . | quote }}
 {{ end -}}
