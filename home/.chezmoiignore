@@ -2,6 +2,9 @@
 .chezmoiscripts/darwin/**
 {{ end }}
 
+.claude/settings_common.json
+.claude/settings_work.json
+
 {{ if ne .machine "personal" }}
 GitHub/personal.yaml
 {{ end }}
