@@ -3,6 +3,9 @@
     "CLAUDE_CODE_NO_FLICKER": "1"
   },
   "permissions": {
+    "deny": [
+      "Bash(git push:*)"
+    ],
     "defaultMode": "plan"
   },
   "awaySummaryEnabled": false,
@@ -12,5 +15,20 @@
   "attribution": {
     "commits": false,
     "pullRequests": false
+  },
+  "disableDeepLinkRegistration": "disable",
+  "fastMode": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
   }
 }

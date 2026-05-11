@@ -25,6 +25,7 @@ brews:
     - micro
     - mise
     - ripgrep
+    - rtk
     - shellcheck
     - thefuck
     - tokei
