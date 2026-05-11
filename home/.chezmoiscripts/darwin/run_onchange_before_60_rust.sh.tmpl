@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+if command -v rustup >/dev/null 2>&1; then
+    if ! command -v cargo >/dev/null 2>&1; then
+        echo "[dotfiles] Installing Rust"
+        rustup-init -y
+    fi
+
+    rustup component list --installed | grep -q '^rust-src' || rustup component add rust-src
+fi
