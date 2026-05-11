@@ -1,3 +1,7 @@
+[tools]
+hk = "latest"
+gitleaks = "latest"
+
 [tasks.config]
 description = "Show the current chezmoi config"
 run = "bat ~/.config/chezmoi/chezmoi.toml"
@@ -34,3 +38,9 @@ run = """
 /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate | grep -q 'enabled' && exit 0
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 """
+
+[env]
+HK_MISE = 1
+
+[hooks]
+postinstall = "hk install --mise"

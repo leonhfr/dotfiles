@@ -18,6 +18,7 @@ brews:
     - go
     - golangci-lint
     - gopls
+    - hk
     - jj
     - jless
     # - lazygit
