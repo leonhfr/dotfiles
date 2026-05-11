@@ -65,12 +65,14 @@ casks:
     - font-powerline-symbols
     - ghostty
     - handy
+    - jordanbaird-ice
     # - nikitabobko/tap/aerospace
     # - notunes
     - obsidian
     - openusage
     - rectangle
     - spotify
+    - stats
     - visual-studio-code
     - zed
   personal:
