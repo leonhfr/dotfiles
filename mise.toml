@@ -11,8 +11,9 @@ name="${1:?Usage: mise run new-script -- <name>}"
 dir="$MISE_PROJECT_ROOT/home/bin"
 target="$dir/executable_$name"
 cp "$dir/.template" "$target"
+sed -i '' "s/my-script/$name/g" "$target"
 echo "Created home/bin/executable_$name → ~/bin/$name"
-${EDITOR:-vi} "$target"
+zed "$target"
 """
 
 [tasks.setup]

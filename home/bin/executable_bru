@@ -1,0 +1,17 @@
+#!/bin/sh
+### bru - apply Homebrew package changes from chezmoi
+###
+### Usage:
+###   bru
+###
+### Options:
+###   -h        Show this message.
+
+set -eu
+
+if [ "${1:-}" = "-h" ]; then
+  sed -rn 's/^### ?//p' "$0"
+  exit 0
+fi
+
+chezmoi apply --source-path home/.chezmoiscripts/darwin/run_onchange_before_40_packages.sh.tmpl
