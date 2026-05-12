@@ -42,12 +42,14 @@ brews:
     # - syncthing
   work:
     # - act
-    # - awscli
+    - awscli
     # - bat
     # - buf
+    - docker-credential-helper-ecr
     # - helm
     # - k9s
     # - kind
+    - kubectl
     # - kubectx
     # - kubernetes-cli
     - pgcli
@@ -58,7 +60,7 @@ brews:
 casks:
   common:
     - 1password-cli
-    - docker-desktop
+    - firefox
     - font-jetbrains-mono
     - font-lato
     - font-open-sans
@@ -71,6 +73,7 @@ casks:
     # - notunes
     - obsidian
     - openusage
+    - orbstack
     - rectangle
     - spotify
     - stats
@@ -81,7 +84,6 @@ casks:
     - calibre
     - claude-code
     - filen
-    - firefox
     - mochi
     - nordvpn
     # - rhino-app
