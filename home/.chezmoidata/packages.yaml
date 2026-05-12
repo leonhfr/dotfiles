@@ -58,7 +58,6 @@ brews:
 casks:
   common:
     - 1password-cli
-    - claude-code
     - docker-desktop
     - font-jetbrains-mono
     - font-lato
@@ -80,6 +79,7 @@ casks:
   personal:
     - 1password
     - calibre
+    - claude-code
     - filen
     - firefox
     - mochi

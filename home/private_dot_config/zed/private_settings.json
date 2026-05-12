@@ -60,7 +60,6 @@
     "golangci-lint": true,
     "html": true,
     "ini": true,
-    "pkl": true,
     "sql": true,
     "terraform": false,
     "toml": true,
