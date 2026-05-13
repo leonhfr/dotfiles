@@ -95,10 +95,9 @@
 
 [includeIf "hasconfig:remote.*.url:https://github.com/{{ .personal.github }}/**"]
   path = ~/.config/git/personal
-{{ else -}}
-[url "git@github.com:{{ .personal.github }}/"]
-  insteadOf = https://github.com/{{ .personal.github }}/
-{{ end }}
+{{ end -}}
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
 {{ $ghPath := lookPath "gh" -}}
 {{ if $ghPath -}}
 [credential "https://github.com"]

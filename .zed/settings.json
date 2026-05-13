@@ -2,7 +2,7 @@
   "file_types": {
     "Shell Script": [
       "*.sh.tmpl",
-      "*.z∫sh.tmpl",
+      "*.zsh.tmpl",
       "dot_zprofile.tmpl",
       "dot_zshrc.tmpl",
     ],
@@ -11,5 +11,6 @@
     "INI": ["**/pgcli/config", "**/git/config.tmpl"],
     "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
     "TOML": ["*.toml.tmpl"],
+    "Git Config": ["**/git/config.tmpl"],
   },
 }

@@ -16,7 +16,8 @@
 encryption = "transparent"
 
 [diff]
-    exclude = ["scripts"]
+  pager = "delta"
+  exclude = ["scripts", "externals"]
 
 [data]
   machine = {{ $machine | quote }}
