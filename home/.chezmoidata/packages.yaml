@@ -6,6 +6,7 @@ brews:
     - cheat
     - chezmoi
     - croc
+    - difftastic
     - dockutil
     - eza
     - fd

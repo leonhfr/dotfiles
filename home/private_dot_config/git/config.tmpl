@@ -10,27 +10,51 @@
 
 [branch]
   sort = -committerdate
+  autoSetupRebase = always
 
 [column]
   ui = auto
 
 [interactive]
-    diffFilter = delta --color-only
+  diffFilter = delta --color-only --features=interactive
+
+[rerere]
+  enabled = true
 
 [delta]
-    navigate = true
-    dark = true
+  navigate = true
+  dark = true
+  features = side-by-side line-numbers decorations
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = red
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
 
 [diff]
-  algorithm = histogram
-  colorMoved = plain
+  algorithm = patience
+  compactionHeuristic = true
+  colorMoved = zebra
 
 [merge]
   conflictStyle = zdiff3
 
+[grep]
+  extendedRegexp = true
+  lineNumber = true
+
 [pager]
   branch = false
   grep = false
+  reflog = delta
+  show = delta
+  tool = difft
 
 [rebase]
   autoSquash = true
@@ -45,6 +69,10 @@
 
 [push]
   autoSetupRemote = true
+  default = current
+
+[checkout]
+  defaultRemote = origin
 
 [fetch]
   prune = true
@@ -52,6 +80,15 @@
 [alias]
   configs = config --list --show-origin
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+  lt = describe --tags --abbrev=0 # latest tag on current commit
+
+  dlog = -c diff.external=difft log --ext-diff
+  dshow = -c diff.external=difft show --ext-diff
+  ddiff = -c diff.external=difft diff --ext-diff
+  dl = -c diff.external=difft log -p --no-prefix --ext-diff
+  ds = -c diff.external=difft show --ext-diff
+  dd = -c diff.external=difft diff --ext-diff
+
   append = town append
   continue = town continue
   delete = town delete
