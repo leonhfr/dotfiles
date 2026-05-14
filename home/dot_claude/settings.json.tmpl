@@ -1,5 +1,5 @@
 {{- $base := include "dot_claude/settings_common.json" | fromJson -}}
-{{- if .work -}}
+{{- if eq .machine "work" -}}
 {{-   $work := include "dot_claude/encrypted_settings_work.json" | fromJson -}}
 {{-   $base = mergeOverwrite $base $work -}}
 {{- end -}}

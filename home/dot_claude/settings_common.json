@@ -1,10 +1,32 @@
 {
   "env": {
-    "CLAUDE_CODE_NO_FLICKER": "1"
+    "CLAUDE_CODE_NO_FLICKER": "1",
+    "DISABLE_AUTOUPDATER": "1"
   },
   "permissions": {
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(ls:*)",
+      "Bash(rtk read *)",
+      "Bash(rtk grep *)",
+      "Bash(rtk glob *)",
+      "Bash(rtk git status)",
+      "Bash(rtk git diff:*)",
+      "Bash(rtk ls:*)"
+    ],
     "deny": [
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(rm -rf:*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(rtk git push:*)",
+      "Bash(rtk rm -rf:*)",
+      "Bash(rtk read ./.env)",
+      "Bash(rtk read ./.env.*)"
     ],
     "defaultMode": "plan"
   },
@@ -16,6 +38,8 @@
     "commits": false,
     "pullRequests": false
   },
+  "includeGitInstructions": false,
+  "spinnerVerbs": { "mode": "replace", "verbs": ["Processing"] },
   "disableDeepLinkRegistration": "disable",
   "fastMode": false,
   "hooks": {
