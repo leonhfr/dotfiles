@@ -1,5 +1,6 @@
 brews:
   common:
+    - antidote
     - bat
     - btop
     - ccusage

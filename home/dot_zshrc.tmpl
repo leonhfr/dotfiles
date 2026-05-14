@@ -4,27 +4,13 @@ export XDG_CONFIG_HOME=$HOME/.config
 export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
 
-# antigen
-
-export ZSH_CACHE_DIR="$XDG_CACHE_HOME/oh-my-zsh"
-mkdir -p "$ZSH_CACHE_DIR/completions"
-
+# antidote
 HIST_STAMPS="yyyy-mm-dd"
 
-source "$HOME/.antigen/antigen.zsh"
+autoload -Uz compinit && compinit
 
-antigen use oh-my-zsh
-
-antigen bundle chezmoi                              # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/chezmoi
-antigen bundle djui/alias-tips                      # https://github.com/djui/alias-tips
-antigen bundle gh                                   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gh
-antigen bundle git                                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
-antigen bundle golang                               # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/golang
-antigen bundle zlsun/solarized-man                  # https://github.com/zlsun/solarized-man
-antigen bundle zsh-users/zsh-syntax-highlighting    # https://github.com/zsh-users/zsh-syntax-highlighting
-
-antigen theme agnoster
-antigen apply
+source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
+antidote load
 
 # options
 setopt prompt_subst
