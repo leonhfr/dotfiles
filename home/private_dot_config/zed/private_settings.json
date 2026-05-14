@@ -48,6 +48,7 @@
   "terminal": {
     "font_size": 12,
     "option_as_meta": true,
+    "font_family": "MesloLGS Nerd Font",
   },
 
   // Extensions

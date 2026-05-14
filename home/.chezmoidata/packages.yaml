@@ -65,9 +65,9 @@ casks:
     - firefox
     - font-jetbrains-mono
     - font-lato
+    - font-meslo-lg-nerd-font
     - font-open-sans
     - font-roboto
-    - font-powerline-symbols
     - ghostty
     - handy
     - jordanbaird-ice
