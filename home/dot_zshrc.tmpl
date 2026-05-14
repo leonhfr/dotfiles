@@ -45,6 +45,26 @@ alias m="mise"
 alias mr="mise run"
 alias cat="bat"
 alias ls="eza"
+alias z="zed"
+alias cdd="cd `pwd`"
+alias cc="claude"
+alias td="tree -d"
+alias tree2="tree -d -L 2"
+alias tree3="tree -d -L 3"
+alias tree4="tree -d -L 4"
+
+alias rgi="rg -i"
+alias rgv="rg -v"
+alias rgvi="rg -vi"
+alias rggo="rg -tgo -F -g '!vendor/'"
+alias rgmd="rg -tmarkdown"
+
+alias ..="cd .."
+alias ...="cd ../../"
+alias ....="cd ../../../"
+alias .....="cd ../../../../"
+
+export LESS=-RFX
 
 eval $(thefuck --alias)
 
