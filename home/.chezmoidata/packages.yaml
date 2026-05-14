@@ -94,7 +94,8 @@ casks:
     # - the-unarchiver
     - vlc
   work:
-    # - beekeeper-studio
+    - constructor
+    - figma
     # - gitify
     # - gitkraken
     # - google-chrome
