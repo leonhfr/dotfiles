@@ -82,13 +82,13 @@
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   lt = describe --tags --abbrev=0 # latest tag on current commit
 
-  dl = -c diff.external=difft log -p --no-prefix --ext-diff
-  ds = -c diff.external=difft show --ext-diff
-  dd = -c diff.external=difft diff --ext-diff
+  dl = "!git --no-pager -c diff.external=difft log -p --no-prefix --ext-diff"
+  ds = "!git --no-pager -c diff.external=difft show --ext-diff"
+  dd = "!git --no-pager -c diff.external=difft diff --ext-diff"
 
-  dnl = -c diff.external=diffnav log -p --no-prefix --ext-diff
-  dns = -c diff.external=diffnav show --ext-diff
-  dnd = -c diff.external=diffnav diff --ext-diff
+  dnl = "!git -c pager.log=diffnav log"
+  dns = "!git -c pager.show=diffnav show"
+  dnd = "!git -c pager.diff=diffnav diff"
 
   append = town append
   continue = town continue
