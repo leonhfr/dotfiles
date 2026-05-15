@@ -8,6 +8,7 @@ brews:
     - chezmoi
     - croc
     - difftastic
+    - dlvhdr/formulae/diffnav
     - dockutil
     - eza
     - fd

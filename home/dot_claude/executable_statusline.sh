@@ -120,7 +120,7 @@ pct_int="${pct_int:-0}"
 pct_color=$(color_for_pct "$pct_int")
 
 line="${blue}${model_name}${reset}"
-line+="${sep}${pct_color}󱄂 ${pct_int}%${reset}"
+line+="${sep}${pct_color}󰓅 ${pct_int}%${reset}"
 line+="${sep}${cyan}${dirname}${reset}"
 [ -n "$git_branch" ] && line+=" ${green}(${git_branch}${red}${git_dirty}${green})${reset}"
 line+="${dur_section}"

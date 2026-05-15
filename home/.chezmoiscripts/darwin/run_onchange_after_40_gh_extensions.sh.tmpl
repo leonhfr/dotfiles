@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+extensions=(
+  "dlvhdr/gh-dash"
+)
+
+installed=$(gh extension list 2>/dev/null || true)
+
+for ext in "${extensions[@]}"; do
+  name="${ext##*/}"
+  if echo "$installed" | grep -q "$name"; then
+    echo "[dotfiles] gh extension already installed: $name"
+  else
+    echo "[dotfiles] Installing gh extension: $ext"
+    gh extension install "$ext"
+  fi
+done
