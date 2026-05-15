@@ -17,6 +17,7 @@ brews:
     - git-delta
     - git-lfs
     - git-town
+    - git-who
     - go
     - golangci-lint
     - gopls
