@@ -9,6 +9,7 @@ brews:
     - croc
     - difftastic
     - dlvhdr/formulae/diffnav
+    # - direnv
     - dockutil
     - eza
     - fd
@@ -56,8 +57,11 @@ brews:
     - kubectl
     # - kubectx
     # - kubernetes-cli
+    - libxml2
+    - pkgconf
     - pgcli
     # - postgresql
+    - saxon
     # - terraform
     # - tfswitch
 
@@ -96,7 +100,7 @@ casks:
     # - the-unarchiver
     - vlc
   work:
-    - constructor
+    - conductor
     - figma
     # - gitify
     # - gitkraken

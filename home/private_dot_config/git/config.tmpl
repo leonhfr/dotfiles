@@ -4,7 +4,7 @@
 [core]
   editor = micro
   autocrlf = input
-  excludesfile = ~/git/ignore
+  excludesFile = ~/.config/git/ignore
   whitespace = trailing-space,space-before-tab
   pager = delta
 
@@ -134,7 +134,7 @@
 [includeIf "hasconfig:remote.*.url:https://github.com/{{ .personal.github }}/**"]
   path = ~/.config/git/personal
 {{ end -}}
-[url "ssh://git@github.com/"]
+[url "git@github.com:"]
   insteadOf = https://github.com/
 {{ $ghPath := lookPath "gh" -}}
 {{ if $ghPath -}}

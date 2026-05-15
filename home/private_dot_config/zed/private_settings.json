@@ -61,8 +61,9 @@
     "golangci-lint": true,
     "html": true,
     "ini": true,
+    "make": true,
     "sql": true,
-    "terraform": false,
+    "terraform": true,
     "toml": true,
   },
 
