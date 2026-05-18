@@ -13,6 +13,8 @@ brews:
     - dockutil
     - eza
     - fd
+    - ffmpeg-full
+    - fzf
     - gdu
     - gh
     - git
@@ -24,19 +26,26 @@ brews:
     - golangci-lint
     - gopls
     - hk
+    - imagemagick-full
     - jj
     - jless
+    - jq
     # - lazygit
     - mani
     - micro
     - mise
+    - poppler
+    - resvg
     - ripgrep
     - rtk
+    - sevenzip
     - shellcheck
     - thefuck
     - tokei
     - transcrypt
     - tree
+    - yazi
+    - zoxide
     # - witr
   personal:
     - filen-cli
@@ -48,7 +57,6 @@ brews:
   work:
     # - act
     - awscli
-    # - bat
     # - buf
     - docker-credential-helper-ecr
     # - helm

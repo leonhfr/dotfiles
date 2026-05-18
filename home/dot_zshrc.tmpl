@@ -34,7 +34,7 @@ alias m="mise"
 alias mr="mise run"
 alias cat="bat"
 alias ls="eza"
-alias z="zed"
+alias zd="zed"
 alias cdd="cd `pwd`"
 alias cc="claude"
 alias td="tree -d"
@@ -56,6 +56,7 @@ alias .....="cd ../../../../"
 export LESS=-RFX
 
 eval $(thefuck --alias)
+eval "$(zoxide init zsh)"
 
 {{ if eq .machine "work" -}}
 [[ -f "$HOME/.zshrc_work.zsh" ]] && source "$HOME/.zshrc_work.zsh"
