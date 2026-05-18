@@ -26,6 +26,7 @@ brews:
     - golangci-lint
     - golangci-lint-langserver
     - gopls
+    - gum
     - hk
     - imagemagick-full
     - jj
