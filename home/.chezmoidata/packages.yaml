@@ -9,7 +9,7 @@ brews:
     - croc
     - difftastic
     - dlvhdr/formulae/diffnav
-    # - direnv
+    - direnv
     - dockutil
     - eza
     - fd
@@ -24,6 +24,7 @@ brews:
     - git-who
     - go
     - golangci-lint
+    - golangci-lint-langserver
     - gopls
     - hk
     - imagemagick-full
@@ -63,7 +64,7 @@ brews:
     # - k9s
     # - kind
     - kubectl
-    # - kubectx
+    - kubectx
     # - kubernetes-cli
     - libxml2
     - pkgconf
@@ -118,3 +119,5 @@ casks:
     - notion
     # - pomatez
     # - postman
+
+# herdr

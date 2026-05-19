@@ -32,11 +32,11 @@ export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead $machineOp.chezmoi_token $
 alias gt="git town"
 alias m="mise"
 alias mr="mise run"
-alias cat="bat"
-alias ls="eza"
+command -v bat >/dev/null && alias cat="bat"
+command -v eza >/dev/null && alias ls="eza"
 alias zd="zed"
-alias cdd="cd `pwd`"
-alias cc="claude"
+alias cdd='cd "$SHELL_START_DIR"'
+alias c="claude"
 alias td="tree -d"
 alias tree2="tree -d -L 2"
 alias tree3="tree -d -L 3"
@@ -55,8 +55,9 @@ alias .....="cd ../../../../"
 
 export LESS=-RFX
 
-eval $(thefuck --alias)
-eval "$(zoxide init zsh)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+command -v thefuck >/dev/null && eval "$(thefuck --alias)"
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 {{ if eq .machine "work" -}}
 [[ -f "$HOME/.zshrc_work.zsh" ]] && source "$HOME/.zshrc_work.zsh"
