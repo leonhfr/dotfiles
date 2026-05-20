@@ -10,6 +10,7 @@ claude_settings_mapping:
   fastMode: common
   hooks: common
   includeGitInstructions: common
+  model: machine
   permissions: common
   prefersReducedMotion: common
   remoteControlAtStartup: common

@@ -1,1 +1,14 @@
-{}
+{
+  "enabledPlugins": {
+    "gopilot@gopilot": true,
+    "gopls-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "gopilot": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:gonzaloserrano/gopilot.git"
+      }
+    }
+  }
+}

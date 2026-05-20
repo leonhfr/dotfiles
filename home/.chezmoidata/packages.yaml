@@ -96,6 +96,7 @@ casks:
     - rectangle
     - spotify
     - stats
+    - the-unarchiver
     - visual-studio-code
     - zed
   personal:
@@ -108,7 +109,6 @@ casks:
     # - rhino-app
     - slack
     # - steam
-    # - the-unarchiver
     - vlc
   work:
     - conductor
