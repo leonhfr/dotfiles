@@ -1,8 +1,30 @@
 {
+  "alwaysThinkingEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "awaySummaryEnabled": false,
+  "disableDeepLinkRegistration": "disable",
   "env": {
     "CLAUDE_CODE_NO_FLICKER": "1",
     "DISABLE_AUTOUPDATER": "1"
   },
+  "fastMode": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "rtk hook claude",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ]
+  },
+  "includeGitInstructions": false,
   "permissions": {
     "allow": [
       "Read",
@@ -20,6 +42,7 @@
       "Bash(rtk git diff *)",
       "Bash(rtk ls *)"
     ],
+    "defaultMode": "plan",
     "deny": [
       "Bash(git push *)",
       "Bash(rm -rf *)",
@@ -29,36 +52,18 @@
       "Bash(rtk rm -rf *)",
       "Bash(rtk read ./.env)",
       "Bash(rtk read ./.env.*)"
-    ],
-    "defaultMode": "plan"
+    ]
   },
-  "awaySummaryEnabled": false,
-  "remoteControlAtStartup": false,
-  "alwaysThinkingEnabled": true,
   "prefersReducedMotion": true,
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "includeGitInstructions": false,
-  "spinnerVerbs": { "mode": "replace", "verbs": ["Processing"] },
-  "disableDeepLinkRegistration": "disable",
-  "fastMode": false,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      }
+  "remoteControlAtStartup": false,
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Processing"
     ]
   },
   "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
+    "command": "~/.claude/statusline.sh",
+    "type": "command"
   }
 }

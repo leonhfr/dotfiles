@@ -1,0 +1,17 @@
+claude_settings_mapping:
+  alwaysThinkingEnabled: common
+  apiKeyHelper: machine
+  attribution: common
+  awaySummaryEnabled: common
+  disableDeepLinkRegistration: common
+  enabledPlugins: machine
+  env: common
+  extraKnownMarketplaces: machine
+  fastMode: common
+  hooks: common
+  includeGitInstructions: common
+  permissions: common
+  prefersReducedMotion: common
+  remoteControlAtStartup: common
+  spinnerVerbs: common
+  statusLine: common

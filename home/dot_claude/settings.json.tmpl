@@ -1,6 +1,9 @@
 {{- $base := include ".chezmoitemplates/claude_settings.json" | fromJson -}}
 {{- if eq .machine "work" -}}
-{{-   $work := include ".chezmoitemplates/encrypted_claude_settings_work.json" | fromJson -}}
-{{-   $base = mergeOverwrite $base $work -}}
+{{-   $machine := include ".chezmoitemplates/encrypted_claude_settings_work.json" | fromJson -}}
+{{-   $base = mergeOverwrite $base $machine -}}
+{{- else if eq .machine "personal" -}}
+{{-   $machine := include ".chezmoitemplates/claude_settings_personal.json" | fromJson -}}
+{{-   $base = mergeOverwrite $base $machine -}}
 {{- end -}}
 {{ $base | toPrettyJson }}

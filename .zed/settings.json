@@ -22,6 +22,7 @@
             {
               "fileMatch": [
                 "**/.chezmoitemplates/claude_settings.json",
+                "**/.chezmoitemplates/claude_settings_personal.json",
                 "**/.chezmoitemplates/encrypted_claude_settings_work.json",
               ],
               "url": "https://json.schemastore.org/claude-code-settings.json",

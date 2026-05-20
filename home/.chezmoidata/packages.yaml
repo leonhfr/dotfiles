@@ -47,6 +47,7 @@ brews:
     - transcrypt
     - tree
     - yazi
+    - yq
     - zoxide
     # - witr
   personal:
@@ -112,6 +113,7 @@ casks:
   work:
     - conductor
     - figma
+    - gcloud-cli
     # - gitify
     # - gitkraken
     # - google-chrome
