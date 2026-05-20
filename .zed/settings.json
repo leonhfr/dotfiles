@@ -12,5 +12,23 @@
     "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
     "TOML": ["*.toml.tmpl"],
     "Git Config": ["**/git/config.tmpl"],
+    "Go Text Template": ["**/dot_claude/settings.json.tmpl"],
+  },
+  "lsp": {
+    "json-language-server": {
+      "settings": {
+        "json": {
+          "schemas": [
+            {
+              "fileMatch": [
+                "**/.chezmoitemplates/claude_settings.json",
+                "**/.chezmoitemplates/encrypted_claude_settings_work.json",
+              ],
+              "url": "https://json.schemastore.org/claude-code-settings.json",
+            },
+          ],
+        },
+      },
+    },
   },
 }

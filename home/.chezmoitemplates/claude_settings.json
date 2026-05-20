@@ -37,8 +37,8 @@
   "alwaysThinkingEnabled": true,
   "prefersReducedMotion": true,
   "attribution": {
-    "commits": false,
-    "pullRequests": false
+    "commit": "",
+    "pr": ""
   },
   "includeGitInstructions": false,
   "spinnerVerbs": { "mode": "replace", "verbs": ["Processing"] },

@@ -59,6 +59,7 @@
     "git-firefly": true,
     "go-snippets": false,
     "golangci-lint": true,
+    "gotmpl": true,
     "html": true,
     "ini": true,
     "make": true,

@@ -1,6 +1,6 @@
-{{- $base := include "dot_claude/settings_common.json" | fromJson -}}
+{{- $base := include ".chezmoitemplates/claude_settings.json" | fromJson -}}
 {{- if eq .machine "work" -}}
-{{-   $work := include "dot_claude/encrypted_settings_work.json" | fromJson -}}
+{{-   $work := include ".chezmoitemplates/encrypted_claude_settings_work.json" | fromJson -}}
 {{-   $base = mergeOverwrite $base $work -}}
 {{- end -}}
 {{ $base | toPrettyJson }}
