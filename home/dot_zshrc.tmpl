@@ -28,7 +28,64 @@ export GPG_TTY=$(tty)
 {{ $machineOp := eq .machine "work" | ternary .work.op .personal.op -}}
 export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead $machineOp.chezmoi_token $machineOp.account }}
 
+function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+
+  local remote ref
+
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
+      return 0
+    fi
+  done
+
+  # Fallback: try to get the default branch from remote HEAD symbolic refs
+  for remote in origin upstream; do
+    ref=$(command git rev-parse --abbrev-ref $remote/HEAD 2>/dev/null)
+    if [[ $ref == $remote/* ]]; then
+      echo ${ref#"$remote/"}; return 0
+    fi
+  done
+
+  # If no main branch was found, fall back to master but return error
+  echo master
+  return 1
+}
+
 # aliases
+alias g="git"
+alias ga="git add"
+alias gaa="git add --all"
+alias gapa="git add --patch"
+alias gb="git branch"
+alias gbd="git branch --delete"
+alias gco="git checkout"
+alias gcb="git checkout -b"
+alias gcm='git checkout $(git_main_branch)'
+alias gc="git commit --verbose"
+alias gc!="git commit --verbose --amend --no-edit"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias gf="git fetch"
+alias gfa="git fetch --all --tags --prune --jobs=10"
+alias glo="git log --oneline --decorate"
+alias glog="git log --oneline --decorate --graph"
+alias gl="git pull"
+alias gp="git push"
+alias grb="git rebase"
+alias grh="git reset --soft"
+alias grs="git restore"
+alias gsh="git show"
+alias gsta="git stash push"
+alias gstc="git stash clear"
+alias gstl="git stash list"
+alias gstp="git stash pop"
+alias gst="git status --short --branch"
+alias gsw="git switch"
+alias gswc="git switch --create"
+alias gswm='git switch $(git_main_branch)'
+alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 alias gt="git town"
 alias m="mise"
 alias mr="mise run"
