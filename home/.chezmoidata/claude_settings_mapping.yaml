@@ -4,6 +4,7 @@ claude_settings_mapping:
   attribution: common
   awaySummaryEnabled: common
   disableDeepLinkRegistration: common
+  effortLevel: common
   enabledPlugins: machine
   env: common
   extraKnownMarketplaces: machine

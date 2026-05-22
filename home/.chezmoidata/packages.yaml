@@ -113,11 +113,12 @@ casks:
     - conductor
     - figma
     - gcloud-cli
+    - google-drive
     # - gitkraken
     # - google-chrome
     # - grammarly
     # - insomnia
-    - notion
+    # - notion
     # - pomatez
     # - postman
 

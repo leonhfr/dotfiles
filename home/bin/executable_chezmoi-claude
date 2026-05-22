@@ -1,0 +1,179 @@
+#!/bin/sh
+### chezmoi-claude — diff and sync ~/.claude/settings.json against chezmoi source
+###
+### Renders ~/.claude/settings.json via `chezmoi cat`, normalizes both sides
+### with `jq -S`, then either shows a delta diff (diff) or syncs on-disk
+### values back into the chezmoi source fragments (sync). Self-contained;
+### does not shell out to chezmoi-diffclaude / chezmoi-syncclaude.
+###
+### Usage:
+###   chezmoi-claude diff    Show a normalized diff (rendered vs on-disk).
+###   chezmoi-claude sync    Show the diff, confirm, then sync on-disk values
+###                          back into the chezmoi source fragments.
+###
+### Options:
+###   -h   Show this message.
+
+set -eu
+
+usage() {
+  sed -rn 's/^### ?//p' "$0"
+}
+
+require() {
+  for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      echo "Error: $cmd is not installed" >&2
+      exit 1
+    fi
+  done
+}
+
+TARGET="$HOME/.claude/settings.json"
+
+normalize_pair() {
+  # $1 = path to write rendered template (sorted)
+  # $2 = path to write on-disk file (sorted)
+  if [ ! -f "$TARGET" ]; then
+    echo "Error: missing $TARGET" >&2
+    exit 2
+  fi
+  chezmoi cat "$TARGET" | jq -S . > "$1"
+  jq -S . "$TARGET" > "$2"
+}
+
+cmd_diff() {
+  require jq delta chezmoi
+
+  RENDERED=$(mktemp)
+  ACTUAL=$(mktemp)
+  trap 'rm -f "$RENDERED" "$ACTUAL"' EXIT
+
+  normalize_pair "$RENDERED" "$ACTUAL"
+
+  if cmp -s "$RENDERED" "$ACTUAL"; then
+    return 0
+  fi
+
+  delta --file-style omit --hunk-header-style omit "$ACTUAL" "$RENDERED"
+  return 1
+}
+
+cmd_sync() {
+  require jq yq gum delta chezmoi
+
+  if cmd_diff; then
+    gum style --foreground 42 "nothing to sync"
+    return 0
+  fi
+
+  if ! gum confirm "Sync these changes back into the chezmoi source?"; then
+    gum style --foreground 226 "aborted"
+    return 1
+  fi
+
+  SOURCE=$(chezmoi source-path)
+  MACHINE=$(chezmoi execute-template '{{ .machine }}')
+
+  COMMON_FILE="$SOURCE/.chezmoitemplates/claude_settings.json"
+  MAP_FILE="$SOURCE/.chezmoidata/claude_settings_mapping.yaml"
+
+  case "$MACHINE" in
+    personal) MACHINE_FILE="$SOURCE/.chezmoitemplates/claude_settings_personal.json" ;;
+    work)     MACHINE_FILE="$SOURCE/.chezmoitemplates/encrypted_claude_settings_work.json" ;;
+    *)
+      gum style --foreground 196 "Error: unknown machine type '$MACHINE'"
+      return 1
+      ;;
+  esac
+
+  for f in "$TARGET" "$COMMON_FILE" "$MACHINE_FILE" "$MAP_FILE"; do
+    if [ ! -f "$f" ]; then
+      gum style --foreground 196 "Error: missing file $f"
+      return 1
+    fi
+  done
+
+  gum style --foreground 212 "machine: $MACHINE"
+
+  NEW_MAPPINGS=""
+  for KEY in $(jq -r 'keys[]' "$TARGET"); do
+    BUCKET=$(K="$KEY" yq '.claude_settings_mapping[strenv(K)] // ""' "$MAP_FILE")
+    if [ -z "$BUCKET" ] || [ "$BUCKET" = "null" ]; then
+      NEW=$(gum choose --header "Where should '$KEY' go?" common machine)
+      if [ -z "$NEW" ]; then
+        gum style --foreground 196 "Aborted."
+        return 1
+      fi
+      K="$KEY" V="$NEW" yq -i '.claude_settings_mapping[strenv(K)] = strenv(V)' "$MAP_FILE"
+      NEW_MAPPINGS="$NEW_MAPPINGS $KEY=$NEW"
+    fi
+  done
+
+  yq -i 'sort_keys(.claude_settings_mapping)' "$MAP_FILE"
+
+  MAP_JSON_FILE=$(mktemp)
+  yq -o json '.claude_settings_mapping' "$MAP_FILE" > "$MAP_JSON_FILE"
+
+  NEW_COMMON=$(jq --sort-keys \
+    --slurpfile mapping "$MAP_JSON_FILE" \
+    --slurpfile current "$COMMON_FILE" \
+    --slurpfile rendered "$TARGET" '
+      $mapping[0] as $m |
+      ($current[0] * ($rendered[0] | with_entries(select($m[.key] == "common"))))
+      | with_entries(select($m[.key] != "machine"))
+    ' -n)
+
+  NEW_MACHINE=$(jq --sort-keys \
+    --slurpfile mapping "$MAP_JSON_FILE" \
+    --slurpfile current "$MACHINE_FILE" \
+    --slurpfile rendered "$TARGET" '
+      $mapping[0] as $m |
+      ($current[0] * ($rendered[0] | with_entries(select($m[.key] == "machine"))))
+      | with_entries(select($m[.key] != "common"))
+    ' -n)
+
+  rm -f "$MAP_JSON_FILE"
+
+  COMMON_TMP=$(mktemp)
+  MACHINE_TMP=$(mktemp)
+  printf '%s\n' "$NEW_COMMON" > "$COMMON_TMP"
+  printf '%s\n' "$NEW_MACHINE" > "$MACHINE_TMP"
+  mv "$COMMON_TMP" "$COMMON_FILE"
+  mv "$MACHINE_TMP" "$MACHINE_FILE"
+
+  ORPHANS_COMMON=$(jq -r --slurpfile rendered "$TARGET" '
+    keys[] | select(. as $k | ($rendered[0] | has($k)) | not)
+  ' "$COMMON_FILE")
+  ORPHANS_MACHINE=$(jq -r --slurpfile rendered "$TARGET" '
+    keys[] | select(. as $k | ($rendered[0] | has($k)) | not)
+  ' "$MACHINE_FILE")
+
+  gum style --foreground 42 "sync complete"
+  if [ -n "$NEW_MAPPINGS" ]; then
+    gum style --foreground 226 "new mappings:$NEW_MAPPINGS"
+  fi
+  if [ -n "$ORPHANS_COMMON" ]; then
+    gum style --foreground 226 "orphan keys in common (left untouched):"
+    echo "$ORPHANS_COMMON" | sed 's/^/  /'
+  fi
+  if [ -n "$ORPHANS_MACHINE" ]; then
+    gum style --foreground 226 "orphan keys in machine fragment (left untouched):"
+    echo "$ORPHANS_MACHINE" | sed 's/^/  /'
+  fi
+}
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+  usage
+  exit 0
+fi
+
+case "$1" in
+  diff) shift; cmd_diff "$@" ;;
+  sync) shift; cmd_sync "$@" ;;
+  *)
+    echo "Error: unknown subcommand '$1'" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
