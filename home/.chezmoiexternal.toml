@@ -1,4 +1,0 @@
-[".config/cheat/cheatsheets/community"]
-  type = "git-repo"
-  url = "https://github.com/cheat/cheatsheets"
-  refreshPeriod = "168h"

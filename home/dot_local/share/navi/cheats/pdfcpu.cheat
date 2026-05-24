@@ -1,0 +1,18 @@
+% pdfcpu
+
+# Check if there is an XML attached
+pdfcpu attachments list <filename>
+
+# Extract XML
+pdfcpu attachments extract <filename> <target_directory>
+
+# Remove the XML
+pdfcpu attachments remove <filename> <attached_xml>
+
+# Attach a new XML
+pdfcpu attachments add <filename> <new_xml>
+
+$ filename: gum file --file
+$ target_directory: gum file --directory
+$ attached_xml: pdfcpu attachments list "$filename" | gum choose
+$ new_xml: gum file --file

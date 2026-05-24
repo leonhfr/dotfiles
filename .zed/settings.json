@@ -12,7 +12,7 @@
     "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
     "TOML": ["*.toml.tmpl"],
     "Git Config": ["**/git/config.tmpl"],
-    "Go Text Template": ["**/dot_claude/settings.json.tmpl"],
+    "Go Text Template": ["**/dot_claude/settings.json.tmpl", ".chezmoiignore"],
   },
   "lsp": {
     "json-language-server": {

@@ -4,7 +4,6 @@ brews:
     - bat
     - btop
     - ccusage
-    - cheat
     - chezmoi
     - croc
     - difftastic
@@ -36,6 +35,7 @@ brews:
     - mani
     - micro
     - mise
+    - navi
     - poppler
     - resvg
     - ripgrep

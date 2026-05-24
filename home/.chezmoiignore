@@ -14,3 +14,14 @@ GitHub/work.yaml
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
 {{ end }}
+
+{{ range $bucket := list .brews .casks -}}
+{{   range $m, $pkgs := $bucket -}}
+{{     if and (ne $m "common") (ne $m $.machine) -}}
+{{       range $pkgs -}}
+{{         $name := . | splitList "/" | last }}
+.local/share/navi/cheats/{{ $name }}.cheat
+{{       end -}}
+{{     end -}}
+{{   end -}}
+{{ end -}}
