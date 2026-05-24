@@ -80,15 +80,19 @@ alias cma="chezmoi apply"
 alias cmd="chezmoi diff"
 command -v kubectl >/dev/null && alias k="kubectl"
 command -v kubectx >/dev/null && alias kctx="kubectx"
-alias ls="eza"
 alias m="mise"
 alias mr="mise run"
 alias zd="zed"
 
-alias td="tree -d"
-alias tree2="tree -d -L 2"
-alias tree3="tree -d -L 3"
-alias tree4="tree -d -L 4"
+alias ls='eza --all --long --color=always --group-directories-first --icons=always'
+alias la='eza --all --color=always --group-directories-first --icons=always'
+alias ll='eza --long --color=always --group-directories-first --icons=always'
+alias lt='eza --all --tree --git-ignore --color=always --group-directories-first --icons=always'
+alias lt1='eza --all --tree --git-ignore --color=always --group-directories-first --icons=always --level 1'
+alias lt2='eza --all --tree --git-ignore --color=always --group-directories-first --icons=always --level 2'
+alias lt3='eza --all --tree --git-ignore --color=always --group-directories-first --icons=always --level 3'
+alias lt4='eza --all --tree --git-ignore --color=always --group-directories-first --icons=always --level 4'
+alias l.="eza --all | grep -e '^\.'"
 
 alias rgi="rg -i"
 alias rgv="rg -v"
