@@ -1,0 +1,9 @@
+{{- $os := .chezmoi.os | replace "darwin" "macos" -}}
+{{- $arch := .chezmoi.arch | replace "arm64" "aarch64" | replace "amd64" "x86_64" -}}
+{{- $tag := (gitHubLatestRelease "ogulcancelik/herdr").TagName -}}
+
+[".local/bin/herdr"]
+    type = "file"
+    url = "https://github.com/ogulcancelik/herdr/releases/download/{{ $tag }}/herdr-{{ $os }}-{{ $arch }}"
+    executable = true
+    refreshPeriod = "168h"
