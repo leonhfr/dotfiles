@@ -32,6 +32,10 @@ function git_main_branch() {
   git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@' || echo main
 }
 
+function navialias() {
+  navi --query ":: $1" --best-match
+}
+
 # aliases
 alias g="git"
 alias ga="git add"
