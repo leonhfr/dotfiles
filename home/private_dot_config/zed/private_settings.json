@@ -63,6 +63,7 @@
     "codebook": true,
     "docker-compose": false,
     "dockerfile": true,
+    "fish": true,
     "git-firefly": true,
     "go-snippets": false,
     "golangci-lint": true,
