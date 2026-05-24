@@ -14,5 +14,5 @@ pdfcpu attachments add <filename> <new_xml>
 
 $ filename: gum file --file
 $ target_directory: gum file --directory
-$ attached_xml: pdfcpu attachments list "$filename" | gum choose
+$ attached_xml: pdfcpu attachments list "$filename"
 $ new_xml: gum file --file
