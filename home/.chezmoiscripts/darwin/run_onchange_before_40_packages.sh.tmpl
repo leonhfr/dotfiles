@@ -3,13 +3,12 @@ set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-{{- $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) -}}
-{{- $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) -}}
-
 echo "[dotfiles] Installing packages"
 
 brew bundle --cleanup --file=/dev/stdin <<EOF
-{{ range $brews | sortAlpha | uniq -}}
+{{ $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) -}}
+{{ $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) -}}
+{{- range $brews | sortAlpha | uniq -}}
 brew {{ . | quote }}
 {{ end -}}
 {{ range $casks | sortAlpha | uniq -}}

@@ -4,6 +4,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # PATH
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.cargo/bin" ] && PATH="$HOME/.cargo/bin:$PATH"
+[ -d "/opt/homebrew/opt/libpq/bin" ] && PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH
 
 export LANG=en_US.UTF-8

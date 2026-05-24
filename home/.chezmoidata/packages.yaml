@@ -48,10 +48,10 @@ brews:
     - transcrypt
     - tree
     - trippy
+    - witr
     - yazi
     - yq
     - zoxide
-    - witr
   personal:
     - filen-cli
     - hugo
@@ -62,21 +62,19 @@ brews:
   work:
     # - act
     - awscli
-    # - buf
+    - buf
     - docker-credential-helper-ecr
-    # - helm
-    # - k9s
-    # - kind
+    - helm
+    - k9s
     - kubectl
     - kubectx
-    # - kubernetes-cli
+    - libpq # psql
     - libxml2
     - pdfcpu
     - pkgconf
     - pgcli
-    # - postgresql
     - saxon
-    # - terraform
+    - terraform
     # - tfswitch
 
 casks:
@@ -117,9 +115,7 @@ casks:
     - figma
     - gcloud-cli
     - google-drive
-    # - gitkraken
     # - google-chrome
-    # - grammarly
     # - insomnia
     # - notion
     # - pomatez
