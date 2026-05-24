@@ -1,0 +1,10 @@
+#!/bin/bash
+# monthly: {{ now | date "2006-01" }}
+set -euo pipefail
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export TLRC_CONFIG="$HOME/.config/tlrc/config.toml"
+
+echo "[dotfiles] Updating tldr-pages cache"
+tldr --update

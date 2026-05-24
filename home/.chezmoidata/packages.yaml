@@ -43,9 +43,11 @@ brews:
     - sevenzip
     - shellcheck
     - thefuck
+    - tlrc
     - tokei
     - transcrypt
     - tree
+    - trippy
     - yazi
     - yq
     - zoxide

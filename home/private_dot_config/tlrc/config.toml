@@ -1,0 +1,3 @@
+[cache]
+auto_update = true
+max_age = 336 # hours = 2 weeks
