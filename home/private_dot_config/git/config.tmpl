@@ -1,5 +1,7 @@
-{{- $user := ternary .work .personal (eq .machine "work") -}}
-{{ template "git-user" $user -}}
+[user]
+  name = {{ .personal.name }}
+  email = {{ .personal.email }}
+  signingkey = {{ onepasswordRead .personal.op.ssh_public_key .personal.op.account }}
 
 [core]
   editor = micro
@@ -122,17 +124,8 @@
 {{ end -}}
 
 {{ if eq .machine "work" -}}
-[url "git@github-personal:{{ .personal.github }}/"]
-  insteadOf = git@github.com:{{ .personal.github }}/
-
-[url "git@github-personal:{{ .personal.github }}/"]
-  insteadOf = https://github.com/{{ .personal.github }}/
-
-[includeIf "hasconfig:remote.*.url:git@github-personal:**"]
-  path = ~/.config/git/personal
-
-[includeIf "hasconfig:remote.*.url:https://github.com/{{ .personal.github }}/**"]
-  path = ~/.config/git/personal
+[includeIf "gitdir:~/work/"]
+  path = ~/work/.gitconfig
 {{ end -}}
 
 [ghq]
@@ -140,12 +133,17 @@
 {{ if eq .machine "work" -}}
 [ghq "https://github.com/{{ .work_github_org }}"]
   root = ~/work
+[ghq "ssh://git@github.com/{{ .work_github_org }}"]
+  root = ~/work
 [ghq "https://github.com/{{ .work_github }}"]
+  root = ~/work
+[ghq "ssh://git@github.com/{{ .work_github }}"]
   root = ~/work
 {{ end -}}
 
 [url "git@github.com:"]
   insteadOf = https://github.com/
+
 {{ $ghPath := lookPath "gh" -}}
 {{ if $ghPath -}}
 [credential "https://github.com"]

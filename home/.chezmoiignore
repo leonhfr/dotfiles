@@ -9,10 +9,10 @@ GitHub/personal.yaml
 {{ if ne .machine "work" }}
 GitHub/work.yaml
 .zshrc_work.zsh
-.config/git/personal
 .config/pgcli/**
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
+work/.gitconfig
 {{ end }}
 
 {{ range $bucket := list .brews .casks -}}

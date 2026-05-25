@@ -1,4 +1,0 @@
-[user]
-  name = {{ .name }}
-  email = {{ .email }}
-  signingkey = {{ onepasswordRead .op.ssh_public_key .op.account }}

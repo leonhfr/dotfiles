@@ -9,16 +9,8 @@ Host *
   AddKeysToAgent yes
   UseKeychain yes
 
-{{ if eq .machine "work" -}}
 Host github.com
   User git
-  IdentityFile ~/.ssh/id_ed25519_work
-
-Host github-personal
-  HostName github.com
-  User git
+{{- if eq .machine "work" }}
   IdentityFile ~/.ssh/id_ed25519_personal
-{{- else -}}
-Host github.com
-  User git
 {{- end }}
