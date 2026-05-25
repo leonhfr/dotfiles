@@ -13,6 +13,7 @@ claude_settings_mapping:
   includeGitInstructions: common
   model: machine
   permissions: common
+  pluginConfigs: machine
   prefersReducedMotion: common
   remoteControlAtStartup: common
   spinnerVerbs: common
