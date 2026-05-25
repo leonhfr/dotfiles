@@ -134,6 +134,16 @@
 [includeIf "hasconfig:remote.*.url:https://github.com/{{ .personal.github }}/**"]
   path = ~/.config/git/personal
 {{ end -}}
+
+[ghq]
+  root = ~/src
+{{ if eq .machine "work" -}}
+[ghq "https://github.com/{{ .work_github_org }}"]
+  root = ~/work
+[ghq "https://github.com/{{ .work_github }}"]
+  root = ~/work
+{{ end -}}
+
 [url "git@github.com:"]
   insteadOf = https://github.com/
 {{ $ghPath := lookPath "gh" -}}

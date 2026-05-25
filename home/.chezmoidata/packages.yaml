@@ -20,6 +20,7 @@ brews:
     - git-delta
     - git-lfs
     - git-town
+    - ghq
     - git-who
     - go
     - golangci-lint
@@ -32,7 +33,6 @@ brews:
     - jless
     - jq
     - lazygit
-    - mani
     - micro
     - mise
     - navi

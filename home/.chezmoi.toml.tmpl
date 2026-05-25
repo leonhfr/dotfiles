@@ -3,12 +3,14 @@
 
 {{- $workEmail := "" -}}
 {{- $workGithub := "" -}}
+{{- $workGithubOrg := "" -}}
 {{- $workOpAccount := "my" -}}
 {{- $workOpVault := "Private" -}}
 
 {{- if eq $machine "work" -}}
 {{- $workEmail = promptStringOnce . "work_email" "Work email address" -}}
 {{- $workGithub = promptStringOnce . "work_github" "Work GitHub username" -}}
+{{- $workGithubOrg = promptStringOnce . "work_github_org" "Work GitHub organization" -}}
 {{- $workOpAccount = promptStringOnce . "work_op_account" "Work 1Password account shorthand" -}}
 {{- $workOpVault = promptStringOnce . "work_op_vault" "Work 1Password vault name" "Private" -}}
 {{- end -}}
@@ -23,6 +25,7 @@ encryption = "transparent"
   machine = {{ $machine | quote }}
   work_email = {{ $workEmail | quote }}
   work_github = {{ $workGithub | quote }}
+  work_github_org = {{ $workGithubOrg | quote }}
   work_op_account = {{ $workOpAccount | quote }}
   work_op_vault = {{ $workOpVault | quote }}
 
