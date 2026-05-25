@@ -135,10 +135,25 @@
   root = ~/work
 [ghq "ssh://git@github.com/{{ .work_github_org }}"]
   root = ~/work
+[ghq "git@github.com:{{ .work_github_org }}"]
+  root = ~/work
 [ghq "https://github.com/{{ .work_github }}"]
   root = ~/work
 [ghq "ssh://git@github.com/{{ .work_github }}"]
   root = ~/work
+[ghq "git@github.com:{{ .work_github }}"]
+  root = ~/work
+{{ end -}}
+
+{{ if eq .machine "work" -}}
+[url "git@github-work:{{ .work_github_org }}/"]
+  insteadOf = https://github.com/{{ .work_github_org }}/
+  insteadOf = ssh://git@github.com/{{ .work_github_org }}/
+  insteadOf = git@github.com:{{ .work_github_org }}/
+[url "git@github-work:{{ .work_github }}/"]
+  insteadOf = https://github.com/{{ .work_github }}/
+  insteadOf = ssh://git@github.com/{{ .work_github }}/
+  insteadOf = git@github.com:{{ .work_github }}/
 {{ end -}}
 
 [url "git@github.com:"]

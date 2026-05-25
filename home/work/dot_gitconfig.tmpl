@@ -2,6 +2,3 @@
   name = {{ .work.name }}
   email = {{ .work.email }}
   signingkey = {{ onepasswordRead .work.op.ssh_public_key .work.op.account }}
-
-[core]
-  sshCommand = ssh -i ~/.ssh/id_ed25519_work -o IdentitiesOnly=yes
