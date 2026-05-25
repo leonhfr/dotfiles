@@ -36,6 +36,24 @@ function navialias() {
   navi --query ":: $1" --best-match
 }
 
+function mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
+function src() {
+  local repo
+  repo=$(ghq list | fzf --query "$LBUFFER" --select-1 --exit-0) || return
+  cd "$(ghq list --full-path --exact "$repo")"
+}
+
+function src-widget() {
+  src
+  zle reset-prompt
+}
+
+zle -N src-widget
+bindkey '^]' src-widget
+
 # aliases
 alias g="git"
 alias ga="git add"
@@ -108,6 +126,7 @@ alias .....="cd ../../../../"
 export LESS=-RFX
 
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+command -v fzf >/dev/null && eval "$(fzf --zsh)"
 command -v navi >/dev/null && eval "$(navi widget zsh)"
 command -v thefuck >/dev/null && eval "$(thefuck --alias)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"

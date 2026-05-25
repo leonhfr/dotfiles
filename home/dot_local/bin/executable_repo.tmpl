@@ -1,0 +1,106 @@
+#!/bin/sh
+### repo — manage ghq repositories
+###
+### Usage:
+###   repo add <url> [<url> ...]
+###   echo <url> | repo add
+###   repo create <target>
+###
+### Subcommands:
+###   add     Clone a repo with ghq and track it in chezmoi's repo list.
+###   create  Create a new local repo with ghq and track it.
+###
+### Options:
+###   -h   Show this message.
+
+set -eu
+
+usage() {
+  sed -rn 's/^### ?//p' "$0"
+}
+
+YAML="$(chezmoi source-path)/home/.chezmoidata/encrypted_repos.yaml"
+WORK_ORG="{{ .work_github_org }}"
+WORK_USER="{{ .work_github }}"
+
+is_work_repo() {
+  if [ -n "$WORK_ORG" ]; then
+    case "$1" in *"$WORK_ORG"*) return 0 ;; esac
+  fi
+  if [ -n "$WORK_USER" ]; then
+    case "$1" in *"$WORK_USER"*) return 0 ;; esac
+  fi
+  return 1
+}
+
+yaml_track() {
+  ENTRY="$1"
+  CAT="$2"
+  if yq ".repos.${CAT}[]" "$YAML" 2>/dev/null | grep -qxF "$ENTRY"; then
+    gum style --foreground 226 "Already tracked: $ENTRY"
+    return
+  fi
+  yq -i ".repos.${CAT} += [\"$ENTRY\"]" "$YAML"
+}
+
+process_add() {
+  REPO="$1"
+  ghq get "$REPO"
+  if is_work_repo "$REPO"; then
+    CAT="work"
+  else
+    CAT=$(gum choose --header "Category for $REPO" "common" "personal") || exit 0
+  fi
+  yaml_track "$REPO" "$CAT"
+  gum style --foreground 42 "Added $REPO → repos.${CAT}"
+}
+
+cmd_add() {
+  if [ $# -eq 0 ] && [ -t 0 ]; then
+    usage
+    exit 0
+  fi
+  if [ $# -gt 0 ]; then
+    for REPO in "$@"; do
+      process_add "$REPO"
+    done
+  else
+    while IFS= read -r REPO; do
+      [ -n "$REPO" ] && process_add "$REPO"
+    done
+  fi
+}
+
+cmd_create() {
+  if [ $# -eq 0 ]; then
+    gum style --foreground 196 "repo create: target required"
+    exit 1
+  fi
+  TARGET="$1"
+  if is_work_repo "$TARGET"; then
+    CAT="work"
+  else
+    CAT=$(gum choose --header "Category for $TARGET" "common" "personal") || exit 0
+  fi
+  ROOT="$HOME/src"
+  [ "$CAT" = "work" ] && ROOT="$HOME/work"
+  gum confirm "Create $TARGET in $ROOT?" || exit 0
+  ghq create "$TARGET"
+  yaml_track "$TARGET" "$CAT"
+  gum style --foreground 42 "Created $TARGET → repos.${CAT}"
+}
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+  usage
+  exit 0
+fi
+
+case "$1" in
+  add)    shift; cmd_add "$@" ;;
+  create) shift; cmd_create "$@" ;;
+  *)
+    gum style --foreground 196 "repo: unknown subcommand '$1'"
+    usage
+    exit 1
+    ;;
+esac
