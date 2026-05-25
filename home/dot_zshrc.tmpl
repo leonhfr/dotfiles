@@ -112,9 +112,5 @@ command -v navi >/dev/null && eval "$(navi widget zsh)"
 command -v thefuck >/dev/null && eval "$(thefuck --alias)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
-{{ if eq .machine "work" -}}
-[[ -f "$HOME/.zshrc_work.zsh" ]] && source "$HOME/.zshrc_work.zsh"
-{{ end -}}
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -7,11 +7,10 @@ GitHub/personal.yaml
 {{ end }}
 
 {{ if ne .machine "work" }}
-GitHub/work.yaml
-.zshrc_work.zsh
 .config/pgcli/**
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
+work/.envrc
 work/.gitconfig
 {{ end }}
 
