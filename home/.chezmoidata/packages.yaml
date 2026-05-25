@@ -63,6 +63,7 @@ brews:
     - awscli
     - buf
     - docker-credential-helper-ecr
+    - hashicorp/tap/terraform
     - helm
     - k9s
     - kubectl
@@ -73,7 +74,6 @@ brews:
     - pkgconf
     - pgcli
     - saxon
-    - terraform
     # - tfswitch
 
 casks:
@@ -110,6 +110,7 @@ casks:
     # - steam
     - vlc
   work:
+    - adobe-acrobat-pro
     - conductor
     - figma
     - gcloud-cli
@@ -119,5 +120,3 @@ casks:
     # - notion
     # - pomatez
     # - postman
-
-# herdr
