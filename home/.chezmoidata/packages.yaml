@@ -5,9 +5,9 @@ brews:
     - btop
     - ccusage
     - chezmoi
-    - croc
-    - difftastic
-    - dlvhdr/formulae/diffnav
+    # - croc
+    # - difftastic
+    # - dlvhdr/formulae/diffnav
     - direnv
     - dockutil
     - eza
@@ -16,11 +16,11 @@ brews:
     - fzf
     - gdu
     - gh
+    - ghq
     - git
     - git-delta
     - git-lfs
     - git-town
-    - ghq
     - git-who
     - go
     - golangci-lint

@@ -56,7 +56,7 @@
   grep = false
   reflog = delta
   show = delta
-  tool = difft
+  tool = delta
 
 [rebase]
   autoSquash = true
@@ -84,13 +84,13 @@
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   lt = describe --tags --abbrev=0 # latest tag on current commit
 
-  dl = "!git --no-pager -c diff.external=difft log -p --no-prefix --ext-diff"
-  ds = "!git --no-pager -c diff.external=difft show --ext-diff"
-  dd = "!git --no-pager -c diff.external=difft diff --ext-diff"
+  # dl = "!git --no-pager -c diff.external=difft log -p --no-prefix --ext-diff"
+  # ds = "!git --no-pager -c diff.external=difft show --ext-diff"
+  # dd = "!git --no-pager -c diff.external=difft diff --ext-diff"
 
-  dnl = "!git -c pager.log=diffnav log"
-  dns = "!git -c pager.show=diffnav show"
-  dnd = "!git -c pager.diff=diffnav diff"
+  # dnl = "!git -c pager.log=diffnav log"
+  # dns = "!git -c pager.show=diffnav show"
+  # dnd = "!git -c pager.diff=diffnav diff"
 
   append = town append
   continue = town continue
