@@ -3,7 +3,7 @@
 {{ end }}
 
 {{ if ne .machine "personal" }}
-GitHub/personal.yaml
+.config/cargo/**
 {{ end }}
 
 {{ if ne .machine "work" }}

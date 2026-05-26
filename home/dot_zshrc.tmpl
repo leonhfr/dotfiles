@@ -1,32 +1,23 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+# shellcheck disable=SC1090,SC2296
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# XDG
-export XDG_DATA_HOME=$HOME/.local/share
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_STATE_HOME=$HOME/.local/state
-export XDG_CACHE_HOME=$HOME/.cache
-
 # antidote
-HIST_STAMPS="yyyy-mm-dd"
+export HIST_STAMPS="yyyy-mm-dd"
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 
 autoload -Uz compinit && compinit
 
+# shellcheck disable=SC1091,2046
 source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
 antidote load
 
 # options
 setopt autocd
-
-# env
-export GPG_TTY=$(tty)
-{{ $machineOp := eq .machine "work" | ternary .work.op .personal.op -}}
-export CHEZMOI_GITHUB_ACCESS_TOKEN={{ onepasswordRead $machineOp.chezmoi_token $machineOp.account }}
 
 function git_main_branch() {
   git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@' || echo main
@@ -37,12 +28,14 @@ function navialias() {
 }
 
 function mkcd() {
+  # shellcheck disable=SC2164
   mkdir -p "$1" && cd "$1"
 }
 
 function src() {
   local repo
   repo=$(ghq list | fzf --query "$LBUFFER" --select-1 --exit-0) || return
+  # shellcheck disable=SC2164
   cd "$(ghq list --full-path --exact "$repo")"
 }
 
@@ -130,6 +123,16 @@ command -v fzf >/dev/null && eval "$(fzf --zsh)"
 command -v navi >/dev/null && eval "$(navi widget zsh)"
 command -v thefuck >/dev/null && eval "$(thefuck --alias)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# tool completions (not shipped via brew site-functions)
+command -v kubectl >/dev/null && eval "$(kubectl completion zsh)"
+command -v helm    >/dev/null && eval "$(helm completion zsh)"
+command -v buf     >/dev/null && eval "$(buf completion zsh)"
+if command -v aws_completer >/dev/null; then
+  autoload -U +X bashcompinit && bashcompinit
+  complete -C aws_completer aws
+fi
+# gcloud: https://issuetracker.google.com/issues/501612370
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
