@@ -1,18 +1,34 @@
 % pdfcpu
 
 # Check if there is an XML attached
-pdfcpu attachments list <filename>
+pdfcpu attachments list <input_pdf>
 
 # Extract XML
-pdfcpu attachments extract <filename> <target_directory>
+pdfcpu attachments extract <input_pdf> <target_directory>
 
 # Remove the XML
-pdfcpu attachments remove <filename> <attached_xml>
+pdfcpu attachments remove <input_pdf> <attached_xml>
 
 # Attach a new XML
-pdfcpu attachments add <filename> <new_xml>
+pdfcpu attachments add <input_pdf> <new_xml>
 
-$ filename: gum file --file
+# Convert PDF to PDF/A-3b (via Gotenberg)
+docker run -d --rm -p 3000:3000 --name gotenberg-pdfa gotenberg/gotenberg:8 >/dev/null || exit; \
+  { gum spin --title "Waiting for Gotenberg..." -- \
+       bash -c 'until curl -sf http://localhost:3000/health >/dev/null 2>&1; do sleep 0.5; done' \
+    && gum spin --show-output --title "Converting to PDF/A-3b..." -- \
+         curl -sf -o "<output_pdf>" \
+              --request POST http://localhost:3000/forms/pdfengines/convert \
+              --form files=@"<input_pdf>" \
+              --form pdfa=PDF/A-3b; \
+    rc=$?; \
+    docker stop gotenberg-pdfa >/dev/null 2>&1; \
+    [ $rc -eq 0 ] && gum style --foreground 212 "Saved to <output_pdf>" \
+                  || { gum style --foreground 196 "Conversion failed"; exit $rc; }; \
+  }
+
 $ target_directory: gum file --directory
-$ attached_xml: pdfcpu attachments list "$filename"
+$ attached_xml: pdfcpu attachments list "$input_pdf"
 $ new_xml: gum file --file
+$ input_pdf: gum file --file
+$ output_pdf: gum input --value "${input_pdf%.pdf}_pdfa.pdf" --prompt "Output path: "
