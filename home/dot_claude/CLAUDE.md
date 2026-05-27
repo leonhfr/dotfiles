@@ -22,6 +22,7 @@ When you use a feature of these technologies in code or explanation, add a short
 - Touch only code needed for the task.
 - Don't improve adjacent code, comments, or formatting.
 - Flag pre-existing dead code; don't delete it unless asked.
+- In a repository, write any temporary files to a `tmp/` subdirectory of the repo instead of using the global temporary directory. Add `tmp/` to `.gitignore` if missing.
 
 ## Writing Style
 

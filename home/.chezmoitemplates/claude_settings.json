@@ -9,7 +9,7 @@
   "effortLevel": "xhigh",
   "env": {
     "ANTHROPIC_MODEL": "claude-opus-4-7",
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "40",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "50",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EFFORT_LEVEL": "xhigh",
@@ -49,6 +49,7 @@
       "Bash(find *)",
       "Bash(git status)",
       "Bash(git diff *)",
+      "Bash(go test *)",
       "Bash(ls:*)",
       "Bash(rtk read *)",
       "Bash(rtk find *)",
@@ -56,6 +57,7 @@
       "Bash(rtk glob *)",
       "Bash(rtk git status)",
       "Bash(rtk git diff *)",
+      "Bash(rtk go test *)",
       "Bash(rtk ls *)"
     ],
     "defaultMode": "plan",
@@ -74,9 +76,7 @@
   "remoteControlAtStartup": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": [
-      "Processing"
-    ]
+    "verbs": ["Processing"]
   },
   "statusLine": {
     "command": "~/.claude/statusline.sh",
