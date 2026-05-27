@@ -19,7 +19,7 @@ usage() {
   sed -rn 's/^### ?//p' "$0"
 }
 
-YAML="$(chezmoi source-path)/home/.chezmoidata/encrypted_repos.yaml"
+YAML="$(chezmoi source-path)/.chezmoidata/encrypted_repos.yaml"
 WORK_ORG="{{ .work_github_org }}"
 WORK_USER="{{ .work_github }}"
 
@@ -40,7 +40,7 @@ yaml_track() {
     gum style --foreground 226 "Already tracked: $ENTRY"
     return
   fi
-  yq -i ".repos.${CAT} += [\"$ENTRY\"]" "$YAML"
+  yq -i ".repos.${CAT} = (.repos.${CAT} + [\"$ENTRY\"] | sort)" "$YAML"
 }
 
 process_add() {
