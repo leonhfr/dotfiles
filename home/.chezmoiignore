@@ -10,6 +10,7 @@
 .config/pgcli/**
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
+.zshrc_work.zsh
 work/.envrc
 work/.gitconfig
 {{ end }}
