@@ -9,7 +9,7 @@ claude_settings_mapping:
   env: common
   extraKnownMarketplaces: machine
   fastMode: common
-  hooks: common
+  hooks: machine
   includeGitInstructions: common
   model: machine
   permissions: common

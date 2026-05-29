@@ -24,19 +24,6 @@
     "ENABLE_TOOL_SEARCH": "true"
   },
   "fastMode": false,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "rtk hook claude",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ]
-  },
   "includeGitInstructions": false,
   "permissions": {
     "allow": [
