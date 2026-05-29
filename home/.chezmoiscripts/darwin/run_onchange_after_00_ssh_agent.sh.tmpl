@@ -2,6 +2,8 @@
 set -euo pipefail
 
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
+#shellcheck disable=1054,1083
 {{ if eq .machine "work" -}}
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
+#shellcheck disable=1009,1073,1072,1056
 {{ end -}}

@@ -11,8 +11,8 @@ Host *
 
 Host github.com
   User git
-{{- if eq .machine "work" }}
   IdentityFile ~/.ssh/id_ed25519_personal
+{{- if eq .machine "work" }}
   IdentitiesOnly yes
 
 Host github-work
