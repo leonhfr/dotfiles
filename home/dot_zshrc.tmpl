@@ -1,6 +1,8 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
 # shellcheck disable=SC1090,SC2296
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -89,6 +91,7 @@ alias cdd='cd "$SHELL_START_DIR"'
 alias cm="chezmoi"
 alias cma="chezmoi apply"
 alias cmd="chezmoi diff"
+alias cmu="chezmoi update"
 command -v kubectl >/dev/null && alias k="kubectl"
 command -v kubectx >/dev/null && alias kctx="kubectx"
 alias m="mise"
