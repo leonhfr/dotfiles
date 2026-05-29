@@ -72,8 +72,8 @@ brews:
     - libpq # psql
     - libxml2
     - pdfcpu
-    - pkgconf
     - pgcli
+    - pkgconf
     - saxon
     # - tfswitch
 
@@ -113,8 +113,10 @@ casks:
   work:
     - adobe-acrobat-pro
     - conductor
+    - datagrip
     - figma
     - gcloud-cli
+    - goland
     - google-drive
     # - google-chrome
     # - insomnia
