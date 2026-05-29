@@ -1,3 +1,15 @@
+# Auto-start `claude` in Herdr panes. Gated on:
+#   - HERDR_ACTIVE_PANE_ID: only fire inside a Herdr pane.
+#   - CLAUDE_AUTOSTARTED:   prevent re-entry if claude spawns a zsh subshell
+#                           that re-reads this file (env is inherited).
+#   - interactive option:   skip non-interactive shells (scripts, here-docs).
+#   - command -v claude:    skip cleanly if claude is not installed.
+if [[ -o interactive ]] && [[ -n "$HERDR_ACTIVE_PANE_ID" ]] \
+  && [[ -z "$CLAUDE_AUTOSTARTED" ]] && command -v claude >/dev/null; then
+  export CLAUDE_AUTOSTARTED=1
+  exec claude
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
