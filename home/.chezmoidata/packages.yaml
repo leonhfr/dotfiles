@@ -26,7 +26,8 @@ brews:
     - golangci-lint
     - golangci-lint-langserver
     - gopls
-    - gum
+    - gup
+    - herdr
     - hk
     - imagemagick-full
     - jj
@@ -120,3 +121,9 @@ casks:
     # - notion
     # - pomatez
     # - postman
+
+gobin:
+  common:
+    - github.com/leonhfr/gum
+  personal: []
+  work: []

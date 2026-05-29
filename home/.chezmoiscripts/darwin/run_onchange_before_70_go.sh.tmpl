@@ -1,0 +1,33 @@
+#!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
+set -euo pipefail
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+GOBIN="$(go env GOBIN)"
+[ -n "$GOBIN" ] || GOBIN="$(go env GOPATH)/bin"
+export PATH="$GOBIN:$PATH"
+
+packages=(
+{{- range (concat (.gobin.common | default (list)) (index .gobin .machine | default (list))) | sortAlpha | uniq }}
+  {{ . | quote }}
+{{- end }}
+)
+
+if [ ${#packages[@]} -eq 0 ]; then
+  exit 0
+fi
+
+names=()
+echo "[dotfiles] Installing missing Go binaries"
+for pkg in "${packages[@]}"; do
+  bin="$(basename "$pkg")"
+  names+=("$bin")
+  if [ ! -x "$GOBIN/$bin" ]; then
+    echo "  go install ${pkg}@latest"
+    go install "${pkg}@latest"
+  fi
+done
+
+echo "[dotfiles] Updating Go binaries with gup"
+gup update "${names[@]}"
