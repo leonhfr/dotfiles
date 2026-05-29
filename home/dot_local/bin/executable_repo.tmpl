@@ -5,10 +5,12 @@
 ###   repo add <url> [<url> ...]
 ###   echo <url> | repo add
 ###   repo create <target>
+###   repo remove
 ###
 ### Subcommands:
 ###   add     Clone a repo with ghq and track it in chezmoi's repo list.
 ###   create  Create a new local repo with ghq and track it.
+###   remove  Delete a local clone (remote untouched) and untrack it.
 ###
 ### Options:
 ###   -h   Show this message.
@@ -41,6 +43,36 @@ yaml_track() {
     return
   fi
   yq -i ".repos.${CAT} = (.repos.${CAT} + [\"$ENTRY\"] | sort)" "$YAML"
+}
+
+# Normalize a git URL to ghq's listing form, e.g.
+#   git@github.com:leonhfr/notes.git -> github.com/leonhfr/notes
+normalize_url() {
+  URL="$1"
+  URL="${URL#git@}"
+  URL="${URL#ssh://}"
+  URL="${URL#https://}"
+  URL="${URL#http://}"
+  URL="${URL%.git}"
+  printf '%s' "$URL" | sed 's#:#/#'
+}
+
+# Remove the YAML entry whose normalized form matches a ghq path.
+yaml_untrack() {
+  TARGET="$1"
+  for CAT in common personal work; do
+    while IFS= read -r ENTRY; do
+      [ -n "$ENTRY" ] || continue
+      if [ "$(normalize_url "$ENTRY")" = "$TARGET" ]; then
+        yq -i "del(.repos.${CAT}[] | select(. == \"$ENTRY\"))" "$YAML"
+        gum style --foreground 42 "Untracked $ENTRY from repos.${CAT}"
+        return 0
+      fi
+    done <<EOF
+$(yq ".repos.${CAT}[]" "$YAML" 2>/dev/null)
+EOF
+  done
+  gum style --foreground 226 "Not tracked in YAML: $TARGET"
 }
 
 process_add() {
@@ -90,6 +122,24 @@ cmd_create() {
   gum style --foreground 42 "Created $TARGET → repos.${CAT}"
 }
 
+cmd_remove() {
+  REPO=$(ghq list | gum filter --header "Select a clone to remove") || exit 0
+  [ -n "$REPO" ] || exit 0
+  DIR=$(ghq list --full-path --exact "$REPO")
+  if [ -n "$DIR" ]; then
+    if [ -n "$(git -C "$DIR" status --porcelain 2>/dev/null)" ]; then
+      gum style --foreground 196 "Warning: $REPO has uncommitted changes."
+    fi
+    if [ -n "$(git -C "$DIR" log --branches --not --remotes --oneline 2>/dev/null)" ]; then
+      gum style --foreground 196 "Warning: $REPO has unpushed commits."
+    fi
+  fi
+  gum confirm "Delete local clone of $REPO? Remote is left untouched." || exit 0
+  ghq rm "$REPO"
+  yaml_untrack "$REPO"
+  gum style --foreground 42 "Removed $REPO"
+}
+
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
   usage
   exit 0
@@ -98,6 +148,7 @@ fi
 case "$1" in
   add)    shift; cmd_add "$@" ;;
   create) shift; cmd_create "$@" ;;
+  remove) shift; cmd_remove "$@" ;;
   *)
     gum style --foreground 196 "repo: unknown subcommand '$1'"
     usage
