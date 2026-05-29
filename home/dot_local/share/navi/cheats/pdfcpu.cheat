@@ -27,8 +27,8 @@ docker run -d --rm -p 3000:3000 --name gotenberg-pdfa gotenberg/gotenberg:8 >/de
                   || { gum style --foreground 196 "Conversion failed"; exit $rc; }; \
   }
 
-$ target_directory: gum file --directory
+$ target_directory: gum file --directory --file=false --header="Target directory:" ..
 $ attached_xml: pdfcpu attachments list "$input_pdf"
-$ new_xml: gum file --file
-$ input_pdf: gum file --file
-$ output_pdf: gum input --value "${input_pdf%.pdf}_pdfa.pdf" --prompt "Output path: "
+$ new_xml: gum file --file --directory=false --header="XML file:"
+$ input_pdf: gum file --file --directory=false --header="PDF file:"
+$ output_pdf: gum input --value "${input_pdf%.pdf}_pdfa3b.pdf" --prompt "Output path: "
