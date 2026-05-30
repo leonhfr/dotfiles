@@ -29,6 +29,7 @@ brews:
     - gup
     - herdr
     - hk
+    - httpie
     - imagemagick-full
     - jj
     - jless
@@ -36,6 +37,7 @@ brews:
     - lazygit
     - micro
     - mise
+    - mole
     - navi
     - poppler
     - resvg
@@ -55,7 +57,6 @@ brews:
   personal:
     - filen-cli
     - hugo
-    - mole
     - pandoc
     - rustup
     # - syncthing
@@ -114,6 +115,7 @@ casks:
     - adobe-acrobat-pro
     - conductor
     - datagrip
+    - discord
     - figma
     - gcloud-cli
     - goland
