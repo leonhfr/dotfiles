@@ -4,10 +4,12 @@
 
 {{ if ne .machine "personal" }}
 .config/cargo/**
+.local/share/navi/cheats/personal/**
 {{ end }}
 
 {{ if ne .machine "work" }}
 .config/pgcli/**
+.local/share/navi/cheats/work/**
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
 .zshrc_work.zsh

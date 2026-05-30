@@ -1,0 +1,33 @@
+% kubernetes, k8s
+
+# Schema docs for a resource; takes dotted paths like pod.spec.containers
+kubectl explain <resource>
+
+# Live CPU/memory usage (requires metrics-server)
+kubectl top <type>
+
+# Recent events in a namespace, oldest-last; the first thing to check when something is off
+kubectl get events --sort-by=.lastTimestamp -n <namespace>
+
+# Source of truth for a live object
+kubectl get <resource> <name> -n <namespace> -o yaml
+
+# Human-readable view with events scoped to the object
+kubectl describe <resource>/<name> -n <namespace>
+
+# Tail and follow logs of a pod
+kubectl logs -f <pod> -n <namespace>
+
+# Logs from the previous container instance (use for CrashLoopBackOff)
+kubectl logs --previous <pod> -n <namespace>
+
+# Shell into a pod
+kubectl exec -it <pod> -n <namespace> -- sh
+
+# Forward a local port to a pod
+kubectl port-forward <pod> <local_port>:<remote_port> -n <namespace>
+
+$ resource: kubectl api-resources --no-headers -o name
+$ type: echo -e 'nodes\npods'
+$ namespace: kubectl get ns --no-headers -o custom-columns=':metadata.name'
+$ node: kubectl get nodes --no-headers -o custom-columns=':metadata.name'

@@ -9,3 +9,6 @@
 ! git merge-base --is-ancestor HEAD @{u} 2>/dev/null \
   && git reset --mixed HEAD~1 \
   || echo "aborted: HEAD already pushed"
+
+# List files ignored by .gitignore
+git ls-files --others --ignored --exclude-standard
