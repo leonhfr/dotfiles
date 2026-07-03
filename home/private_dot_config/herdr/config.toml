@@ -1,0 +1,10 @@
+onboarding = false
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "off"
+
+[theme]
+name = "catppuccin"

@@ -35,6 +35,7 @@ brews:
     - jless
     - jq
     - lazygit
+    - mani
     - micro
     - mise
     - mole
@@ -72,6 +73,7 @@ brews:
     - kubectx
     - libpq # psql
     - libxml2
+    - node
     - pdfcpu
     - pgcli
     - pkgconf
@@ -89,14 +91,14 @@ casks:
     - font-roboto
     - ghostty
     - handy
-    - jordanbaird-ice
+    # - jordanbaird-ice
     # - nikitabobko/tap/aerospace
     - obsidian
     - openusage
     - orbstack
     - rectangle
     - spotify
-    - stats
+    # - stats
     - the-unarchiver
     - visual-studio-code
     - zed
@@ -114,7 +116,7 @@ casks:
   work:
     - adobe-acrobat-pro
     - conductor
-    - datagrip
+    # - datagrip
     - discord
     - figma
     - gcloud-cli

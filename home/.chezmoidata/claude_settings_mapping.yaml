@@ -1,6 +1,5 @@
 claude_settings_mapping:
   alwaysThinkingEnabled: common
-  apiKeyHelper: machine
   attribution: common
   awaySummaryEnabled: common
   disableDeepLinkRegistration: common

@@ -27,3 +27,86 @@ work/.gitconfig
 {{     end -}}
 {{   end -}}
 {{ end -}}
+
+# runtime noise (caches, logs, history, sessions, backups)
+.cache/**
+.claude/.last-cleanup
+.claude/backups/**
+.claude/cache/**
+.claude/debug/**
+.claude/downloads/**
+.claude/file-history/**
+.claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
+.claude/paste-cache/**
+.claude/plans/**
+.claude/plugins/**
+.claude/policy-limits.json
+.claude/projects/**
+.claude/session-env/**
+.claude/sessions/**
+.claude/settings.json.*.bak
+.claude/shell-snapshots/**
+.claude/stats-cache.json
+.claude/tasks/**
+.claude.json
+.config/gh/hosts.yml
+.config/herdr/*.log
+.config/herdr/release-notes.json
+.config/herdr/session.json
+.config/homebrew/trust.json
+.config/homebrew/trust.json.lock
+.config/navi/navi.log
+.config/pgcli/history
+.config/pgcli/log
+.config/thefuck/__pycache__/**
+.local/state/**
+.local/share/.DS_Store
+.local/share/GitKrakenCLI/**
+.local/share/claude/**
+.local/share/codebook/**
+.local/share/delta/**
+.local/share/direnv/**
+.local/share/gh/**
+.local/share/gk/**
+.psql_history
+.zcompdump
+.zsh_history
+.zsh_plugins.zsh
+.zshrc.zwc
+
+# macOS system files and dirs
+.CFUserTextEncoding
+.DS_Store
+.Trash/**
+Library/**
+Applications
+Desktop
+Documents
+Downloads
+Movies
+Music
+Pictures
+Public
+
+# personal workspace / cloud sync roots (never dotfile material)
+Google Drive
+OrbStack
+go
+src/github.com/**
+work/github.com/**
+
+# app-managed state / installed artifacts
+.herdr
+.npm
+.ollama
+.orbstack
+.vscode
+.vscode-shared
+.local/bin/**
+.local/share/chezmoi/**
+
+# ephemeral screenshots (dir kept via .keep)
+Screenshots/*.png
+Screenshots/*.jpg
+Screenshots/*.jpeg
