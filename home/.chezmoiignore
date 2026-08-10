@@ -103,7 +103,6 @@ work/github.com/**
 .orbstack
 .vscode
 .vscode-shared
-.local/bin/**
 .local/share/chezmoi/**
 
 # ephemeral screenshots (dir kept via .keep)

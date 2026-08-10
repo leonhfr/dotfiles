@@ -1,0 +1,162 @@
+#!/bin/sh
+### repos — maintenance commands for all ghq-managed repos
+###
+### Usage:
+###   repos check
+###   repos pull [-f]
+###   repos switch
+###
+### Subcommands:
+###   check   Show dirty state: uncommitted files, unpushed commits, stash.
+###   pull    Pull default branch for each repo. Skips repos with uncommitted
+###           changes or unpushed commits unless -f is given.
+###   switch  Switch to default branch for each repo.
+###
+### Options:
+###   -f, --force  (pull) Pull even if the repo has uncommitted changes or unpushed commits.
+###   -h           Show this message.
+
+set -eu
+
+YELLOW=$(printf '\033[38;5;226m')
+GREEN=$(printf '\033[38;5;42m')
+RED=$(printf '\033[38;5;196m')
+RESET=$(printf '\033[0m')
+
+usage() {
+  sed -rn 's/^### ?//p' "$0"
+}
+
+# Resolve the default branch for a local repo.
+# Prefers refs/remotes/origin/HEAD, falls back to checking main then master.
+default_branch() {
+  DIR="$1"
+  BRANCH=$(git -C "$DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's#refs/remotes/origin/##')
+  if [ -z "$BRANCH" ]; then
+    if git -C "$DIR" show-ref --verify --quiet refs/heads/main 2>/dev/null; then
+      BRANCH="main"
+    elif git -C "$DIR" show-ref --verify --quiet refs/heads/master 2>/dev/null; then
+      BRANCH="master"
+    fi
+  fi
+  printf '%s' "$BRANCH"
+}
+
+# Run FUNC in parallel for every repo reported by ghq, then print results in
+# ghq list order. FUNC receives (REPO DIR OUTFILE) and writes its output to OUTFILE.
+run_parallel() {
+  FUNC="$1"
+  TMP=$(mktemp -d)
+  DONE="$TMP/done"
+  mkdir "$DONE"
+  I=0
+  while IFS= read -r REPO; do
+    [ -n "$REPO" ] || continue
+    DIR=$(ghq list --full-path --exact "$REPO")
+    (
+      trap "touch '$DONE/$I'" EXIT
+      "$FUNC" "$REPO" "$DIR" "$TMP/$I"
+    ) &
+    I=$((I + 1))
+  done <<EOF
+$(ghq list)
+EOF
+  TOTAL=$I
+  while true; do
+    COMPLETED=$(ls "$DONE" | wc -l | tr -d ' ')
+    printf '\r  %s / %s' "$COMPLETED" "$TOTAL"
+    if [ "$COMPLETED" -eq "$TOTAL" ]; then break; fi
+    sleep 0.1
+  done
+  wait
+  printf '\r\033[K'
+  J=0
+  while [ "$J" -lt "$TOTAL" ]; do
+    [ -s "$TMP/$J" ] && cat "$TMP/$J"
+    J=$((J + 1))
+  done
+  rm -rf "$TMP"
+}
+
+check_repo() {
+  REPO="$1"; DIR="$2"; OUT="$3"
+  DIRTY=$(git -C "$DIR" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+  UNPUSHED=$(git -C "$DIR" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
+  STASH=$(git -C "$DIR" stash list 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$DIRTY" -gt 0 ] || [ "$UNPUSHED" -gt 0 ] || [ "$STASH" -gt 0 ]; then
+    PARTS=""
+    [ "$DIRTY" -gt 0 ]    && PARTS="${PARTS}  dirty:${DIRTY}"
+    [ "$UNPUSHED" -gt 0 ] && PARTS="${PARTS}  unpushed:${UNPUSHED}"
+    [ "$STASH" -gt 0 ]    && PARTS="${PARTS}  stash:${STASH}"
+    printf '%s%s%s%s\n' "$YELLOW" "$REPO" "$RESET" "$PARTS" > "$OUT"
+  fi
+}
+
+pull_repo() {
+  REPO="$1"; DIR="$2"; OUT="$3"
+  if [ "${FORCE:-0}" = "0" ]; then
+    DIRTY=$(git -C "$DIR" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+    UNPUSHED=$(git -C "$DIR" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$DIRTY" -gt 0 ] || [ "$UNPUSHED" -gt 0 ]; then
+      PARTS=""
+      [ "$DIRTY" -gt 0 ]    && PARTS="${PARTS}  dirty:${DIRTY}"
+      [ "$UNPUSHED" -gt 0 ] && PARTS="${PARTS}  unpushed:${UNPUSHED}"
+      printf '%s%s%s  skipped%s\n' "$YELLOW" "$REPO" "$RESET" "$PARTS" > "$OUT"
+      return
+    fi
+  fi
+  BRANCH=$(default_branch "$DIR")
+  if [ -z "$BRANCH" ]; then
+    printf '%s%s%s  no default branch\n' "$RED" "$REPO" "$RESET" > "$OUT"
+    return
+  fi
+  if git -C "$DIR" pull origin "$BRANCH" > /dev/null 2>&1; then
+    printf '%s%s%s  pulled %s\n' "$GREEN" "$REPO" "$RESET" "$BRANCH" > "$OUT"
+  else
+    printf '%s%s%s  pull failed (%s)\n' "$RED" "$REPO" "$RESET" "$BRANCH" > "$OUT"
+  fi
+}
+
+switch_repo() {
+  REPO="$1"; DIR="$2"; OUT="$3"
+  BRANCH=$(default_branch "$DIR")
+  if [ -z "$BRANCH" ]; then
+    printf '%s%s%s  no default branch\n' "$RED" "$REPO" "$RESET" > "$OUT"
+    return
+  fi
+  if git -C "$DIR" checkout "$BRANCH" > /dev/null 2>&1; then
+    printf '%s%s%s  switched to %s\n' "$GREEN" "$REPO" "$RESET" "$BRANCH" > "$OUT"
+  else
+    printf '%s%s%s  checkout failed (%s)\n' "$RED" "$REPO" "$RESET" "$BRANCH" > "$OUT"
+  fi
+}
+
+cmd_check()  { run_parallel check_repo; }
+cmd_switch() { run_parallel switch_repo; }
+
+cmd_pull() {
+  FORCE=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -f|--force) FORCE=1; shift ;;
+      *) printf '%srepos pull: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
+    esac
+  done
+  run_parallel pull_repo
+}
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+  usage
+  exit 0
+fi
+
+case "$1" in
+  check)  cmd_check ;;
+  pull)   shift; cmd_pull "$@" ;;
+  switch) cmd_switch ;;
+  *)
+    printf '%srepos: unknown subcommand %s%s\n' "$RED" "'$1'" "$RESET" >&2
+    usage
+    exit 1
+    ;;
+esac
