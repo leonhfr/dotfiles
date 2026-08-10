@@ -1,11 +1,36 @@
 #!/bin/bash
+# {{ list .brews .casks .gobin .cargo | toJson | sha256sum }}
 set -euo pipefail
 
-if command -v rustup >/dev/null 2>&1; then
-    if ! command -v cargo >/dev/null 2>&1; then
-        echo "[dotfiles] Installing Rust"
-        rustup-init -y
-    fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    rustup component list --installed | grep -q '^rust-src' || rustup component add rust-src
+if ! command -v rustup >/dev/null 2>&1; then
+  exit 0
 fi
+
+if ! rustup toolchain list 2>/dev/null | grep -q '^stable'; then
+  echo "[dotfiles] Installing Rust"
+  rustup install stable
+fi
+
+export PATH="$(brew --prefix rustup)/bin:$HOME/.cargo/bin:$PATH"
+
+rustup component list --installed | grep -q '^rust-src' || rustup component add rust-src
+
+crates=(
+{{- range (concat (.cargo.common | default (list)) (index .cargo .machine | default (list))) | sortAlpha | uniq }}
+  {{ . | quote }}
+{{- end }}
+)
+
+if [ ${#crates[@]} -eq 0 ]; then
+  exit 0
+fi
+
+echo "[dotfiles] Installing missing cargo crates"
+for crate in "${crates[@]}"; do
+  if ! cargo install --list | grep -q "^${crate} "; then
+    echo "  cargo install ${crate}"
+    cargo install "$crate"
+  fi
+done

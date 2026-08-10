@@ -44,6 +44,7 @@ brews:
     - resvg
     - ripgrep
     - rtk
+    - rustup
     - sevenzip
     - shellcheck
     - thefuck
@@ -59,7 +60,6 @@ brews:
     - filen-cli
     - hugo
     - pandoc
-    - rustup
     # - syncthing
   work:
     # - act
@@ -132,5 +132,11 @@ casks:
 gobin:
   common:
     - github.com/leonhfr/gum
+  personal: []
+  work: []
+
+cargo:
+  common:
+    - patent
   personal: []
   work: []
