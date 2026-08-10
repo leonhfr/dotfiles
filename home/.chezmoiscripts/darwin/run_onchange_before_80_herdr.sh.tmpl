@@ -6,9 +6,13 @@ plugins=(
     "devashish2203/herdr-worktrunk"
 )
 
-if command -v herdr >/dev/null 2>&1; then
-    echo "[dotfiles] Installing herdr plugins"
-    for plugin in "${plugins[@]}"; do
+installed=$(herdr plugin list 2>/dev/null || true)
+
+for plugin in "${plugins[@]}"; do
+    if echo "$installed" | grep -q "$plugin"; then
+        echo "[dotfiles] herdr plugin already installed: $plugin"
+    else
+        echo "[dotfiles] Installing herdr plugin: $plugin"
         herdr plugin install "$plugin" --yes
-    done
-fi
+    fi
+done
