@@ -35,7 +35,6 @@ brews:
     - jless
     - jq
     - lazygit
-    - mani
     - micro
     - mise
     - mole
