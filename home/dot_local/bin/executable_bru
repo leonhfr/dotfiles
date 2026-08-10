@@ -14,5 +14,6 @@ if [ "${1:-}" = "-h" ]; then
   exit 0
 fi
 
-chezmoi apply --source-path home/.chezmoiscripts/darwin/run_onchange_before_10_homebrew_update.sh.tmpl
-chezmoi apply --source-path home/.chezmoiscripts/darwin/run_onchange_before_40_packages.sh.tmpl
+source_dir=$(chezmoi source-path)
+chezmoi apply --source-path "$source_dir/home/.chezmoiscripts/darwin/run_onchange_before_10_homebrew_update.sh.tmpl"
+chezmoi apply --source-path "$source_dir/home/.chezmoiscripts/darwin/run_onchange_before_40_packages.sh.tmpl"
