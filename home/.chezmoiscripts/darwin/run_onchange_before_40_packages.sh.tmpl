@@ -3,6 +3,10 @@ set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+{{ $trust := concat (.trust.common | default (list)) (index .trust .machine | default (list)) -}}
+{{ range $trust | sortAlpha | uniq -}}
+brew trust --formula {{ . | quote }}
+{{ end -}}
 echo "[dotfiles] Installing packages"
 
 brew bundle --cleanup --file=/dev/stdin <<EOF

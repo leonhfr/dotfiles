@@ -127,6 +127,14 @@ casks:
     # - pomatez
     # - postman
 
+trust:
+  common: []
+  personal: []
+  work:
+    - edgee-ai/tap/edgee
+    - hashicorp/tap/terraform
+
+
 gobin:
   common:
     - github.com/leonhfr/gum

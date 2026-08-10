@@ -56,6 +56,7 @@
       "mcp__notion__notion-fetch",
       "mcp__plugin_sentry_sentry__search_events",
       "mcp__plugin_sentry_sentry__search_issues",
+      "mcp__plugin_slack_slack__slack_read_channel",
       "mcp__plugin_slack_slack__slack_read_thread",
       "mcp__slack__slack_read_file",
       "mcp__slack__slack_read_thread"
