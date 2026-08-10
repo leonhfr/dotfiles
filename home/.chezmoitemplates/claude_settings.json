@@ -5,12 +5,13 @@
     "pr": ""
   },
   "awaySummaryEnabled": false,
-  "companyAnnouncements": ["Welcome back, boss!"],
+  "companyAnnouncements": [
+    "Welcome back, boss!"
+  ],
   "disableDeepLinkRegistration": "disable",
   "effortLevel": "xhigh",
   "env": {
-    "ANTHROPIC_MODEL": "claude-opus-4-7",
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "50",
+    "ANTHROPIC_MODEL": "sonnet",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EFFORT_LEVEL": "xhigh",
@@ -90,7 +91,9 @@
   "remoteControlAtStartup": false,
   "spinnerVerbs": {
     "mode": "replace",
-    "verbs": ["Processing"]
+    "verbs": [
+      "Processing"
+    ]
   },
   "statusLine": {
     "command": "~/.claude/statusline.sh",

@@ -2,6 +2,7 @@ claude_settings_mapping:
   alwaysThinkingEnabled: common
   attribution: common
   awaySummaryEnabled: common
+  companyAnnouncements: common
   disableDeepLinkRegistration: common
   effortLevel: common
   enabledPlugins: machine

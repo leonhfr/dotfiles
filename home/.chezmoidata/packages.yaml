@@ -66,6 +66,7 @@ brews:
     - awscli
     - buf
     - docker-credential-helper-ecr
+    - edgee-ai/tap/edgee
     - hashicorp/tap/terraform
     - helm
     - k9s
