@@ -69,6 +69,7 @@
       "Read(./.env.*)"
     ]
   },
+  "outputStyle": "Simplified Technical English",
   "prefersReducedMotion": true,
   "remoteControlAtStartup": false,
   "spinnerVerbs": {
