@@ -20,3 +20,22 @@ key = "prefix+shift+r"
 type = "plugin_action"
 command = "herdr-qonto-run.open"
 description = "open run workspace"
+
+# Override herdr's built-in "new worktree" key with worktrunk's default-branch switch/create picker:
+[[keys.command]]
+key = "prefix+shift+g"
+type = "plugin_action"
+command = "worktrunk.open"
+description = "worktree: switch / create from default branch"
+
+[[keys.command]]
+key = "prefix+shift+c"
+type = "plugin_action"
+command = "worktrunk.open-current"
+description = "worktree: switch / create from current branch"
+
+[[keys.command]]
+key = "prefix+shift+d"
+type = "plugin_action"
+command = "worktrunk.remove"
+description = "worktree: remove"
