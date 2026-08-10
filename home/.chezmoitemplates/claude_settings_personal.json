@@ -10,18 +10,5 @@
         "url": "git@github.com:gonzaloserrano/gopilot.git"
       }
     }
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "rtk hook claude",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ]
   }
 }

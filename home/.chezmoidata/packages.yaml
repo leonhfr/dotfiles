@@ -42,7 +42,6 @@ brews:
     - poppler
     - resvg
     - ripgrep
-    - rtk
     - rustup
     - sevenzip
     - shellcheck
