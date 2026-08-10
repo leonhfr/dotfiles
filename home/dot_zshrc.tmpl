@@ -131,6 +131,7 @@ command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 command -v kubectl >/dev/null && eval "$(kubectl completion zsh)"
 command -v helm    >/dev/null && eval "$(helm completion zsh)"
 command -v buf     >/dev/null && eval "$(buf completion zsh)"
+command -v wt      >/dev/null && eval "$(wt config shell init zsh)"
 if command -v aws_completer >/dev/null; then
   autoload -U +X bashcompinit && bashcompinit
   complete -C aws_completer aws

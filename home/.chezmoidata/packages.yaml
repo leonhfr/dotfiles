@@ -51,6 +51,7 @@ brews:
     - transcrypt
     - trippy
     - witr
+    - worktree
     - yazi
     - yq
     - zoxide
