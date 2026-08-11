@@ -15,12 +15,20 @@ type = "plugin_action"
 command = "herdr-navigator.open"
 description = "jump to anything"
 
+{{ if eq .machine "work" -}}
 [[keys.command]]
 key = "prefix+shift+r"
 type = "plugin_action"
-command = "herdr-qonto-run.open"
-description = "open run workspace"
+command = "herdr-qonto-run.start"
+description = "start run workspace"
 
+[[keys.command]]
+key = "prefix+shift+s"
+type = "plugin_action"
+command = "herdr-qonto-run.stop"
+description = "stop run workspace"
+
+{{ end -}}
 # Override herdr's built-in "new worktree" key with worktrunk's default-branch switch/create picker:
 [[keys.command]]
 key = "prefix+shift+g"

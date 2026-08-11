@@ -12,6 +12,7 @@ claude_settings_mapping:
   hooks: machine
   includeGitInstructions: common
   model: machine
+  outputStyle: common
   permissions: common
   pluginConfigs: machine
   prefersReducedMotion: common
