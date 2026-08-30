@@ -1,6 +1,7 @@
 [tools]
 hk = "latest"
 gitleaks = "latest"
+pkl = "latest"
 
 [tasks.config]
 description = "Show the current chezmoi config"

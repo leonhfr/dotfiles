@@ -7,7 +7,7 @@ brews:
     - chezmoi
     # - croc
     # - difftastic
-    # - dlvhdr/formulae/diffnav
+    - dlvhdr/formulae/diffnav
     - direnv
     - dockutil
     - eza
@@ -20,7 +20,6 @@ brews:
     - git
     - git-delta
     - git-lfs
-    - git-town
     - git-who
     - go
     - golangci-lint
@@ -91,14 +90,12 @@ casks:
     - font-roboto
     - ghostty
     - handy
-    # - jordanbaird-ice
     # - nikitabobko/tap/aerospace
     - obsidian
     - openusage
     - orbstack
     - rectangle
     - spotify
-    # - stats
     - the-unarchiver
     - visual-studio-code
     - zed
@@ -132,6 +129,7 @@ trust:
   common: []
   personal: []
   work:
+    - dlvhdr/formulae/diffnav
     - edgee-ai/tap/edgee
     - hashicorp/tap/terraform
 

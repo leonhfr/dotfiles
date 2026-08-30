@@ -5,15 +5,19 @@
 ###   repos check
 ###   repos pull [-f]
 ###   repos switch
+###   repos clean [-f]
 ###
 ### Subcommands:
-###   check   Show dirty state: uncommitted files, unpushed commits, stash.
+###   check   Show dirty state: uncommitted files, unpushed commits, stash, pushed branches.
 ###   pull    Pull default branch for each repo. Skips repos with uncommitted
 ###           changes or unpushed commits unless -f is given.
 ###   switch  Switch to default branch for each repo.
+###   clean   Delete branches whose PR was merged. With -f, delete all branches
+###           with no remote tracking except main and master.
 ###
 ### Options:
 ###   -f, --force  (pull) Pull even if the repo has uncommitted changes or unpushed commits.
+###   -f, --force  (clean) Delete all branches with no upstream or whose upstream is gone, except main and master.
 ###   -h           Show this message.
 
 set -eu
@@ -53,6 +57,7 @@ run_parallel() {
   while IFS= read -r REPO; do
     [ -n "$REPO" ] || continue
     DIR=$(ghq list --full-path --exact "$REPO")
+    [ -f "$DIR/.git" ] && continue
     (
       trap "touch '$DONE/$I'" EXIT
       "$FUNC" "$REPO" "$DIR" "$TMP/$I"
@@ -83,11 +88,17 @@ check_repo() {
   DIRTY=$(git -C "$DIR" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
   UNPUSHED=$(git -C "$DIR" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
   STASH=$(git -C "$DIR" stash list 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$DIRTY" -gt 0 ] || [ "$UNPUSHED" -gt 0 ] || [ "$STASH" -gt 0 ]; then
+  PUSHED=$(git -C "$DIR" branch --format '%(refname:short) %(upstream:short)' 2>/dev/null \
+    | awk '$2 != "" && $1 != "main" && $1 != "master" {c++} END {print c+0}')
+  CURRENT=$(git -C "$DIR" branch --show-current 2>/dev/null)
+  case "$CURRENT" in main|master) CURRENT="" ;; esac
+  if [ "$DIRTY" -gt 0 ] || [ "$UNPUSHED" -gt 0 ] || [ "$STASH" -gt 0 ] || [ "$PUSHED" -gt 0 ] || [ -n "$CURRENT" ]; then
     PARTS=""
     [ "$DIRTY" -gt 0 ]    && PARTS="${PARTS}  dirty:${DIRTY}"
     [ "$UNPUSHED" -gt 0 ] && PARTS="${PARTS}  unpushed:${UNPUSHED}"
     [ "$STASH" -gt 0 ]    && PARTS="${PARTS}  stash:${STASH}"
+    [ "$PUSHED" -gt 0 ]   && PARTS="${PARTS}  pushed:${PUSHED}"
+    [ -n "$CURRENT" ]     && PARTS="${PARTS}  branch:${CURRENT}"
     printf '%s%s%s%s\n' "$YELLOW" "$REPO" "$RESET" "$PARTS" > "$OUT"
   fi
 }
@@ -131,8 +142,59 @@ switch_repo() {
   fi
 }
 
+clean_repo() {
+  REPO="$1"; DIR="$2"; OUT="$3"
+  DELETED=0
+  FAILED=0
+
+  if [ "${FORCE:-0}" = "1" ]; then
+    git -C "$DIR" fetch --prune --quiet 2>/dev/null
+    BRANCHES=$(git -C "$DIR" branch --format '%(refname:short) %(upstream:short) %(upstream:track)' 2>/dev/null \
+      | awk '($2 == "" || $3 == "[gone]") && $1 != "main" && $1 != "master" {print $1}')
+    for BRANCH in $BRANCHES; do
+      if git -C "$DIR" branch -D "$BRANCH" > /dev/null 2>&1; then
+        DELETED=$((DELETED + 1))
+      else
+        FAILED=$((FAILED + 1))
+      fi
+    done
+  else
+    BRANCHES=$(git -C "$DIR" branch --format '%(refname:short)' 2>/dev/null \
+      | awk '$1 != "main" && $1 != "master" {print $1}')
+    for BRANCH in $BRANCHES; do
+      if ( cd "$DIR" && gh pr list --state merged --head "$BRANCH" --json number 2>/dev/null ) | grep -q '"number"'; then
+        if git -C "$DIR" branch -D "$BRANCH" > /dev/null 2>&1; then
+          DELETED=$((DELETED + 1))
+        else
+          FAILED=$((FAILED + 1))
+        fi
+      fi
+    done
+  fi
+
+  if [ "$DELETED" -gt 0 ] || [ "$FAILED" -gt 0 ]; then
+    MSG=""
+    [ "$DELETED" -gt 0 ] && MSG="${MSG}  deleted:${DELETED}"
+    [ "$FAILED" -gt 0 ]  && MSG="${MSG}  failed:${FAILED}"
+    COLOR="$GREEN"
+    [ "$FAILED" -gt 0 ] && COLOR="$RED"
+    printf '%s%s%s%s\n' "$COLOR" "$REPO" "$RESET" "$MSG" > "$OUT"
+  fi
+}
+
 cmd_check()  { run_parallel check_repo; }
 cmd_switch() { run_parallel switch_repo; }
+
+cmd_clean() {
+  FORCE=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -f|--force) FORCE=1; shift ;;
+      *) printf '%srepos clean: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
+    esac
+  done
+  run_parallel clean_repo
+}
 
 cmd_pull() {
   FORCE=0
@@ -154,6 +216,7 @@ case "$1" in
   check)  cmd_check ;;
   pull)   shift; cmd_pull "$@" ;;
   switch) cmd_switch ;;
+  clean)  shift; cmd_clean "$@" ;;
   *)
     printf '%srepos: unknown subcommand %s%s\n' "$RED" "'$1'" "$RESET" >&2
     usage

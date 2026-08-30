@@ -1,8 +1,10 @@
 #!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
 set -euo pipefail
 
 extensions=(
   "dlvhdr/gh-dash"
+  "dlvhdr/gh-enhance"
   "fchimpan/gh-workflow-stats"
   "github/gh-stack"
 )
@@ -18,3 +20,5 @@ for ext in "${extensions[@]}"; do
     gh extension install "$ext"
   fi
 done
+
+gh extension upgrade --all

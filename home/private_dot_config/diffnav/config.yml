@@ -1,0 +1,4 @@
+ui:
+  hideHeader: true
+  fileTreeWidth: 32
+  sideBySide: true
