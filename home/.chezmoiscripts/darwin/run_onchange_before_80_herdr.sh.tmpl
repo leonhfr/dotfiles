@@ -7,7 +7,14 @@ plugins=(
     "thanhdat77/herdr-navigator"
 )
 
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "[dotfiles] missing cargo, skipping herdr plugins..."
+  exit 0
+fi
+
 installed=$(herdr plugin list 2>/dev/null || true)
+
+export PATH="$(brew --prefix rustup)/bin:$HOME/.cargo/bin:$PATH"
 
 for plugin in "${plugins[@]}"; do
     if echo "$installed" | grep -q "$plugin"; then
