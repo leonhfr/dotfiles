@@ -1,15 +1,15 @@
 % kubectx
 
 # List contexts
-kubectx
+; kubectx
 
 # Switch context
-kubectx <context>
+; kubectx <context>
 
 # Print the active context
-kubectx -c
+; kubectx -c
 
 # Alias an existing context under a shorter name
-kubectx <alias>=<context>
+; kubectx <alias>=<context>
 
 $ context: kubectx

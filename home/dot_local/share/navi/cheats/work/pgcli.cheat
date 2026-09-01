@@ -1,0 +1,4 @@
+% pgcli
+
+# show backslash command reference (pgcli + psql)
+; bat "$HOME/.local/share/navi/cheats/work/pgcli.md" "$HOME/.local/share/navi/cheats/work/psql.md"

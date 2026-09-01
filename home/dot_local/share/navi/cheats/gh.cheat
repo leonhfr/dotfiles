@@ -1,0 +1,13 @@
+% gh
+
+# Show current auth state for every host
+; gh auth status
+
+# Open the current repo in a browser
+; gh repo view --web
+
+# Open current branch's PR in browser
+; gh pr view --web
+
+# Show PR diff in the terminal
+; gh pr diff

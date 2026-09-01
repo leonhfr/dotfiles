@@ -1,0 +1,60 @@
+% mole, mo
+
+# Open the interactive main menu
+; mole
+
+# Free up disk space: caches, logs, leftovers from uninstalled apps
+; mole clean
+
+# Preview what clean would remove (no changes)
+; mole clean --dry-run
+
+# Manage paths that clean should leave alone
+; mole clean --whitelist
+
+# Clean OS metadata from a mounted external volume (no app caches touched)
+; mole clean --external <path>
+
+# Refresh system caches and services, repair safe maintenance issues
+; mole optimize
+
+# Preview optimize
+; mole optimize --dry-run
+
+# Remove project build artifacts (node_modules, target/, .next, etc.)
+; mole purge
+
+# Preview purge
+; mole purge --dry-run
+
+# Configure which directories purge scans
+; mole purge --paths
+
+# Include zero-byte artifact directories in the purge report
+; mole purge --include-empty
+
+# Fully uninstall an app, including support files and prefs
+; mole uninstall
+
+# Preview uninstall
+; mole uninstall --dry-run
+
+# Find and remove leftover installer packages and dmgs
+; mole installer
+
+# Preview installer cleanup
+; mole installer --dry-run
+
+# Interactive disk usage TUI for the home dir
+; mole analyze
+
+# Analyze a specific path (e.g. external drives)
+; mole analyze <path>
+
+# Disk usage as JSON (for scripting)
+; mole analyze -json
+
+# Live system health TUI (CPU, memory, processes, sensors)
+; mole status
+
+$ path: echo -e '~\n/\n/Volumes'

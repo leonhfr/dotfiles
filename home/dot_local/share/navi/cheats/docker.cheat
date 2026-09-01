@@ -1,47 +1,47 @@
 % docker
 
 # Wipe all containers, running or stopped
-docker rm -f $(docker ps -aq)
+; docker rm -f $(docker ps -aq)
 
 # Clean dangling images (<none>:<none>)
 ; --no-trunc avoids ID/tag collisions
-docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+; docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
 # Show disk usage broken down
-docker system df
+; docker system df
 
 # Live CPU, memory, net, block IO per container
-docker stats
+; docker stats
 
 # Full JSON state of a container
-docker inspect <container_id>
+; docker inspect <container_id>
 
 # Tail and follow the last 100 lines of a container's logs
-docker logs --tail 100 <container_id> -f
+; docker logs --tail 100 <container_id> -f
 
 # Open a shell inside a running container
-docker exec -it <container_id> bash
+; docker exec -it <container_id> bash
 
 # Copy a file or directory out of a container
-docker cp <container_id>:<path> <local_path>
+; docker cp <container_id>:<path> <local_path>
 
 $ container_id: docker ps --- --headers 1 --column 1
 
 % docker-compose, compose
 
 # Build, (re)create, start, attach to all services
-docker compose up
+; docker compose up
 
 # Same, detached
-docker compose up -d
+; docker compose up -d
 
 # Stop and remove containers and networks (add -v to also drop volumes)
-docker compose down
+; docker compose down
 
 # Tail and follow logs for one service
-docker compose logs --tail 100 -f <service>
+; docker compose logs --tail 100 -f <service>
 
 # Shell into a running service
-docker compose exec <service> bash
+; docker compose exec <service> bash
 
 $ service: docker compose ps --services

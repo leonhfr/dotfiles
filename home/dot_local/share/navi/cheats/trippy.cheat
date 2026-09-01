@@ -1,4 +1,4 @@
 % trippy, trip
 
 # Interactive traceroute TUI to a host
-trip <host>
+; trip <host>

@@ -1,0 +1,4 @@
+% psql
+
+# show backslash command reference
+; bat "$HOME/.local/share/navi/cheats/work/psql.md"

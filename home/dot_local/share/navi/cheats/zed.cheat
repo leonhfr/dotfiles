@@ -1,34 +1,34 @@
 % zed, golangci-lint
 
 # Patch .zed/settings.json with custom-golangci-lint LSP command in every ghq repo that has a .custom-gcl.yml
-ghq list --full-path | while read -r repo; do \
-    [ -f "$repo/.custom-gcl.yml" ] || continue; \
-    mkdir -p "$repo/.zed"; \
-    s="$repo/.zed/settings.json"; \
-    [ -f "$s" ] || printf '{}\n' > "$s"; \
-    tmp=$(mktemp); \
-    if sed -E -e ':a' -e 'N' -e '$!ba' -e 's/,([[:space:]]*[]}])/\1/g' "$s" | jq --argjson p "$(cat <<'EOF'
-{
-  "lsp": {
-    "golangci-lint": {
-      "initialization_options": {
-        "command": [
-          "__REPO_PATH__/custom-golangci-lint",
-          "run",
-          "--output.json.path",
-          "stdout",
-          "--show-stats=false",
-          "--output.text.path="
-        ]
-      }
-    }
-  }
-}
-EOF
-)" --arg repo "$repo" '. * ($p | walk(if type == "string" then gsub("__REPO_PATH__"; $repo) else . end))' > "$tmp"; then \
-      mv "$tmp" "$s" && echo "patched $s"; \
-    else \
-      rm -f "$tmp"; \
-      echo "SKIPPED $s" >&2; \
-    fi; \
-  done
+; ghq list --full-path | while read -r repo; do \
+;     [ -f "$repo/.custom-gcl.yml" ] || continue; \
+;     mkdir -p "$repo/.zed"; \
+;     s="$repo/.zed/settings.json"; \
+;     [ -f "$s" ] || printf '{}\n' > "$s"; \
+;     tmp=$(mktemp); \
+;     if sed -E -e ':a' -e 'N' -e '$!ba' -e 's/,([[:space:]]*[]}])/\1/g' "$s" | jq --argjson p "$(cat <<'EOF'
+; {
+;   "lsp": {
+;     "golangci-lint": {
+;       "initialization_options": {
+;         "command": [
+;           "__REPO_PATH__/custom-golangci-lint",
+;           "run",
+;           "--output.json.path",
+;           "stdout",
+;           "--show-stats=false",
+;           "--output.text.path="
+;         ]
+;       }
+;     }
+;   }
+; }
+; EOF
+; )" --arg repo "$repo" '. * ($p | walk(if type == "string" then gsub("__REPO_PATH__"; $repo) else . end))' > "$tmp"; then \
+;       mv "$tmp" "$s" && echo "patched $s"; \
+;     else \
+;       rm -f "$tmp"; \
+;       echo "SKIPPED $s" >&2; \
+;     fi; \
+;   done
