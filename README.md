@@ -35,8 +35,6 @@ mise run setup
   - Calibre Library
 - Calibre
 - Mochi
-- Stats
-- Ice
 
 ## Install manually
 

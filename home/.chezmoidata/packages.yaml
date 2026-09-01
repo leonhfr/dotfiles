@@ -7,7 +7,7 @@ brews:
     - chezmoi
     # - croc
     # - difftastic
-    - dlvhdr/formulae/diffnav
+    - diffnav
     - direnv
     - dockutil
     - eza
@@ -104,20 +104,20 @@ casks:
     - calibre
     - claude-code
     - filen
+    - google-chrome
     - mochi
     - nordvpn
     # - rhino-app
     - slack
     # - steam
+    - transmission
     - vlc
   work:
     - adobe-acrobat-pro
     - conductor
-    # - datagrip
     - discord
     - figma
     - gcloud-cli
-    - goland
     - google-drive
     # - google-chrome
     # - insomnia
@@ -129,10 +129,8 @@ trust:
   common: []
   personal: []
   work:
-    - dlvhdr/formulae/diffnav
     - edgee-ai/tap/edgee
     - hashicorp/tap/terraform
-
 
 gobin:
   common:
