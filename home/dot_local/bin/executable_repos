@@ -2,23 +2,26 @@
 ### repos — maintenance commands for all ghq-managed repos
 ###
 ### Usage:
-###   repos check
-###   repos pull [-f]
-###   repos switch
-###   repos clean [-f]
+###   repos check [-s]
+###   repos pull [-f] [-s]
+###   repos switch [-s]
+###   repos clean [-f] [-s]
 ###
 ### Subcommands:
 ###   check   Show dirty state: uncommitted files, unpushed commits, stash, pushed branches.
-###   pull    Pull default branch for each repo. Skips repos with uncommitted
-###           changes or unpushed commits unless -f is given.
+###   pull    Pull default branch for each repo. Skips repos not currently on
+###           the default branch, and skips repos with uncommitted changes or
+###           unpushed commits unless -f is given.
 ###   switch  Switch to default branch for each repo.
 ###   clean   Delete branches whose PR was merged. With -f, delete all branches
 ###           with no remote tracking except main and master.
 ###
 ### Options:
-###   -f, --force  (pull) Pull even if the repo has uncommitted changes or unpushed commits.
-###   -f, --force  (clean) Delete all branches with no upstream or whose upstream is gone, except main and master.
-###   -h           Show this message.
+###   -f, --force       (pull) Pull even if the repo has uncommitted changes or unpushed commits.
+###   -f, --force       (clean) Delete all branches with no upstream or whose upstream is gone, except main and master.
+###   -s, --sequential  Process repos one at a time instead of in parallel, with no
+###                     progress spinner. Produces clean, ordered output for logs.
+###   -h                Show this message.
 
 set -eu
 
@@ -51,6 +54,23 @@ default_branch() {
 run_parallel() {
   FUNC="$1"
   TMP=$(mktemp -d)
+
+  if [ "${SEQUENTIAL:-0}" = "1" ]; then
+    while IFS= read -r REPO; do
+      [ -n "$REPO" ] || continue
+      DIR=$(ghq list --full-path --exact "$REPO")
+      [ -f "$DIR/.git" ] && continue
+      OUT="$TMP/out"
+      rm -f "$OUT"
+      "$FUNC" "$REPO" "$DIR" "$OUT"
+      [ -s "$OUT" ] && cat "$OUT"
+    done <<EOF
+$(ghq list)
+EOF
+    rm -rf "$TMP"
+    return
+  fi
+
   DONE="$TMP/done"
   mkdir "$DONE"
   I=0
@@ -105,6 +125,16 @@ check_repo() {
 
 pull_repo() {
   REPO="$1"; DIR="$2"; OUT="$3"
+  BRANCH=$(default_branch "$DIR")
+  if [ -z "$BRANCH" ]; then
+    printf '%s%s%s  no default branch\n' "$RED" "$REPO" "$RESET" > "$OUT"
+    return
+  fi
+  CURRENT=$(git -C "$DIR" branch --show-current 2>/dev/null)
+  if [ "$CURRENT" != "$BRANCH" ]; then
+    printf '%s%s%s  skipped  branch:%s\n' "$YELLOW" "$REPO" "$RESET" "$CURRENT" > "$OUT"
+    return
+  fi
   if [ "${FORCE:-0}" = "0" ]; then
     DIRTY=$(git -C "$DIR" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
     UNPUSHED=$(git -C "$DIR" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
@@ -115,11 +145,6 @@ pull_repo() {
       printf '%s%s%s  skipped%s\n' "$YELLOW" "$REPO" "$RESET" "$PARTS" > "$OUT"
       return
     fi
-  fi
-  BRANCH=$(default_branch "$DIR")
-  if [ -z "$BRANCH" ]; then
-    printf '%s%s%s  no default branch\n' "$RED" "$REPO" "$RESET" > "$OUT"
-    return
   fi
   if git -C "$DIR" pull origin "$BRANCH" > /dev/null 2>&1; then
     printf '%s%s%s  pulled %s\n' "$GREEN" "$REPO" "$RESET" "$BRANCH" > "$OUT"
@@ -182,14 +207,35 @@ clean_repo() {
   fi
 }
 
-cmd_check()  { run_parallel check_repo; }
-cmd_switch() { run_parallel switch_repo; }
+cmd_check() {
+  SEQUENTIAL=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -s|--sequential) SEQUENTIAL=1; shift ;;
+      *) printf '%srepos check: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
+    esac
+  done
+  run_parallel check_repo
+}
+
+cmd_switch() {
+  SEQUENTIAL=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -s|--sequential) SEQUENTIAL=1; shift ;;
+      *) printf '%srepos switch: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
+    esac
+  done
+  run_parallel switch_repo
+}
 
 cmd_clean() {
   FORCE=0
+  SEQUENTIAL=0
   while [ $# -gt 0 ]; do
     case "$1" in
       -f|--force) FORCE=1; shift ;;
+      -s|--sequential) SEQUENTIAL=1; shift ;;
       *) printf '%srepos clean: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
     esac
   done
@@ -198,9 +244,11 @@ cmd_clean() {
 
 cmd_pull() {
   FORCE=0
+  SEQUENTIAL=0
   while [ $# -gt 0 ]; do
     case "$1" in
       -f|--force) FORCE=1; shift ;;
+      -s|--sequential) SEQUENTIAL=1; shift ;;
       *) printf '%srepos pull: unknown option %s%s\n' "$RED" "'$1'" "$RESET" >&2; exit 1 ;;
     esac
   done
@@ -213,9 +261,9 @@ if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
 fi
 
 case "$1" in
-  check)  cmd_check ;;
+  check)  shift; cmd_check "$@" ;;
   pull)   shift; cmd_pull "$@" ;;
-  switch) cmd_switch ;;
+  switch) shift; cmd_switch "$@" ;;
   clean)  shift; cmd_clean "$@" ;;
   *)
     printf '%srepos: unknown subcommand %s%s\n' "$RED" "'$1'" "$RESET" >&2

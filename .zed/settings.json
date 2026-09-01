@@ -13,6 +13,14 @@
     "TOML": ["*.toml.tmpl"],
     "Git Config": ["**/git/config.tmpl"],
     "Go Text Template": ["**/dot_claude/settings.json.tmpl", ".chezmoiignore"],
+    "XML": ["*.plist", "*.plist.tmpl"],
+  },
+  "languages": {
+    "XML": {
+      "prettier": {
+        "allowed": false,
+      },
+    },
   },
   "lsp": {
     "json-language-server": {

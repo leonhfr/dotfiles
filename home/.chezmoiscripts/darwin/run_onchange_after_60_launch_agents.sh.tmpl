@@ -1,0 +1,51 @@
+#!/bin/bash
+# Sync user LaunchAgents in the "fr.leonh" namespace with what chezmoi put in
+# ~/Library/LaunchAgents/.
+#
+# Auto-generated checksums:
+{{- $launchSrc := joinPath .chezmoi.sourceDir "home/private_Library/LaunchAgents" -}}
+{{- range (glob (joinPath $launchSrc "*")) }}
+# {{ base . }} {{ output "shasum" "-a" "256" . | trunc 64 }}
+{{- else }}
+# (no plists in source)
+{{- end }}
+
+set -euo pipefail
+
+NAMESPACE="fr.leonh"
+LAUNCH_DIR="$HOME/Library/LaunchAgents"
+DOMAIN="gui/$(id -u)"
+
+echo "[dotfiles] syncing launch agents (namespace: $NAMESPACE)"
+
+# Desired set: every plist matching our namespace in LAUNCH_DIR.
+desired=""
+for plist in "$LAUNCH_DIR"/"${NAMESPACE}".*.plist; do
+  [[ -f "$plist" ]] || continue
+  desired="${desired}"$'\n'"$(basename "$plist" .plist)"
+done
+
+# Boot out anything currently loaded under our namespace that has no plist on disk.
+launchctl list 2>/dev/null \
+  | awk -v prefix="${NAMESPACE}." 'NR>1 && index($3, prefix)==1 {print $3}' \
+  | while IFS= read -r label; do
+      if ! grep -qx -- "$label" <<<"$desired"; then
+        echo "[dotfiles] launchd bootout (orphan): $label"
+        launchctl bootout "$DOMAIN/$label" 2>/dev/null || true
+      fi
+    done
+
+# (Re)load every desired agent.
+echo "$desired" | while IFS= read -r label; do
+  [[ -z "$label" ]] && continue
+  plist="$LAUNCH_DIR/$label.plist"
+  [[ -f "$plist" ]] || continue
+  echo "[dotfiles] launchd reload: $label"
+  launchctl bootout "$DOMAIN/$label" 2>/dev/null || true
+  if ! launchctl bootstrap "$DOMAIN" "$plist"; then
+    echo "[dotfiles] launchd bootstrap FAILED for $label" >&2
+  fi
+done
+
+count=$(echo "$desired" | grep -c . || true)
+echo "[dotfiles] $count launch agent(s) loaded"
