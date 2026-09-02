@@ -79,7 +79,9 @@ work/.gitconfig
 .CFUserTextEncoding
 .DS_Store
 .Trash/**
-Library/**
+Library/**/*
+!Library/LaunchAgents
+!Library/LaunchAgents/**
 Applications
 Desktop
 Documents
