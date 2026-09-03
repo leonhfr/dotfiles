@@ -7,7 +7,6 @@
 {{ end }}
 
 {{ if ne .machine "work" }}
-.config/pgcli/**
 .local/share/navi/cheats/work
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
@@ -82,6 +81,8 @@ work/.gitconfig
 Library/**/*
 !Library/LaunchAgents
 !Library/LaunchAgents/**
+!Library/Application Support/Code/User
+!Library/Application Support/Code/User/**
 Applications
 Desktop
 Documents
@@ -91,7 +92,7 @@ Music
 Pictures
 Public
 
-# personal workspace / cloud sync roots (never dotfile material)
+# personal workspace / cloud sync roots
 Google Drive
 OrbStack
 go
