@@ -82,6 +82,7 @@ brews:
 casks:
   common:
     - 1password-cli
+    - crmne/tap/fastpotify
     - firefox
     - font-jetbrains-mono
     - font-lato
@@ -124,13 +125,6 @@ casks:
     # - notion
     # - pomatez
     # - postman
-
-trust:
-  common: []
-  personal: []
-  work:
-    - edgee-ai/tap/edgee
-    - hashicorp/tap/terraform
 
 gobin:
   common:

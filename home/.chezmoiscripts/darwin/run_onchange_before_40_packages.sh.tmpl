@@ -3,19 +3,15 @@ set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-{{ $trust := concat (.trust.common | default (list)) (index .trust .machine | default (list)) -}}
-{{ range $trust | sortAlpha | uniq -}}
-brew trust --formula {{ . | quote }}
-{{ end -}}
 echo "[dotfiles] Installing packages"
 
 brew bundle --cleanup --force --file=/dev/stdin <<EOF
-{{ $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) -}}
-{{ $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) -}}
-{{- range $brews | sortAlpha | uniq -}}
-brew {{ . | quote }}
+{{ $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) | sortAlpha | uniq -}}
+{{ $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) | sortAlpha | uniq -}}
+{{ range $brews -}}
+brew {{ . | quote }}{{ if contains "/" . }}, trusted: true{{ end }}
 {{ end -}}
-{{ range $casks | sortAlpha | uniq -}}
-cask {{ . | quote }}
+{{ range $casks -}}
+cask {{ . | quote }}{{ if contains "/" . }}, trusted: true{{ end }}
 {{ end -}}
 EOF
