@@ -1,0 +1,38 @@
+#!/bin/bash
+set -euo pipefail
+
+plugins=(
+    "devashish2203/herdr-worktrunk"
+    "persiyanov/herdr-reviewr"
+    "thanhdat77/herdr-navigator"
+)
+
+local_plugins=(
+    "$HOME/src/github.com/leonhfr/herdr-worktree-groups"
+)
+
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "[dotfiles] missing cargo, skipping GitHub herdr plugins..."
+else
+  installed=$(herdr plugin list 2>/dev/null || true)
+
+  export PATH="$(brew --prefix rustup)/bin:$HOME/.cargo/bin:$PATH"
+
+  for plugin in "${plugins[@]}"; do
+      if echo "$installed" | grep -q "$plugin"; then
+          echo "[dotfiles] herdr plugin already installed: $plugin"
+      else
+          echo "[dotfiles] Installing herdr plugin: $plugin"
+          herdr plugin install "$plugin" --yes
+      fi
+  done
+fi
+
+for plugin_path in "${local_plugins[@]}"; do
+    if [[ ! -d $plugin_path ]]; then
+        echo "[dotfiles] local herdr plugin path missing, skipping: $plugin_path"
+        continue
+    fi
+    echo "[dotfiles] Linking herdr plugin: $plugin_path"
+    herdr plugin link "$plugin_path" >/dev/null
+done

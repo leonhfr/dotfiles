@@ -21,7 +21,6 @@ type = "plugin_action"
 command = "persiyanov.reviewr.toggle"
 description = "toggle reviewer"
 
-# Override herdr's built-in "new worktree" key with worktrunk's default-branch switch/create picker:
 [[keys.command]]
 key = "prefix+shift+g"
 type = "plugin_action"
@@ -39,3 +38,15 @@ key = "prefix+shift+d"
 type = "plugin_action"
 command = "worktrunk.remove"
 description = "wt: remove"
+
+[[keys.command]]
+key = "prefix+shift+w"
+type = "plugin_action"
+command = "worktree-groups.create"
+description = "wt: create worktree group"
+
+[[keys.command]]
+key = "prefix+shift+x"
+type = "plugin_action"
+command = "worktree-groups.delete"
+description = "wt: delete worktree group"
