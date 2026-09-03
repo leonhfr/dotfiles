@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+src="$1/.claude/settings.local.json"
+dst="$2/.claude/settings.local.json"
+
+mkdir -p "$2/.claude" || true
+[ -f "$src" ] || exit 0
+
+if [ -f "$dst" ]; then
+  existing_dirs=$(jq -c '.permissions.additionalDirectories // []' "$dst")
+  jq --argjson dirs "$existing_dirs" '
+    .permissions //= {} |
+    .permissions.additionalDirectories = ((.permissions.additionalDirectories // []) + $dirs | unique)
+  ' "$src" > "${dst}.tmp" && mv "${dst}.tmp" "$dst"
+else
+  cp "$src" "$dst"
+fi
