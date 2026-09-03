@@ -21,7 +21,7 @@ brews:
     - git-delta
     - git-lfs
     - git-who
-    - go
+    - go@1.26
     - golangci-lint
     - golangci-lint-langserver
     - gopls

@@ -5,6 +5,14 @@ set -euo pipefail
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+{{- $go := "" -}}
+{{- range (concat (.brews.common | default (list)) (index .brews .machine | default (list))) -}}
+  {{- if hasPrefix "go@" . -}}{{- $go = . -}}{{- end -}}
+{{- end }}
+{{ if $go -}}
+export PATH="$(brew --prefix {{ $go | quote }})/bin:$PATH"
+{{ end -}}
+
 GOBIN="$(go env GOBIN)"
 [ -n "$GOBIN" ] || GOBIN="$(go env GOPATH)/bin"
 export PATH="$GOBIN:$PATH"
