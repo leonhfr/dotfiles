@@ -10,6 +10,8 @@
 ###   chezmoi-claude diff    Show a normalized diff (rendered vs on-disk).
 ###   chezmoi-claude sync    Show the diff, confirm, then sync on-disk values
 ###                          back into the chezmoi source fragments.
+###   chezmoi-claude local   Review and optionally delete per-repo local Claude
+###                          settings (settings.local.json) across all ghq repos.
 ###
 ### Options:
 ###   -h   Show this message.
@@ -55,7 +57,7 @@ cmd_diff() {
     return 0
   fi
 
-  diff -u "$ACTUAL" "$RENDERED" | diffnav
+  git diff --no-index -- "$ACTUAL" "$RENDERED" | diffnav
   return 1
 }
 
@@ -163,14 +165,54 @@ cmd_sync() {
   fi
 }
 
+cmd_local() {
+  require ghq bat gum
+
+  FOUND=0
+  DELETED=0
+  REPOS_FILE=$(mktemp)
+  ghq list --full-path > "$REPOS_FILE"
+  exec 3< "$REPOS_FILE"
+  while IFS= read -r REPO <&3; do
+    [ -f "$REPO/.git" ] && continue
+    SETTINGS="$REPO/.claude/settings.local.json"
+    [ -f "$SETTINGS" ] || continue
+    FOUND=$((FOUND + 1))
+
+    gum style --foreground 212 "$REPO"
+    bat --pager=never --language=json "$SETTINGS"
+
+    CONFIRM_RC=0
+    gum confirm --default=false "Delete?" || CONFIRM_RC=$?
+    case "$CONFIRM_RC" in
+      0)
+        rm "$SETTINGS"
+        rmdir "$REPO/.claude" 2>/dev/null || true
+        DELETED=$((DELETED + 1))
+        ;;
+      1) ;;
+      *) break ;;
+    esac
+  done
+  exec 3<&-
+  rm -f "$REPOS_FILE"
+
+  if [ "$FOUND" -eq 0 ]; then
+    gum style --foreground 42 "no local claude settings found"
+  else
+    gum style --foreground 42 "done: $DELETED/$FOUND deleted"
+  fi
+}
+
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
   usage
   exit 0
 fi
 
 case "$1" in
-  diff) shift; cmd_diff "$@" ;;
-  sync) shift; cmd_sync "$@" ;;
+  diff)  shift; cmd_diff "$@" ;;
+  sync)  shift; cmd_sync "$@" ;;
+  local) shift; cmd_local "$@" ;;
   *)
     echo "Error: unknown subcommand '$1'" >&2
     usage >&2
