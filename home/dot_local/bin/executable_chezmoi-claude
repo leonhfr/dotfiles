@@ -62,7 +62,7 @@ cmd_diff() {
 }
 
 cmd_sync() {
-  require jq yq gum diffnav chezmoi
+  require jq gum diffnav chezmoi
 
   if cmd_diff; then
     gum style --foreground 42 "nothing to sync"
@@ -76,9 +76,7 @@ cmd_sync() {
 
   SOURCE=$(chezmoi source-path)
   MACHINE=$(chezmoi execute-template '{{ .machine }}')
-
-  COMMON_FILE="$SOURCE/.chezmoitemplates/claude_settings.json"
-  MAP_FILE="$SOURCE/.chezmoidata/claude_settings_mapping.yaml"
+  BASE_FILE="$SOURCE/.chezmoitemplates/claude_settings.json"
 
   case "$MACHINE" in
     personal) MACHINE_FILE="$SOURCE/.chezmoitemplates/claude_settings_personal.json" ;;
@@ -89,80 +87,109 @@ cmd_sync() {
       ;;
   esac
 
-  for f in "$TARGET" "$COMMON_FILE" "$MACHINE_FILE" "$MAP_FILE"; do
-    if [ ! -f "$f" ]; then
-      gum style --foreground 196 "Error: missing file $f"
-      return 1
-    fi
+  for f in "$TARGET" "$BASE_FILE" "$MACHINE_FILE"; do
+    [ -f "$f" ] || { gum style --foreground 196 "Error: missing file $f"; return 1; }
   done
 
   gum style --foreground 212 "machine: $MACHINE"
 
-  NEW_MAPPINGS=""
-  for KEY in $(jq -r 'keys[]' "$TARGET"); do
-    BUCKET=$(K="$KEY" yq '.claude_settings_mapping[strenv(K)] // ""' "$MAP_FILE")
-    if [ -z "$BUCKET" ] || [ "$BUCKET" = "null" ]; then
-      NEW=$(gum choose --header "Where should '$KEY' go?" common machine)
-      if [ -z "$NEW" ]; then
-        gum style --foreground 196 "Aborted."
-        return 1
-      fi
-      K="$KEY" V="$NEW" yq -i '.claude_settings_mapping[strenv(K)] = strenv(V)' "$MAP_FILE"
-      NEW_MAPPINGS="$NEW_MAPPINGS $KEY=$NEW"
+  # Decrypt work machine file to a writable temp copy
+  MACH_TMP=$(mktemp)
+  trap 'rm -f "$MACH_TMP"' EXIT
+  if [ "$MACHINE" = "work" ]; then
+    chezmoi decrypt "$MACHINE_FILE" > "$MACH_TMP"
+  else
+    cp "$MACHINE_FILE" "$MACH_TMP"
+  fi
+
+  # Non-permissions top-level keys: route by presence in source files
+  KEYS_TMP=$(mktemp)
+  jq -r 'keys[] | select(. != "permissions")' "$TARGET" > "$KEYS_TMP"
+  exec 4< "$KEYS_TMP"
+  while IFS= read -r KEY <&4; do
+    DISK_VAL=$(jq -c --arg k "$KEY" '.[$k]' "$TARGET")
+    IN_MACH=$(jq -r --arg k "$KEY" 'has($k)' "$MACH_TMP")
+    IN_BASE=$(jq -r --arg k "$KEY" 'has($k)' "$BASE_FILE")
+    if [ "$IN_MACH" = "true" ]; then
+      jq --arg k "$KEY" --argjson v "$DISK_VAL" '.[$k] = $v' "$MACH_TMP" > "${MACH_TMP}.new" && mv "${MACH_TMP}.new" "$MACH_TMP"
+    elif [ "$IN_BASE" = "true" ]; then
+      jq --arg k "$KEY" --argjson v "$DISK_VAL" '.[$k] = $v' "$BASE_FILE" > "${BASE_FILE}.new" && mv "${BASE_FILE}.new" "$BASE_FILE"
+    else
+      DEST=$(gum choose --header "New key '$KEY' — add to which file?" "base" "machine")
+      case "$DEST" in
+        base)    jq --arg k "$KEY" --argjson v "$DISK_VAL" '.[$k] = $v' "$BASE_FILE" > "${BASE_FILE}.new" && mv "${BASE_FILE}.new" "$BASE_FILE" ;;
+        machine) jq --arg k "$KEY" --argjson v "$DISK_VAL" '.[$k] = $v' "$MACH_TMP" > "${MACH_TMP}.new" && mv "${MACH_TMP}.new" "$MACH_TMP" ;;
+      esac
     fi
   done
+  exec 4<&-
+  rm -f "$KEYS_TMP"
 
-  yq -i 'sort_keys(.claude_settings_mapping)' "$MAP_FILE"
+  # permissions.allow and permissions.deny: item-level diff
+  for LIST_KEY in allow deny; do
+    NEW_TMP=$(mktemp)
+    jq -rn \
+      --slurpfile disk "$TARGET" \
+      --slurpfile base "$BASE_FILE" \
+      --slurpfile mach "$MACH_TMP" \
+      --arg lk "$LIST_KEY" \
+      '($disk[0].permissions[$lk] // []) as $d |
+       (($base[0].permissions[$lk] // []) + ($mach[0].permissions[$lk] // [])) as $s |
+       $d | map(select(. as $i | $s | index($i) | not)) | .[]' > "$NEW_TMP"
+    exec 5< "$NEW_TMP"
+    while IFS= read -r ITEM <&5; do
+      DEST=$(gum choose --header "New permissions.$LIST_KEY: $ITEM" "base" "machine")
+      case "$DEST" in
+        base)
+          jq --arg lk "$LIST_KEY" --arg i "$ITEM" '.permissions[$lk] += [$i]' "$BASE_FILE" > "${BASE_FILE}.new" && mv "${BASE_FILE}.new" "$BASE_FILE"
+          ;;
+        machine)
+          jq --arg lk "$LIST_KEY" --arg i "$ITEM" \
+            '.permissions //= {} | .permissions[$lk] //= [] | .permissions[$lk] += [$i]' \
+            "$MACH_TMP" > "${MACH_TMP}.new" && mv "${MACH_TMP}.new" "$MACH_TMP"
+          ;;
+      esac
+    done
+    exec 5<&-
+    rm -f "$NEW_TMP"
 
-  MAP_JSON_FILE=$(mktemp)
-  yq -o json '.claude_settings_mapping' "$MAP_FILE" > "$MAP_JSON_FILE"
+    # Drop items removed from on-disk list
+    jq --slurpfile disk "$TARGET" --arg lk "$LIST_KEY" \
+      'if .permissions[$lk] then
+         .permissions[$lk] |= map(. as $i | select(($disk[0].permissions[$lk] // []) | index($i) != null))
+       else . end' \
+      "$BASE_FILE" > "${BASE_FILE}.new" && mv "${BASE_FILE}.new" "$BASE_FILE"
+    jq --slurpfile disk "$TARGET" --arg lk "$LIST_KEY" \
+      'if .permissions[$lk] then
+         .permissions[$lk] |= map(. as $i | select(($disk[0].permissions[$lk] // []) | index($i) != null))
+       else . end' \
+      "$MACH_TMP" > "${MACH_TMP}.new" && mv "${MACH_TMP}.new" "$MACH_TMP"
+  done
 
-  NEW_COMMON=$(jq --sort-keys \
-    --slurpfile mapping "$MAP_JSON_FILE" \
-    --slurpfile current "$COMMON_FILE" \
-    --slurpfile rendered "$TARGET" '
-      $mapping[0] as $m |
-      ($current[0] * ($rendered[0] | with_entries(select($m[.key] == "common"))))
-      | with_entries(select($m[.key] != "machine"))
-    ' -n)
+  # Non-array permissions sub-keys (e.g. defaultMode): route by presence in source files
+  PKEYS_TMP=$(mktemp)
+  jq -r '(.permissions // {}) | keys[] | select(. != "allow" and . != "deny" and . != "additionalDirectories")' "$TARGET" > "$PKEYS_TMP"
+  exec 6< "$PKEYS_TMP"
+  while IFS= read -r PKEY <&6; do
+    DISK_VAL=$(jq -c --arg k "$PKEY" '.permissions[$k]' "$TARGET")
+    IN_MACH=$(jq -r --arg k "$PKEY" '(.permissions // {}) | has($k)' "$MACH_TMP")
+    if [ "$IN_MACH" = "true" ]; then
+      jq --arg k "$PKEY" --argjson v "$DISK_VAL" '.permissions[$k] = $v' "$MACH_TMP" > "${MACH_TMP}.new" && mv "${MACH_TMP}.new" "$MACH_TMP"
+    else
+      jq --arg k "$PKEY" --argjson v "$DISK_VAL" '.permissions[$k] = $v' "$BASE_FILE" > "${BASE_FILE}.new" && mv "${BASE_FILE}.new" "$BASE_FILE"
+    fi
+  done
+  exec 6<&-
+  rm -f "$PKEYS_TMP"
 
-  NEW_MACHINE=$(jq --sort-keys \
-    --slurpfile mapping "$MAP_JSON_FILE" \
-    --slurpfile current "$MACHINE_FILE" \
-    --slurpfile rendered "$TARGET" '
-      $mapping[0] as $m |
-      ($current[0] * ($rendered[0] | with_entries(select($m[.key] == "machine"))))
-      | with_entries(select($m[.key] != "common"))
-    ' -n)
-
-  rm -f "$MAP_JSON_FILE"
-
-  COMMON_TMP=$(mktemp)
-  MACHINE_TMP=$(mktemp)
-  printf '%s\n' "$NEW_COMMON" > "$COMMON_TMP"
-  printf '%s\n' "$NEW_MACHINE" > "$MACHINE_TMP"
-  mv "$COMMON_TMP" "$COMMON_FILE"
-  mv "$MACHINE_TMP" "$MACHINE_FILE"
-
-  ORPHANS_COMMON=$(jq -r --slurpfile rendered "$TARGET" '
-    keys[] | select(. as $k | ($rendered[0] | has($k)) | not)
-  ' "$COMMON_FILE")
-  ORPHANS_MACHINE=$(jq -r --slurpfile rendered "$TARGET" '
-    keys[] | select(. as $k | ($rendered[0] | has($k)) | not)
-  ' "$MACHINE_FILE")
+  # Write back: re-encrypt for work
+  if [ "$MACHINE" = "work" ]; then
+    chezmoi encrypt "$MACH_TMP" > "$MACHINE_FILE"
+  else
+    cp "$MACH_TMP" "$MACHINE_FILE"
+  fi
 
   gum style --foreground 42 "sync complete"
-  if [ -n "$NEW_MAPPINGS" ]; then
-    gum style --foreground 226 "new mappings:$NEW_MAPPINGS"
-  fi
-  if [ -n "$ORPHANS_COMMON" ]; then
-    gum style --foreground 226 "orphan keys in common (left untouched):"
-    echo "$ORPHANS_COMMON" | sed 's/^/  /'
-  fi
-  if [ -n "$ORPHANS_MACHINE" ]; then
-    gum style --foreground 226 "orphan keys in machine fragment (left untouched):"
-    echo "$ORPHANS_MACHINE" | sed 's/^/  /'
-  fi
 }
 
 cmd_local() {

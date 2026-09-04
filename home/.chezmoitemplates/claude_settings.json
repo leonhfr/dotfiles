@@ -27,6 +27,80 @@
     "ENABLE_TOOL_SEARCH": "true"
   },
   "fastMode": false,
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" blocked",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" release",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" idle",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" working",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
   "includeGitInstructions": false,
   "outputStyle": "Simplified Technical English",
   "permissions": {
@@ -43,6 +117,7 @@
       "Bash(gh pr view *)",
       "Bash(gh repo view *)",
       "Bash(gh search *)",
+      "Bash(gh workflow-stats *)",
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git show *)",
@@ -52,20 +127,10 @@
       "Bash(grep *)",
       "Bash(ls:*)",
       "Bash(make *)",
+      "Bash(jq *)",
       "Bash(pdfinfo *)",
       "Bash(pdftotext *)",
-      "mcp__mcp-gateway__mcp-clickhouse-list-databases",
-      "mcp__mcp-gateway__mcp-clickhouse-list-tables",
-      "mcp__mcp-gateway__mcp-clickhouse-run-select-query",
-      "mcp__metabase__*",
-      "mcp__notion__notion-fetch",
-      "mcp__plugin_sentry_sentry__get_sentry_resource",
-      "mcp__plugin_sentry_sentry__search_events",
-      "mcp__plugin_sentry_sentry__search_issues",
-      "mcp__plugin_slack_slack__slack_read_channel",
-      "mcp__plugin_slack_slack__slack_read_thread",
-      "mcp__slack__slack_read_file",
-      "mcp__slack__slack_read_thread"
+      "Bash(xargs cat)"
     ],
     "defaultMode": "plan",
     "deny": [
