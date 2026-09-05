@@ -8,6 +8,7 @@
     ],
     "JSON": ["*.json.tmpl"],
     "JSONC": ["**/zed/*.json"],
+    "Markdown": ["*.md.tmpl"],
     "INI": ["**/pgcli/config", "**/git/config.tmpl", "config.ghostty"],
     "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
     "TOML": ["*.toml.tmpl"],
