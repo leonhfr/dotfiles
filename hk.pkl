@@ -5,6 +5,10 @@ hooks {
     ["pre-commit"] {
         steps {
             ["gitleaks"] = Builtins.gitleaks
+            ["plaintext-keywords"] {
+                check = "bin/check-plaintext-keywords.sh"
+                allow_failure = true
+            }
             ["chezmoiremove"] {
                 check = "bin/check-chezmoiremove.sh"
                 allow_failure = true
