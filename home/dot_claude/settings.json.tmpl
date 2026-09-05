@@ -6,23 +6,5 @@
 {{-   $machine = include ".chezmoitemplates/claude_settings_personal.json" | fromJson -}}
 {{- end -}}
 {{- $merged := deepCopy $base -}}
-{{- range $k, $mv := $machine -}}
-{{-   $bv := index $base $k -}}
-{{-   if and $bv (eq (kindOf $mv) "slice") (eq (kindOf $bv) "slice") -}}
-{{-     $_ := set $merged $k (concat $bv $mv | uniq) -}}
-{{-   else if and $bv (eq (kindOf $mv) "map") (eq (kindOf $bv) "map") -}}
-{{-     $nested := deepCopy $bv -}}
-{{-     range $nk, $nv := $mv -}}
-{{-       $nbv := index $bv $nk -}}
-{{-       if and $nbv (eq (kindOf $nv) "slice") (eq (kindOf $nbv) "slice") -}}
-{{-         $_ := set $nested $nk (concat $nbv $nv | uniq) -}}
-{{-       else -}}
-{{-         $_ := set $nested $nk $nv -}}
-{{-       end -}}
-{{-     end -}}
-{{-     $_ := set $merged $k $nested -}}
-{{-   else -}}
-{{-     $_ := set $merged $k $mv -}}
-{{-   end -}}
-{{- end -}}
+{{- template "claude_settings_deepmerge.tmpl" (list $merged $machine) -}}
 {{ $merged | toPrettyJson }}

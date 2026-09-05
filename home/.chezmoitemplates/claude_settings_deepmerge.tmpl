@@ -1,0 +1,12 @@
+{{- $dst := index . 0 -}}
+{{- $src := index . 1 -}}
+{{- range $k, $sv := $src -}}
+{{-   $dv := index $dst $k -}}
+{{-   if and $dv (eq (kindOf $sv) "slice") (eq (kindOf $dv) "slice") -}}
+{{-     $_ := set $dst $k (concat $dv $sv | uniq) -}}
+{{-   else if and $dv (eq (kindOf $sv) "map") (eq (kindOf $dv) "map") -}}
+{{-     template "claude_settings_deepmerge.tmpl" (list $dv $sv) -}}
+{{-   else -}}
+{{-     $_ := set $dst $k $sv -}}
+{{-   end -}}
+{{- end -}}
