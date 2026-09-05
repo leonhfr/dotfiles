@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# herdr claude integration: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr integration status 2>/dev/null | grep '^claude:' || echo 'herdr not installed'" | trim }}
+# herdr plugin update week: {{ now | date "2006-W01" }}
+
 plugins=(
     "devashish2203/herdr-worktrunk"
     "persiyanov/herdr-reviewr"
@@ -14,17 +17,12 @@ local_plugins=(
 if ! command -v cargo >/dev/null 2>&1; then
   echo "[dotfiles] missing cargo, skipping GitHub herdr plugins..."
 else
-  installed=$(herdr plugin list 2>/dev/null || true)
-
   export PATH="$(brew --prefix rustup)/bin:$HOME/.cargo/bin:$PATH"
 
   for plugin in "${plugins[@]}"; do
-      if echo "$installed" | grep -q "$plugin"; then
-          echo "[dotfiles] herdr plugin already installed: $plugin"
-      else
-          echo "[dotfiles] Installing herdr plugin: $plugin"
-          herdr plugin install "$plugin" --yes
-      fi
+      echo "[dotfiles] Updating herdr plugin: $plugin"
+      herdr plugin uninstall "$plugin" >/dev/null 2>&1 || true
+      herdr plugin install "$plugin" --yes
   done
 fi
 
@@ -36,3 +34,11 @@ for plugin_path in "${local_plugins[@]}"; do
     echo "[dotfiles] Linking herdr plugin: $plugin_path"
     herdr plugin link "$plugin_path" >/dev/null
 done
+
+claude_integration_status=$(herdr integration status 2>/dev/null | grep '^claude:' || true)
+if echo "$claude_integration_status" | grep -q 'current'; then
+    echo "[dotfiles] herdr claude integration already current"
+else
+    echo "[dotfiles] Installing herdr claude integration"
+    herdr integration install claude
+fi
