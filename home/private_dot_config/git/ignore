@@ -6,4 +6,4 @@ Thumbs.db
 .Trashes
 /tmp
 **/.claude/settings.local.json
-/.zed
+work/**/.zed
