@@ -13,6 +13,25 @@
   "disableDeepLinkRegistration": "disable",
   "effortLevel": "xhigh",
   "enableWorkflows": true,
+  "enabledPlugins": {
+    "gopilot@gopilot": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "worktrunk@worktrunk": true
+  },
+  "extraKnownMarketplaces": {
+    "gopilot": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:gonzaloserrano/gopilot.git"
+      }
+    },
+    "worktrunk": {
+      "source": {
+        "source": "github",
+        "repo": "max-sixty/worktrunk"
+      }
+    }
+  },
   "env": {
     "ANTHROPIC_MODEL": "sonnet",
     "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
@@ -51,6 +70,7 @@
     ]
   },
   "includeGitInstructions": false,
+  "model": "sonnet-4-6",
   "outputStyle": "Simplified Technical English",
   "permissions": {
     "allow": [
