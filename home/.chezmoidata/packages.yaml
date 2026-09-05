@@ -27,7 +27,6 @@ brews:
     - gopls
     - gup
     - herdr
-    - hk
     - httpie
     - imagemagick-full
     - jj

@@ -1,7 +1,7 @@
 [tools]
-hk = "latest"
-gitleaks = "latest"
-pkl = "latest"
+hk = "1.57.0"
+gitleaks = "8.30.1"
+pkl = "0.32.1"
 
 [tasks.config]
 description = "Show the current chezmoi config"

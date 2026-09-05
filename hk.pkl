@@ -1,6 +1,8 @@
 amends "package://github.com/jdx/hk/releases/download/v1.57.0/hk@1.57.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.57.0/hk@1.57.0#/Builtins.pkl"
 
+fail_fast = false
+
 hooks {
     ["pre-commit"] {
         steps {
