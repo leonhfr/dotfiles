@@ -31,6 +31,3 @@ pager = "delta --features='line-numbers decorations'"
 [projects."github.com/qonto-private/*"]
 forge.platform = "github"
 forge.hostname = "github-work"
-
-[pre-start]
-copy-claude-settings = "$HOME/.config/worktrunk/copy-claude-settings {{ primary_worktree_path }} {{ worktree_path }}"

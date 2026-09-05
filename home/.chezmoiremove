@@ -6,3 +6,4 @@
 .zshenv
 .profile
 bin
+.config/worktrunk/copy-claude-settings
