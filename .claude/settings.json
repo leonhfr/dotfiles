@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chezmoi cat *)",
+      "Bash(chezmoi decrypt *)",
+      "Bash(chezmoi encrypt *)",
+      "Bash(chezmoi diff *)",
+      "Bash(chezmoi execute-template *)",
+      "Bash(chezmoi ignored *)",
+      "Bash(chezmoi source-path *)",
+      "Bash(chezmoi status *)",
+      "Bash(chezmoi target-path *)"
+    ]
+  }
+}
