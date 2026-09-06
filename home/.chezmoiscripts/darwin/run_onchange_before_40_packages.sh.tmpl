@@ -8,10 +8,14 @@ echo "[dotfiles] Installing packages"
 brew bundle --cleanup --force --file=/dev/stdin <<EOF
 {{ $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) | sortAlpha | uniq -}}
 {{ $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) | sortAlpha | uniq -}}
+{{ $vscode := concat (.vscode.common | default (list)) (index .vscode .machine | default (list)) | sortAlpha | uniq -}}
 {{ range $brews -}}
 brew {{ . | quote }}{{ if contains "/" . }}, trusted: true{{ end }}
 {{ end -}}
 {{ range $casks -}}
 cask {{ . | quote }}{{ if contains "/" . }}, trusted: true{{ end }}
+{{ end -}}
+{{ range $vscode -}}
+vscode {{ . | quote }}
 {{ end -}}
 EOF

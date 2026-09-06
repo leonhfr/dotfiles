@@ -136,3 +136,20 @@ cargo:
     - patent
   personal: []
   work: []
+
+vscode:
+  common:
+    - christian-kohler.path-intellisense
+    - eamodio.gitlens
+    - github.vscode-github-actions
+    - golang.go
+    - gruntfuggly.todo-tree
+    - jinliming2.vscode-go-template
+    - pkief.material-icon-theme
+    - redhat.vscode-yaml
+    - streetsidesoftware.code-spell-checker
+    - tamasfe.even-better-toml
+    - tyriar.sort-lines
+    - yzhang.markdown-all-in-one
+  personal: []
+  work: []
