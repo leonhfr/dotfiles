@@ -1,0 +1,168 @@
+#!/bin/sh
+### chezmoi-brews — list brews/casks from packages.yaml with descriptions
+###
+### Computes the active brew and cask lists from .chezmoidata/packages.yaml
+### for the current machine, looks up each package's description via
+### `brew info`, and prints a table (b = brew, c = cask).
+###
+### Usage:
+###   chezmoi-brews [-n] [-a]
+###
+### Options:
+###   -n, --not-installed   Show packages commented out in packages.yaml,
+###                         instead of the active list.
+###   -a, --all             Include all machines (common+personal+work)
+###                         instead of just the current machine. Combines
+###                         with -n.
+###   -h                    Show this message.
+
+set -eu
+
+usage() {
+  sed -rn 's/^### ?//p' "$0"
+}
+
+require() {
+  for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      echo "Error: $cmd is not installed" >&2
+      exit 1
+    fi
+  done
+}
+
+NOT_INSTALLED=0
+ALL_MACHINES=0
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--not-installed) NOT_INSTALLED=1; shift ;;
+    -a|--all) ALL_MACHINES=1; shift ;;
+    -h) usage; exit 0 ;;
+    *)
+      echo "Error: unknown option '$1'" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+done
+
+require chezmoi jq gum brew awk
+
+SOURCE=$(chezmoi source-path)
+PACKAGES_FILE="$SOURCE/.chezmoidata/packages.yaml"
+[ -f "$PACKAGES_FILE" ] || { echo "Error: missing $PACKAGES_FILE" >&2; exit 1; }
+MACHINE=$(chezmoi execute-template '{{ .machine }}')
+TAB=$(printf '\t')
+
+# scope_names SECTION SCOPE -> active (uncommented) package names under
+# SECTION.SCOPE, one per line.
+scope_names() {
+  SECTION="$1"; SCOPE="$2"
+  chezmoi execute-template "{{ range (.$SECTION.$SCOPE | default (list) | sortAlpha | uniq) }}{{ . }}
+{{ end -}}"
+}
+
+# active_names_scoped SECTION -> "scope<TAB>name" pairs for the relevant
+# scopes (common+machine, or with -a, common+personal+work), one per line.
+# A name listed under more than one scope keeps only its first (common,
+# then machine) scope.
+active_names_scoped() {
+  SECTION="$1"
+  if [ "$ALL_MACHINES" = "1" ]; then
+    SCOPES="common personal work"
+  else
+    SCOPES="common $MACHINE"
+  fi
+  for SCOPE in $SCOPES; do
+    scope_names "$SECTION" "$SCOPE" | while IFS= read -r NAME; do
+      [ -n "$NAME" ] || continue
+      printf '%s\t%s\n' "$SCOPE" "$NAME"
+    done
+  done | awk -F'\t' '!seen[$2]++'
+}
+
+# commented_names_scoped SECTION -> "scope<TAB>name" pairs for packages
+# commented out (# - name) under SECTION in the raw yaml, scoped the same
+# way as active_names_scoped.
+commented_names_scoped() {
+  SECTION="$1"
+  if [ "$ALL_MACHINES" = "1" ]; then
+    ALLOWED="common personal work"
+  else
+    ALLOWED="common $MACHINE"
+  fi
+  awk -v section="$SECTION" '
+    /^[a-zA-Z0-9_]+:/ { cur_section=$1; sub(/:$/,"",cur_section); cur_sub=""; next }
+    /^  [a-zA-Z0-9_]+:/ {
+      if (cur_section == section) { cur_sub=$1; sub(/:$/,"",cur_sub) }
+      next
+    }
+    /^    # - / {
+      if (cur_section == section) {
+        name=$0
+        sub(/^    # - /,"",name)
+        sub(/[ \t]+#.*/,"",name)
+        sub(/[ \t]+$/,"",name)
+        print cur_sub "\t" name
+      }
+    }
+  ' "$PACKAGES_FILE" \
+    | awk -F'\t' -v allowed=" $ALLOWED " '{ if (index(allowed, " " $1 " ")) print }' \
+    | awk -F'\t' '!seen[$2]++'
+}
+
+package_names_scoped() {
+  if [ "$NOT_INSTALLED" = "1" ]; then
+    commented_names_scoped "$1"
+  else
+    active_names_scoped "$1"
+  fi
+}
+
+fetch_desc() {
+  TYPE="$1"; SCOPE="$2"; NAME="$3"
+  if [ "$TYPE" = "c" ]; then
+    DESC=$(brew info --cask --json=v2 "$NAME" 2>/dev/null | jq -r '.casks[0].desc // empty' 2>/dev/null) || DESC=""
+  else
+    DESC=$(brew info --json=v2 "$NAME" 2>/dev/null | jq -r '.formulae[0].desc // empty' 2>/dev/null) || DESC=""
+  fi
+  [ -n "$DESC" ] || DESC="(no info)"
+  printf '%s\t%s\t%s\t%s\n' "$TYPE" "$NAME" "$SCOPE" "$DESC"
+}
+
+# build_rows TYPE SECTION OUTDIR -> fetches descriptions for every name in
+# SECTION in parallel, one file per name under OUTDIR.
+build_rows() {
+  TYPE="$1"; SECTION="$2"; OUTDIR="$3"
+  NAMES_FILE=$(mktemp)
+  package_names_scoped "$SECTION" > "$NAMES_FILE"
+  I=0
+  exec 3< "$NAMES_FILE"
+  while IFS="$TAB" read -r SCOPE NAME <&3; do
+    [ -n "$NAME" ] || continue
+    fetch_desc "$TYPE" "$SCOPE" "$NAME" > "$OUTDIR/$TYPE-$I" &
+    I=$((I + 1))
+  done
+  exec 3<&-
+  rm -f "$NAMES_FILE"
+  wait
+}
+
+OUTDIR=$(mktemp -d)
+ROWS_FILE=$(mktemp)
+trap 'rm -rf "$OUTDIR"; rm -f "$ROWS_FILE"' EXIT
+
+build_rows b brews "$OUTDIR"
+build_rows c casks "$OUTDIR"
+
+: > "$ROWS_FILE"
+for f in "$OUTDIR"/b-*; do [ -e "$f" ] && cat "$f"; done | sort -t "$TAB" -k2,2 >> "$ROWS_FILE"
+for f in "$OUTDIR"/c-*; do [ -e "$f" ] && cat "$f"; done | sort -t "$TAB" -k2,2 >> "$ROWS_FILE"
+
+if [ ! -s "$ROWS_FILE" ]; then
+  gum style --foreground 226 "no packages found"
+  exit 0
+fi
+
+gum table -s "$TAB" -c "Type,Name,Scope,Description" -p < "$ROWS_FILE"
