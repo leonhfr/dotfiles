@@ -3,13 +3,13 @@
 # Check if there is an XML attached
 pdfcpu attachments list <input_pdf>
 
-# Extract XML
+# Extract XML from PDF
 pdfcpu attachments extract <input_pdf> <target_directory>
 
-# Remove the XML
+# Remove the XML from PDF
 pdfcpu attachments remove <input_pdf> <attached_xml>
 
-# Attach a new XML
+# Attach a new XML to PDF
 pdfcpu attachments add <input_pdf> <new_xml>
 
 # Convert PDF to PDF/A-3b (via Gotenberg)
