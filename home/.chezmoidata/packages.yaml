@@ -1,7 +1,7 @@
 brews:
   common:
     - antidote
-    # - atuin
+    - atuin
     - bat
     - btop
     - ccusage
