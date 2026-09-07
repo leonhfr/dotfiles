@@ -1,0 +1,51 @@
+% ripgrep, rg
+
+# Search for a pattern recursively, respecting .gitignore
+; rg <pattern>
+
+# Case-insensitive search
+; rg -i <pattern>
+
+# Whole-word match
+; rg -w <pattern>
+
+# Fixed-string match (no regex parsing); essential when searching symbols
+; rg -F <pattern>
+
+# Invert match: show lines that do NOT match
+; rg -v <pattern>
+
+# Restrict to a file type (use `rg --type-list` to see all)
+; rg -t <type> <pattern>
+
+# Restrict to multiple types
+; rg -t <type1> -t <type2> <pattern>
+
+# Search Go files literally, excluding vendor (matches the rggo alias in zshrc)
+; rg -tgo -F -g '!vendor/' <pattern>
+
+# Include/exclude with globs (prefix ! to exclude)
+; rg -g '<glob>' <pattern>
+
+# List only the file paths that contain a match
+; rg -l <pattern>
+
+# Count matches per file
+; rg -c <pattern>
+
+# Show N lines of context around each match (-A after, -B before)
+; rg -C <n> <pattern>
+
+# Include hidden files and dirs (.git is still excluded)
+; rg --hidden <pattern>
+
+# Also search files ignored by .gitignore
+; rg -uu <pattern>
+
+# Disable all smart filtering (binary, hidden, ignored)
+; rg -uuu <pattern>
+
+# Replace match in output (preview only; doesn't write files)
+; rg <pattern> -r <replacement>
+
+$ type: rg --type-list | awk -F: '{print $1}'

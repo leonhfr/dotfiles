@@ -1,0 +1,29 @@
+% pgcli, postgres
+
+# Connect to a local db by name (autocompletion + syntax highlight on top of psql)
+; pgcli <db>
+
+# Connect with host, user, db
+; pgcli -h <host> -U <user> -d <db>
+
+# Connect with a libpq URI
+; pgcli <conn_string>
+
+# All psql backslash commands work; pgcli adds:
+#   F2            toggle smart completion (table/column-aware)
+#   F3            toggle multi-line mode
+#   F4            toggle vi keybindings
+#   \refresh      reload completion metadata after a schema change
+#   \fs <name> <query>   save a named query (favorite)
+#   \f  <name>          run a saved favorite
+#   \fd <name>          delete a favorite
+#   \i <file>           run sql from file
+#   \copy ... csv header  client-side COPY, same as psql
+#   \pset pager off      disable the pager for long results
+#   \timing              toggle query timing
+
+# Run a single query and exit
+; pgcli <db> -c "<query>"
+
+# Run a sql file
+; pgcli <db> -f <file.sql>

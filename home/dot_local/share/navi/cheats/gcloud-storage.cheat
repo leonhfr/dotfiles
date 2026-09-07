@@ -1,0 +1,31 @@
+% gcloud-storage, gcs, gsutil
+
+# Download an object to the current directory
+; gcloud storage cp gs://<bucket>/<object> .
+
+# Download to a specific path (renames if path is a file)
+; gcloud storage cp gs://<bucket>/<object> <local_path>
+
+# Stream an object to stdout (no temp file; pipe directly into something)
+; gcloud storage cat gs://<bucket>/<object>
+
+# Download a whole prefix recursively
+; gcloud storage cp -r gs://<bucket>/<prefix> <local_dir>
+
+# Parallel download with N workers
+; gcloud storage cp -r --threads=<n> gs://<bucket>/<prefix> <local_dir>
+
+# Mirror a prefix into a local dir; only fetch changed/missing objects
+; gcloud storage rsync -r gs://<bucket>/<prefix> <local_dir>
+
+# List objects (use --recursive to descend into prefixes)
+; gcloud storage ls gs://<bucket>/<prefix>
+
+# List with size and metadata
+; gcloud storage ls --long gs://<bucket>/<prefix>
+
+# Show object metadata (size, etag, generation, customer-metadata, etc.)
+; gcloud storage objects describe gs://<bucket>/<object>
+
+# Upload a single file
+; gcloud storage cp <local_path> gs://<bucket>/<object>

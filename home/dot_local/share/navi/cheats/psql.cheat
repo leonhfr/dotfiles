@@ -1,0 +1,44 @@
+% psql, postgres
+
+# Connect to a local db by name
+; psql <db>
+
+# Connect with explicit host, user, db
+; psql -h <host> -U <user> -d <db>
+
+# Connect with a DSN; works with libpq URI and key=value formats
+; psql "<conn_string>"
+
+# Run a single query and exit; great for scripts
+; psql -c "<query>" <db>
+
+# Run SQL from a file
+; psql -f <file.sql> <db>
+
+# Common backslash commands inside psql:
+#   \l            list databases
+#   \c <db>       connect to db
+#   \dn           list schemas
+#   \dt           list tables in current schema
+#   \dt <schema>.*  tables in a schema
+#   \d <table>    describe a table (columns, indexes, FKs)
+#   \d+ <table>   same plus storage info
+#   \df <name>    list functions
+#   \du           list roles
+#   \timing on    show query duration
+#   \x            toggle expanded output (one column per line)
+#   \e            edit current query in $EDITOR
+#   \i <file>     run sql from file
+#   \copy <table> from '<file>' csv header   (client-side COPY, no superuser needed)
+#   \watch <s>    rerun the previous query every s seconds
+#   \?            backslash-command help
+#   \h <stmt>     SQL syntax help
+#   \q            quit
+
+# Run psql in single-transaction mode; aborts the whole file on first error
+; psql -1 -f <file.sql> <db>
+
+# Stop on first error (default off; psql normally continues)
+; psql -v ON_ERROR_STOP=1 -f <file.sql> <db>
+
+$ db: psql -lqtA 2>/dev/null | cut -d'|' -f1 | grep -v '^$'

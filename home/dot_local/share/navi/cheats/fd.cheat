@@ -1,0 +1,36 @@
+% fd, find
+
+# Find files and dirs matching a regex on the basename
+; fd <pattern>
+
+# Find by extension
+; fd -e <ext>
+
+# Files only
+; fd -t f <pattern>
+
+# Directories only
+; fd -t d <pattern>
+
+# Include hidden files (still respects .gitignore)
+; fd -H <pattern>
+
+# Include hidden and ignored (.gitignore-listed) files
+; fd -HI <pattern>
+
+# Full-path match instead of basename
+; fd -p <pattern>
+
+# Run a command per match; {} is the file, {/} basename, {//} dir, {.} no ext
+; fd <pattern> -x <command> {}
+
+# Run a command once with all matches as args
+; fd <pattern> -X <command>
+
+# Limit traversal depth
+; fd <pattern> --max-depth <n>
+
+# Exclude a glob from results
+; fd <pattern> -E <glob>
+
+$ ext: echo -e 'go\nts\ntsx\njs\npy\nrs\nmd\nyaml\nyml'
