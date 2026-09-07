@@ -51,5 +51,8 @@ encryption = "transparent"
   ssh_private_key = "op://{{ $workOpVault }}/GitHub SSH Key/private key"
   chezmoi_token = "op://{{ $workOpVault }}/chezmoi GitHub API Token/credential"
 
+[hooks.apply.pre]
+  command = ".local/share/chezmoi/bin/check-claude-settings.sh"
+
 [hooks.read-source-state.pre]
-  command = ".local/share/chezmoi/bin/.install-prerequisites.sh"
+  command = ".local/share/chezmoi/bin/install-prerequisites.sh"

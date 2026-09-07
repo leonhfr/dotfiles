@@ -45,7 +45,7 @@ normalize_pair() {
 }
 
 cmd_diff() {
-  require jq diffnav chezmoi
+  require jq delta chezmoi
 
   RENDERED=$(mktemp)
   ACTUAL=$(mktemp)
@@ -57,12 +57,12 @@ cmd_diff() {
     return 0
   fi
 
-  git diff --no-index -- "$ACTUAL" "$RENDERED" | diffnav
+  git diff --no-index -- "$ACTUAL" "$RENDERED" | delta
   return 1
 }
 
 cmd_sync() {
-  require jq gum diffnav chezmoi
+  require jq gum delta chezmoi
 
   if cmd_diff; then
     gum style --foreground 42 "nothing to sync"
