@@ -172,6 +172,10 @@ cargo:
   personal: []
   work: []
 
+claude_tools:
+  ripgrep: "rg over grep"
+  fd: "fd over find"
+
 vscode:
   common:
     - christian-kohler.path-intellisense
