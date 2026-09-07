@@ -1,11 +1,17 @@
 brews:
   common:
     - antidote
+    # - atuin
     - bat
     - btop
     - ccusage
     - chezmoi
+    # - choose-gui
+    # - circumflex
     # - croc
+    # - curlie
+    # - delve
+    # - dust
     # - difftastic
     - diffnav
     - direnv
@@ -13,6 +19,8 @@ brews:
     - eza
     - fd
     - ffmpeg-full
+    # - figlet
+    # - fx
     - fzf
     - gdu
     - gh
@@ -21,6 +29,8 @@ brews:
     - git-delta
     - git-lfs
     - git-who
+    # - glow
+    # - gnupg
     - go@1.26
     - golangci-lint
     - golangci-lint-langserver
@@ -32,25 +42,35 @@ brews:
     - jj
     - jless
     - jq
+    # - jqp
     - lazygit
     - micro
     - mise
     - mole
     - navi
+    # - pastel
     - poppler
+    # - procs
+    # - posting
+    # - resterm
     - resvg
     - ripgrep
     - rustup
     - sevenzip
     - shellcheck
+    # - terminal-notifier
     - thefuck
     - tlrc
     - tokei
     - transcrypt
+    # - tree-sitter-cli
     - trippy
+    # - unar
     - witr
     - worktrunk
+    # - xan
     - yazi
+    # - yozefu
     - yq
     - zoxide
   personal:
@@ -60,17 +80,26 @@ brews:
     # - syncthing
   work:
     # - act
+    # - actionlint
     - awscli
     - buf
     - docker-credential-helper-ecr
     - edgee-ai/tap/edgee
     - hashicorp/tap/terraform
     - helm
+    # - helm-ls
+    # - hl
+    # - hyperfine
     - k9s
+    # - kafkactl
+    # - kcat
+    # - ktea
     - kubectl
     - kubectx
     - libpq # psql
     - libxml2
+    # - schpet/tap/linear
+    # - lnav
     - node
     - pdfcpu
     - pgcli
@@ -81,8 +110,11 @@ brews:
 casks:
   common:
     - 1password-cli
+    # - betterdisplay
     - crmne/tap/fastpotify
+    # - dockdoor
     - firefox
+    # - flux-app
     - font-jetbrains-mono
     - font-lato
     - font-meslo-lg-nerd-font
@@ -90,11 +122,14 @@ casks:
     - font-roboto
     - ghostty
     - handy
+    # - music-decoy
     # - nikitabobko/tap/aerospace
     - obsidian
     - openusage
     - orbstack
+    # - raycast
     - rectangle
+    # - redis-insight
     - spotify
     - the-unarchiver
     - visual-studio-code
