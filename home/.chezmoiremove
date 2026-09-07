@@ -6,4 +6,8 @@
 .zshenv
 .profile
 bin
+
 .config/worktrunk/copy-claude-settings
+.local/bin/git-wt
+.config/fish
+.config/gh-dash/config.yaml
