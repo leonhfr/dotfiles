@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+# rebuild bat cache when themes change
+# bat config hash: {{ include "private_dot_config/bat/config" | sha256sum }}
+# bat themes hash: {{ range glob (joinPath .chezmoi.sourceDir "private_dot_config/bat/themes/*") }}{{ include . | sha256sum }}{{ end }}
+bat cache --build

@@ -1,5 +1,10 @@
+theme = TokyoNight
+# theme = "catppuccin-latte"
+
 font-family = MesloLGS Nerd Font
 window-colorspace = display-p3
+# window-decoration = false
+# macos-titlebar-style = hidden
 
 shell-integration = zsh
 scrollback-limit = 10000000

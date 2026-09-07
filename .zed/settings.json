@@ -9,12 +9,12 @@
     "JSON": ["*.json.tmpl"],
     "JSONC": ["**/zed/*.json"],
     "Markdown": ["*.md.tmpl"],
-    "INI": ["**/pgcli/config", "**/git/config.tmpl", "config.ghostty"],
+    "INI": ["**/pgcli/config", "**/git/config.tmpl"],
     "YAML": ["*.yml.tmpl", "*.yaml.tmpl"],
-    "TOML": ["*.toml.tmpl"],
+    "TOML": ["*.toml.tmpl", "*.ghostty"],
     "Git Config": ["**/git/config.tmpl"],
     "Go Text Template": ["**/dot_claude/settings.json.tmpl", ".chezmoiignore"],
-    "XML": ["*.plist", "*.plist.tmpl"],
+    "XML": ["*.plist", "*.plist.tmpl", "*.tmTheme"],
   },
   "languages": {
     "XML": {
