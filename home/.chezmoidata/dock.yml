@@ -6,7 +6,6 @@ dock:
       - Firefox
       - Ghostty
       - Obsidian
-      - "Visual Studio Code"
       - Zed
       - Spotify
       - VLC
@@ -18,7 +17,6 @@ dock:
     add:
       - Ghostty
       - Obsidian
-      - "Visual Studio Code"
       - Zed
       - Spotify
       - Slack
