@@ -1,0 +1,77 @@
+#!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
+# {{ list .claude_marketplaces .claude_plugins | toJson | sha256sum }}
+set -euo pipefail
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+command -v claude >/dev/null || { echo "[dotfiles] claude not found, skipping plugins"; exit 0; }
+command -v jq    >/dev/null || { echo "[dotfiles] jq not found, skipping plugins";    exit 0; }
+
+KNOWN_MARKETPLACES="$HOME/.claude/plugins/known_marketplaces.json"
+INSTALLED_PLUGINS="$HOME/.claude/plugins/installed_plugins.json"
+
+marketplace_known() {
+  [ -f "$KNOWN_MARKETPLACES" ] || return 1
+  jq -e --arg src "$1" '[.[].source | (.repo // .url)] | any(. == $src)' "$KNOWN_MARKETPLACES" > /dev/null 2>&1
+}
+
+plugin_installed() {
+  [ -f "$INSTALLED_PLUGINS" ] || return 1
+  jq -e --arg p "$1" '.plugins | has($p)' "$INSTALLED_PLUGINS" > /dev/null 2>&1
+}
+
+plugin_user_scope() {
+  [ -f "$INSTALLED_PLUGINS" ] || return 1
+  jq -e --arg p "$1" '.plugins[$p][0].scope == "user"' "$INSTALLED_PLUGINS" > /dev/null 2>&1
+}
+
+{{ $marketplaces := concat (.claude_marketplaces.common | default (list)) (index .claude_marketplaces .machine | default (list)) | sortAlpha | uniq -}}
+{{ $plugins := concat (.claude_plugins.common | default (list)) (index .claude_plugins .machine | default (list)) | sortAlpha | uniq -}}
+
+echo "[dotfiles] Setting up Claude marketplaces"
+
+{{ range $marketplaces -}}
+if ! marketplace_known {{ . | quote }}; then
+  echo "  Adding marketplace {{ . }}"
+  claude plugin marketplace add {{ . | quote }}
+fi
+{{ end }}
+
+echo "[dotfiles] Removing unmanaged Claude plugins"
+
+desired_plugins=(
+{{- range $plugins }}
+  {{ . | quote }}
+{{- end }}
+)
+
+if [ -f "$INSTALLED_PLUGINS" ]; then
+  while IFS= read -r installed; do
+    keep=false
+    for p in "${desired_plugins[@]}"; do
+      [ "$p" = "$installed" ] && keep=true && break
+    done
+    if [ "$keep" = "false" ]; then
+      echo "  Uninstalling $installed"
+      claude plugin uninstall "$installed"
+    fi
+  done < <(jq -r '.plugins | to_entries[] | select(.value[0].scope == "user") | .key' "$INSTALLED_PLUGINS")
+fi
+
+echo "[dotfiles] Installing Claude plugins"
+
+{{ range $plugins -}}
+if ! plugin_installed {{ . | quote }}; then
+  echo "  Installing plugin {{ . }}"
+  claude plugin install {{ . | quote }}
+fi
+{{ end }}
+
+echo "[dotfiles] Updating Claude plugins"
+
+{{ range $plugins -}}
+if plugin_user_scope {{ . | quote }}; then
+  claude plugin update {{ . | quote }}
+fi
+{{ end }}
