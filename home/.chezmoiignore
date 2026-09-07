@@ -28,6 +28,15 @@ work/.gitconfig
 {{   end -}}
 {{ end -}}
 
+{{ range $m, $pkgs := .brews -}}
+{{   if and (ne $m "common") (ne $m $.machine) -}}
+{{     range $pkgs -}}
+{{       $name := . | splitList "/" | last }}
+.claude/skills/{{ $name }}/
+{{     end -}}
+{{   end -}}
+{{ end -}}
+
 # runtime noise (caches, logs, history, sessions, backups)
 .cache/**
 .claude/.last-cleanup

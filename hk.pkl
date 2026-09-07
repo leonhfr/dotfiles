@@ -15,6 +15,10 @@ hooks {
                 check = "bin/check-chezmoiremove.sh"
                 allow_failure = true
             }
+            ["skill-tags"] {
+                check = "bin/check-skill-tags.sh"
+                allow_failure = true
+            }
         }
     }
 }

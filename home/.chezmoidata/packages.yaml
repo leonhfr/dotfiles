@@ -10,7 +10,7 @@ brews:
     # - circumflex
     # - croc
     # - curlie
-    # - delve
+    # - delve #skill:gopilot
     # - dust
     # - difftastic
     - diffnav
@@ -31,10 +31,10 @@ brews:
     - git-who
     # - glow
     # - gnupg
-    - go@1.26
-    - golangci-lint
+    - go@1.26 #skill:gopilot
+    - golangci-lint #skill:gopilot
     - golangci-lint-langserver
-    - gopls
+    - gopls #skill:gopilot
     - gup
     - herdr
     - httpie
@@ -49,7 +49,7 @@ brews:
     - mole
     - navi
     # - pastel
-    - poppler
+    - poppler #skill?
     # - procs
     # - posting
     # - resterm
@@ -61,17 +61,17 @@ brews:
     # - terminal-notifier
     - thefuck
     - tlrc
-    - tokei
+    - tokei #skill?
     - transcrypt
     # - tree-sitter-cli
     - trippy
     # - unar
-    - witr
+    - witr #skill?
     - worktrunk
-    # - xan
+    - xan #skill
     - yazi
     # - yozefu
-    - yq
+    - yq #skill
     - zoxide
   personal:
     - filen-cli
@@ -91,15 +91,15 @@ brews:
     # - hl
     # - hyperfine
     - k9s
-    # - kafkactl
-    # - kcat
+    # - kafkactl #skill
+    # - kcat #skill
     # - ktea
     - kubectl
     - kubectx
     - libpq # psql
     - libxml2
     # - schpet/tap/linear
-    # - lnav
+    # - lnav #skill
     - node
     - pdfcpu
     - pgcli
