@@ -19,6 +19,9 @@ hooks {
                 check = "bin/check-skill-tags.sh"
                 allow_failure = true
             }
+            ["repos-sync"] {
+                check = "bin/check-repos-sync.sh"
+            }
         }
     }
 }

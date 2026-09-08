@@ -138,8 +138,9 @@ Key scripts:
 - `check-plaintext-keywords.sh` (work keywords outside `encrypted_` files)
 - `check-chezmoiremove.sh` (deleted or renamed source with no `.chezmoiremove` entry)
 - `check-skill-tags.sh` (`#skill`-tagged brew without a skill directory)
+- `check-repos-sync.sh` (`ghq list` clones diverge from `encrypted_repos.yaml` for this machine, in either direction; worktrees skipped)
 
-The last three are `allow_failure = true`, so they warn but do not block.
+`check-plaintext-keywords.sh`, `check-chezmoiremove.sh`, and `check-skill-tags.sh` are `allow_failure = true`: they warn but do not block. `gitleaks` and `check-repos-sync.sh` block the commit.
 
 ## Cron
 
