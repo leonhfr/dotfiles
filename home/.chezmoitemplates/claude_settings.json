@@ -74,7 +74,8 @@
   "outputStyle": "Simplified Technical English",
   "permissions": {
     "allow": [
-      "Read",
+      "Read(~/src/**)",
+      "Read(~/go/**)",
       "Grep",
       "Glob",
       "Skill",
