@@ -114,7 +114,6 @@
       "Read(./.env.*)"
     ]
   },
-  "plansDirectory": "$HOME/.claude/plans",
   "preferredNotifChannel": "ghostty",
   "prefersReducedMotion": true,
   "remoteControlAtStartup": false,
