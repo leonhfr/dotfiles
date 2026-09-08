@@ -10,10 +10,6 @@
 ###   chezmoi-claude diff    Show a normalized diff (rendered vs on-disk).
 ###   chezmoi-claude sync    Show the diff, confirm, then sync on-disk values
 ###                          back into the chezmoi source fragments.
-###   chezmoi-claude local   Review and optionally delete per-repo local Claude
-###                          settings (settings.local.json) across all ghq repos.
-###   chezmoi-claude skills  List skills (.claude/skills, .agents/skills) found
-###                          across all ghq repos.
 ###
 ### Options:
 ###   -h   Show this message.
@@ -194,112 +190,14 @@ cmd_sync() {
   gum style --foreground 42 "sync complete"
 }
 
-cmd_local() {
-  require ghq bat gum
-
-  FOUND=0
-  DELETED=0
-  REPOS_FILE=$(mktemp)
-  ghq list --full-path > "$REPOS_FILE"
-  exec 3< "$REPOS_FILE"
-  while IFS= read -r REPO <&3; do
-    [ -f "$REPO/.git" ] && continue
-    SETTINGS="$REPO/.claude/settings.local.json"
-    [ -f "$SETTINGS" ] || continue
-    FOUND=$((FOUND + 1))
-
-    gum style --foreground 212 "$REPO"
-    bat --pager=never --language=json "$SETTINGS"
-
-    CONFIRM_RC=0
-    gum confirm --default=false "Delete?" || CONFIRM_RC=$?
-    case "$CONFIRM_RC" in
-      0)
-        rm "$SETTINGS"
-        rmdir "$REPO/.claude" 2>/dev/null || true
-        DELETED=$((DELETED + 1))
-        ;;
-      1) ;;
-      *) break ;;
-    esac
-  done
-  exec 3<&-
-  rm -f "$REPOS_FILE"
-
-  if [ "$FOUND" -eq 0 ]; then
-    gum style --foreground 42 "no local claude settings found"
-  else
-    gum style --foreground 42 "done: $DELETED/$FOUND deleted"
-  fi
-}
-
-# skill_field FILE FIELD -> the value of FIELD in FILE's YAML frontmatter,
-# stripped of surrounding quotes. Empty if the field or frontmatter is absent.
-skill_field() {
-  awk -v field="$2" '
-    NR==1 && $0=="---" { infm=1; next }
-    infm && $0=="---" { exit }
-    infm && $0 ~ "^" field ":" {
-      sub("^" field ":[ \t]*", "")
-      gsub(/^"|"$/, "")
-      print
-      exit
-    }
-  ' "$1"
-}
-
-cmd_skills() {
-  require ghq gum
-
-  FOUND=0
-  REPOS_FILE=$(mktemp)
-  ghq list --full-path > "$REPOS_FILE"
-  exec 3< "$REPOS_FILE"
-  while IFS= read -r REPO <&3; do
-    [ -f "$REPO/.git" ] && continue
-
-    SKILLS_FILE=$(mktemp)
-    for DIR in "$REPO/.claude/skills" "$REPO/.agents/skills"; do
-      [ -d "$DIR" ] && find "$DIR" -mindepth 2 -maxdepth 2 -name SKILL.md
-    done | sort > "$SKILLS_FILE"
-
-    if [ -s "$SKILLS_FILE" ]; then
-      gum style --foreground 212 "$REPO"
-      exec 4< "$SKILLS_FILE"
-      while IFS= read -r SKILL_MD <&4; do
-        FOUND=$((FOUND + 1))
-        NAME=$(skill_field "$SKILL_MD" name)
-        [ -n "$NAME" ] || NAME=$(basename "$(dirname "$SKILL_MD")")
-        DESC=$(skill_field "$SKILL_MD" description)
-        if [ "${#DESC}" -gt 100 ]; then
-          DESC="$(printf '%s' "$DESC" | cut -c1-97)..."
-        fi
-        printf '  %-24s %s\n' "$NAME" "$DESC"
-      done
-      exec 4<&-
-    fi
-    rm -f "$SKILLS_FILE"
-  done
-  exec 3<&-
-  rm -f "$REPOS_FILE"
-
-  if [ "$FOUND" -eq 0 ]; then
-    gum style --foreground 42 "no skills found"
-  else
-    gum style --foreground 42 "found $FOUND skill(s)"
-  fi
-}
-
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
   usage
   exit 0
 fi
 
 case "$1" in
-  diff)   shift; cmd_diff "$@" ;;
-  sync)   shift; cmd_sync "$@" ;;
-  local)  shift; cmd_local "$@" ;;
-  skills) shift; cmd_skills "$@" ;;
+  diff)  shift; cmd_diff "$@" ;;
+  sync)  shift; cmd_sync "$@" ;;
   *)
     echo "Error: unknown subcommand '$1'" >&2
     usage >&2

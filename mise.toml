@@ -8,16 +8,16 @@ description = "Show the current chezmoi config"
 run = "bat ~/.config/chezmoi/chezmoi.toml"
 
 [tasks.new-script]
-description = "Create a new script in ~/bin"
+description = "Create a new script in ~/.local/bin"
 run = """
 #!/bin/sh
 set -eu
 name="${1:?Usage: mise run new-script -- <name>}"
-dir="$MISE_PROJECT_ROOT/home/bin"
+dir="$MISE_PROJECT_ROOT/home/dot_local/bin"
 target="$dir/executable_$name"
 cp "$dir/.template" "$target"
 sed -i '' "s/my-script/$name/g" "$target"
-echo "Created home/bin/executable_$name → ~/bin/$name"
+echo "Created home/dot_local/bin/executable_$name → ~/.local/bin/$name"
 zed "$target"
 """
 
