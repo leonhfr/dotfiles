@@ -12,13 +12,6 @@ export XDG_CACHE_HOME=$HOME/.cache
 [ -d "$HOME/.cargo/bin" ] && PATH="$HOME/.cargo/bin:$PATH"
 [ -d "/opt/homebrew/opt/rustup/bin" ] && PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 [ -d "$HOME/go/bin" ] && PATH="$HOME/go/bin:$PATH"
-{{- $go := "" -}}
-{{- range (concat (.brews.common | default (list)) (index .brews .machine | default (list))) -}}
-{{-   if hasPrefix "go@" . -}}{{- $go = . -}}{{- end -}}
-{{- end }}
-{{ if $go -}}
-[ -d "/opt/homebrew/opt/{{ $go }}/bin" ] && PATH="/opt/homebrew/opt/{{ $go }}/bin:$PATH"
-{{ end -}}
 [ -d "/opt/homebrew/opt/libpq/bin" ] && PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH
 

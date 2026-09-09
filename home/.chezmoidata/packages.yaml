@@ -31,7 +31,7 @@ brews:
     - git-who
     # - glow
     # - gnupg
-    - go@1.26 #skill:gopilot
+    - go #skill:gopilot
     - golangci-lint #skill:gopilot
     - golangci-lint-langserver
     - gopls #skill:gopilot
