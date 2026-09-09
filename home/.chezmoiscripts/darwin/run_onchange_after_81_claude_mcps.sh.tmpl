@@ -1,0 +1,47 @@
+#!/bin/bash
+# {{ list .claude_mcps | toJson | sha256sum }}
+set -euo pipefail
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+command -v claude >/dev/null || { echo "[dotfiles] claude not found, skipping mcps"; exit 0; }
+command -v jq    >/dev/null || { echo "[dotfiles] jq not found, skipping mcps";    exit 0; }
+
+CLAUDE_JSON="$HOME/.claude.json"
+
+mcp_user_installed() {
+  [ -f "$CLAUDE_JSON" ] || return 1
+  jq -e --arg n "$1" '(.mcpServers // {}) | has($n)' "$CLAUDE_JSON" > /dev/null 2>&1
+}
+
+{{ $mcps := concat (.claude_mcps.common | default (list)) (index .claude_mcps .machine | default (list)) -}}
+
+echo "[dotfiles] Removing unmanaged Claude user-scope MCPs"
+
+desired_mcps=(
+{{- range $mcps }}
+  {{ .name | quote }}
+{{- end }}
+)
+
+if [ -f "$CLAUDE_JSON" ]; then
+  while IFS= read -r installed; do
+    keep=false
+    for p in "${desired_mcps[@]}"; do
+      [ "$p" = "$installed" ] && keep=true && break
+    done
+    if [ "$keep" = "false" ]; then
+      echo "  Removing $installed"
+      claude mcp remove "$installed" -s user
+    fi
+  done < <(jq -r '(.mcpServers // {}) | keys[]' "$CLAUDE_JSON" 2>/dev/null)
+fi
+
+echo "[dotfiles] Installing Claude user-scope MCPs"
+
+{{ range $mcps -}}
+if ! mcp_user_installed {{ .name | quote }}; then
+  echo "  Adding {{ .name }}"
+  claude mcp add {{ .name | quote }} --scope user --transport http {{ .url | quote }}{{ range index . "args" }} {{ . | quote }}{{ end }}
+fi
+{{ end -}}

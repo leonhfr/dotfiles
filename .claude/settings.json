@@ -9,7 +9,9 @@
       "Bash(chezmoi ignored *)",
       "Bash(chezmoi source-path *)",
       "Bash(chezmoi status *)",
-      "Bash(chezmoi target-path *)"
+      "Bash(chezmoi target-path *)",
+      "Bash(claude mcp *)",
+      "Bash(claude plugin *)"
     ]
   }
 }
