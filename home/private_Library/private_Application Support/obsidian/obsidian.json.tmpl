@@ -1,0 +1,12 @@
+{
+  "vaults": {
+    "notes": {
+      "path": "{{ .chezmoi.homeDir }}/notes",
+      "ts": 0
+    }{{ if eq .machine "work" }},
+    "worknotes": {
+      "path": "{{ .chezmoi.homeDir }}/worknotes",
+      "ts": 0
+    }{{ end }}
+  }
+}

@@ -1,3 +1,15 @@
+["notes"]
+type = "git-repo"
+url = "git@github.com:leonhfr/notes.git"
+refreshPeriod = "8760h"
+
+{{ if eq .machine "work" }}
+["worknotes"]
+type = "git-repo"
+url = "git@github.com:leon-hollender_qonto/worknotes.git"
+refreshPeriod = "8760h"
+{{ end }}
+
 [".config/yazi/flavors/tokyo-night.yazi"]
 type = "git-repo"
 url = "git@github.com:BennyOe/tokyo-night.yazi.git"

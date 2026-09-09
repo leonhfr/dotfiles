@@ -15,6 +15,7 @@
 work
 work/.envrc
 work/.gitconfig
+worknotes
 {{ end }}
 
 {{ range $bucket := list .brews .casks -}}
@@ -94,6 +95,8 @@ Library/**/*
 !Library/LaunchAgents/**
 !Library/Application Support/Code/User
 !Library/Application Support/Code/User/**
+!Library/Application Support/obsidian
+!Library/Application Support/obsidian/**
 Applications
 Desktop
 Documents
