@@ -7,11 +7,11 @@
       "Bash(chezmoi diff *)",
       "Bash(chezmoi execute-template *)",
       "Bash(chezmoi ignored *)",
+      "Bash(claude mcp *)",
+      "Bash(claude plugin *)",
       "Bash(chezmoi source-path *)",
       "Bash(chezmoi status *)",
-      "Bash(chezmoi target-path *)",
-      "Bash(claude mcp *)",
-      "Bash(claude plugin *)"
+      "Bash(chezmoi target-path *)"
     ]
   }
 }

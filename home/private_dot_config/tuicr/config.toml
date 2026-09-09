@@ -1,0 +1,3 @@
+diff_view = "side-by-side"
+ignore_whitespace = "true"
+show_pr_checks = false

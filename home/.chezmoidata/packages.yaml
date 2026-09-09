@@ -5,6 +5,7 @@ brews:
     - bat
     - btop
     - ccusage
+    # - chenyukang/tap/ghr-cli
     - chezmoi
     # - choose-gui
     # - circumflex
@@ -65,6 +66,7 @@ brews:
     - transcrypt
     # - tree-sitter-cli
     - trippy
+    - tuicr
     # - unar
     - witr #skill?
     - worktrunk
