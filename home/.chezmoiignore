@@ -38,6 +38,9 @@ worknotes
 {{   end -}}
 {{ end -}}
 
+# script-managed skills (not in source)
+.claude/skills/herdr/
+
 # runtime noise (caches, logs, history, sessions, backups)
 .cache/**
 .claude/.last-cleanup

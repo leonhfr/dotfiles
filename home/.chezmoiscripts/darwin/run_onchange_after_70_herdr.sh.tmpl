@@ -3,6 +3,7 @@ set -euo pipefail
 
 # herdr claude integration: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr integration status 2>/dev/null | grep '^claude:' || echo 'herdr not installed'" | trim }}
 # herdr plugin update week: {{ now | date "2006-W01" }}
+# herdr version: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr --version || echo 'herdr not installed'" | trim }}
 
 plugins=(
     "devashish2203/herdr-worktrunk"
@@ -42,3 +43,7 @@ else
     echo "[dotfiles] Installing herdr claude integration"
     herdr integration install claude
 fi
+
+echo "[dotfiles] Syncing herdr skill"
+mkdir -p ~/.claude/skills/herdr
+herdr --skill > ~/.claude/skills/herdr/SKILL.md

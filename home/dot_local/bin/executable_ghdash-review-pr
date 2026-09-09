@@ -1,0 +1,29 @@
+#!/bin/bash
+### ghdash-review-pr — open a herdr tab and run /pr-review for a github PR
+###
+### Usage: ghdash-review-pr <owner/repo> <pr-number>
+### Called from the gh-dash keybinding (key C, prs section).
+
+set -euo pipefail
+
+REPO="${1:?repo required (owner/repo)}"
+PR="${2:?pr number required}"
+
+[ -z "${HERDR_WORKSPACE_ID:-}" ] && exit 0
+
+SHORT_REPO="${REPO##*/}"
+LABEL="${SHORT_REPO}#${PR}"
+PR_URL="https://github.com/${REPO}/pull/${PR}"
+
+# Create a new focused tab in the current workspace
+CREATE_OUT=$(herdr tab create --workspace "$HERDR_WORKSPACE_ID" --label "$LABEL" --focus)
+TAB_ID=$(printf '%s' "$CREATE_OUT" | jq -r '.. | .tab_id? | select(type == "string")' | head -1)
+
+# Find the pane in the new tab
+PANE_ID=$(herdr pane list | jq -r --arg tid "$TAB_ID" \
+  '.result.panes[] | select(.tab_id == $tid) | .pane_id' | head -1)
+
+# Start claude in the pane and submit the pr-review skill
+AGENT="pr-review-${PR}"
+herdr agent start "$AGENT" --kind claude --pane "$PANE_ID"
+herdr agent prompt "$AGENT" "/pr-review ${PR_URL}"
