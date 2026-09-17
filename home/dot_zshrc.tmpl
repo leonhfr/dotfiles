@@ -144,3 +144,12 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+{{ if eq .machine "work" -}}
+# >>> edgee launch aliases >>>
+case ":$PATH:" in
+  *":$HOME/.edgee/bin:"*) ;;
+  *) export PATH="$HOME/.edgee/bin:$PATH" ;;
+esac
+# <<< edgee launch aliases <<<
+{{- end }}

@@ -14,17 +14,10 @@
   "effortLevel": "xhigh",
   "enableWorkflows": true,
   "enabledPlugins": {
-    "gopilot@gopilot": true,
     "gopls-lsp@claude-plugins-official": true,
     "worktrunk@worktrunk": true
   },
   "extraKnownMarketplaces": {
-    "gopilot": {
-      "source": {
-        "source": "git",
-        "url": "git@github.com:gonzaloserrano/gopilot.git"
-      }
-    },
     "worktrunk": {
       "source": {
         "source": "github",
@@ -128,6 +121,7 @@
   "remoteControlAtStartup": false,
   "respondToBashCommands": true,
   "showThinkingSummaries": true,
+  "skillListingBudgetFraction": 0.05,
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
@@ -137,5 +131,6 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "theme": "auto"
 }

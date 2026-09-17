@@ -164,7 +164,7 @@ PYEOF
     ;;
 
   *)
-    echo "Usage: claude-skills <invocations|budget> [-h]" >&2
+    sed -rn 's/^### ?//p' "$0"
     exit 1
     ;;
 esac
