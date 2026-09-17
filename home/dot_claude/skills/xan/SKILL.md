@@ -1,6 +1,7 @@
 ---
 name: xan
-description: Process, analyze, and transform CSV/TSV files from the command line using xan. Use when working with delimited data files: filtering rows, computing stats, joining files, or inspecting structure.
+description: "Process, analyze, and transform CSV/TSV files from the command line using xan. Use when working with delimited data files: filtering rows, computing stats, joining files, or inspecting structure."
+allowed-tools: Bash(xan *), Read
 ---
 
 # xan
@@ -8,6 +9,7 @@ description: Process, analyze, and transform CSV/TSV files from the command line
 `xan` is a fast CSV processor. It reads from a file or stdin and writes to stdout.
 
 Common flags available on most subcommands:
+
 - `-n` / `--no-headers`: input has no header row
 - `-d <char>` / `--delimiter <char>`: field separator (default `,`)
 

@@ -12,3 +12,7 @@ bin
 .config/worktrunk/copy-claude-settings
 .local/bin/git-wt
 .ghr
+
+.claude/skills/pr-create
+.claude/skills/pr-review
+.claude/skills/pr-body

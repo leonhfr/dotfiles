@@ -1,0 +1,170 @@
+#!/bin/sh
+### claude-skills — inspect Claude Code skill invocations and budget
+###
+### Usage:
+###   claude-skills invocations [filter]   count skill invocations across transcripts
+###   claude-skills budget                 check whether descriptions fit the context window
+###
+### Options:
+###   -h   Show this message.
+
+set -eu
+
+SUBCOMMAND="${1:-}"
+
+case "$SUBCOMMAND" in
+  -h)
+    sed -rn 's/^### ?//p' "$0"
+    ;;
+
+  invocations)
+    FILTER="${2:-}"
+    PROJECTS="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects"
+    files=$(find "$PROJECTS" -name "*.jsonl" 2>/dev/null)
+    if [ -z "$files" ]; then
+      echo "No session transcripts found."
+      exit 0
+    fi
+    echo "$files" | xargs python3 -c "
+import sys, json
+from collections import Counter
+filter_str = sys.argv[1]
+counts = Counter()
+for path in sys.argv[2:]:
+    try:
+        with open(path) as f:
+            for line in f:
+                obj = json.loads(line)
+                if obj.get('type') == 'assistant':
+                    for m in obj.get('message', {}).get('content', []):
+                        if isinstance(m, dict) and m.get('name') == 'Skill':
+                            skill = m.get('input', {}).get('skill', '')
+                            if not filter_str or filter_str in skill:
+                                counts[skill] += 1
+    except: pass
+if not counts:
+    print('No skill invocations found.')
+    sys.exit(0)
+for skill, n in counts.most_common():
+    print(f'{n:4d}  {skill}')
+print()
+print('Total:', sum(counts.values()))
+" "$FILTER"
+    ;;
+
+  budget)
+    python3 << 'PYEOF'
+import json, os, re
+from collections import defaultdict
+from pathlib import Path
+
+CLAUDE_DIR = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+SETTINGS_FILE = CLAUDE_DIR / "settings.json"
+
+DEFAULT_BUDGET_FRACTION = 0.01
+DEFAULT_MAX_DESC_CHARS = 1536
+CONTEXT_WINDOW_CHARS = 800_000  # 200K tokens × ~4 chars/token
+
+budget_fraction = DEFAULT_BUDGET_FRACTION
+max_desc_chars = DEFAULT_MAX_DESC_CHARS
+enabled_plugins = set()
+if SETTINGS_FILE.exists():
+    with open(SETTINGS_FILE) as f:
+        settings = json.load(f)
+    budget_fraction = settings.get("skillListingBudgetFraction", DEFAULT_BUDGET_FRACTION)
+    max_desc_chars = settings.get("skillListingMaxDescChars", DEFAULT_MAX_DESC_CHARS)
+    enabled_plugins = {k for k, v in settings.get("enabledPlugins", {}).items() if v}
+
+budget_chars = int(CONTEXT_WINDOW_CHARS * budget_fraction)
+
+def extract_name_and_desc(path):
+    try:
+        with open(path) as f:
+            content = f.read()
+        if not content.startswith("---"):
+            return None, None
+        parts = content.split("---", 2)
+        if len(parts) < 3:
+            return None, None
+        frontmatter = parts[1]
+        name_m = re.search(r'^name:\s*(.+)$', frontmatter, re.MULTILINE)
+        desc_m = re.search(r'^description:\s*(.+)$', frontmatter, re.MULTILINE)
+        if not desc_m:
+            return None, None
+        name = name_m.group(1).strip() if name_m else path.parent.name
+        desc = desc_m.group(1).strip().strip('"')
+        return name, desc
+    except Exception:
+        return None, None
+
+def plugin_key_from_path(p):
+    parts = p.parts
+    try:
+        idx = list(parts).index("cache")
+        marketplace, plugin = parts[idx + 1], parts[idx + 2]
+        return f"{plugin}@{marketplace}"
+    except (ValueError, IndexError):
+        return None
+
+# name -> (desc, origin)
+seen = {}
+
+for p in sorted(CLAUDE_DIR.glob("skills/*/SKILL.md")):
+    name, desc = extract_name_and_desc(p)
+    if name and desc:
+        seen[name] = (desc, "user")
+
+for p in sorted(CLAUDE_DIR.glob("plugins/cache/*/*/*/skills/*/SKILL.md")):
+    key = plugin_key_from_path(p)
+    if not key or key not in enabled_plugins:
+        continue
+    name, desc = extract_name_and_desc(p)
+    if name and desc:
+        seen[name] = (desc, key)
+
+results = sorted(
+    [(min(len(d), max_desc_chars), len(d), n, o) for n, (d, o) in seen.items()],
+    reverse=True,
+)
+total = sum(r[0] for r in results)
+pct = 100.0 * total / budget_chars if budget_chars > 0 else float('inf')
+fits = total <= budget_chars
+
+print("Skill listing budget check")
+print(f"  Budget fraction : {budget_fraction} ({budget_fraction*100:.0f}% of context window)")
+print(f"  Max desc chars  : {max_desc_chars}")
+print(f"  Context window  : {CONTEXT_WINDOW_CHARS:,} chars (assumed 200K tokens × ~4)")
+print(f"  Budget          : {budget_chars:,} chars")
+print()
+print(f"  Skills with descriptions : {len(results)}")
+print(f"  Total (capped)           : {total:,} chars")
+print(f"  Budget used              : {pct:.1f}% — {'fits ✓' if fits else 'OVER BUDGET ✗'}")
+
+capped = [(cl, rl, n, o) for cl, rl, n, o in results if cl < rl]
+if capped:
+    print()
+    print(f"  {len(capped)} skill(s) hit the {max_desc_chars}-char per-skill cap:")
+    for capped_len, raw_len, name, origin in capped:
+        print(f"    {raw_len:5d} → {capped_len}  {name}  ({origin})")
+
+print()
+print("  Longest descriptions:")
+for capped_len, raw_len, name, origin in results[:10]:
+    flag = " (capped)" if capped_len < raw_len else ""
+    print(f"    {capped_len:5d}  {name}{flag}  ({origin})")
+
+by_origin = defaultdict(list)
+for _, _, name, origin in results:
+    by_origin[origin].append(name)
+print()
+print("  Skills by origin:")
+for origin in sorted(by_origin):
+    print(f"    {origin} ({len(by_origin[origin])}): {', '.join(sorted(by_origin[origin]))}")
+PYEOF
+    ;;
+
+  *)
+    echo "Usage: claude-skills <invocations|budget> [-h]" >&2
+    exit 1
+    ;;
+esac

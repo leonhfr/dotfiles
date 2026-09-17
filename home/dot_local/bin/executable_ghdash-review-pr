@@ -1,5 +1,5 @@
 #!/bin/bash
-### ghdash-review-pr — open a herdr tab and run /pr-review for a github PR
+### ghdash-review-pr — open a herdr tab and run /review-pr for a github PR
 ###
 ### Usage: ghdash-review-pr <owner/repo> <pr-number>
 ### Called from the gh-dash keybinding (key C, prs section).
@@ -15,15 +15,20 @@ SHORT_REPO="${REPO##*/}"
 LABEL="${SHORT_REPO}#${PR}"
 PR_URL="https://github.com/${REPO}/pull/${PR}"
 
+REPO_PATH=$(ghq list --full-path --exact "github.com/${REPO}" 2>/dev/null | head -1)
+
 # Create a new focused tab in the current workspace
-CREATE_OUT=$(herdr tab create --workspace "$HERDR_WORKSPACE_ID" --label "$LABEL" --focus)
-TAB_ID=$(printf '%s' "$CREATE_OUT" | jq -r '.. | .tab_id? | select(type == "string")' | head -1)
+CREATE_ARGS=(--workspace "$HERDR_WORKSPACE_ID" --label "$LABEL" --focus)
+[ -n "$REPO_PATH" ] && CREATE_ARGS+=(--cwd "$REPO_PATH")
+CREATE_OUT=$(herdr tab create "${CREATE_ARGS[@]}")
+PANE_ID=$(printf '%s' "$CREATE_OUT" | jq -r '.result.root_pane.pane_id')
 
-# Find the pane in the new tab
-PANE_ID=$(herdr pane list | jq -r --arg tid "$TAB_ID" \
-  '.result.panes[] | select(.tab_id == $tid) | .pane_id' | head -1)
-
-# Start claude in the pane and submit the pr-review skill
-AGENT="pr-review-${PR}"
-herdr agent start "$AGENT" --kind claude --pane "$PANE_ID"
-herdr agent prompt "$AGENT" "/pr-review ${PR_URL}"
+# Detach from gh-dash: wait for the shell, start claude, submit the prompt
+AGENT="review-pr-${PR}"
+{
+  herdr pane run "$PANE_ID" "echo PANE_READY"
+  herdr pane wait-output "$PANE_ID" --match "PANE_READY" --timeout 10000
+  herdr agent start "$AGENT" --kind claude --pane "$PANE_ID" --timeout 90000
+  herdr agent prompt "$AGENT" "/review-pr ${PR_URL}"
+} &>/dev/null &
+disown $!

@@ -1,6 +1,7 @@
 ---
 name: yq
-description: Read, write, and transform YAML, JSON, XML, TOML, CSV, and properties files using yq. Use when working with structured config or data files: extracting values, editing in place, or converting between formats.
+description: "Read, write, and transform YAML, JSON, XML, TOML, CSV, and properties files using yq. Use when working with structured config or data files: extracting values, editing in place, or converting between formats."
+allowed-tools: Bash(yq *), Read, Edit
 ---
 
 # yq
