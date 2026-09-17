@@ -3,7 +3,13 @@
 # List fr.leonh.* launch agents with PID/status and last exit code
 launchctl list | grep 'fr.leonh'
 
-# Tail an agent's stdout and stderr logs together
-tail -f ~/Library/Logs/<name>.out.log ~/Library/Logs/<name>.err.log
+# Tail an agent's stdout log live
+tail -f ~/Library/Logs/<name>.out.log
+
+# List all run timestamps for an agent
+grep '===' ~/Library/Logs/<name>.out.log
+
+# Show the last complete run output for an agent
+run-logged --last-run ~/Library/Logs/<name>.out.log
 
 $ name: launchctl list | grep 'fr.leonh' | awk '{print $3}' | sed 's/^fr\.leonh\.//'

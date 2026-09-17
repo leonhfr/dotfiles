@@ -1,0 +1,32 @@
+#!/bin/sh
+### run-logged — run a command wrapped with start/end timestamps
+###
+### Usage:
+###   run-logged <cmd> [args...]      run command; write timestamped markers to stdout; stderr merged into stdout
+###   run-logged --last-run <logfile> print the last complete run block from a log
+###
+### Options:
+###   -h   Show this message.
+
+set -eu
+
+case "${1:-}" in
+  -h)
+    sed -rn 's/^### ?//p' "$0"
+    ;;
+  --last-run)
+    FILE="${2:?logfile required}"
+    awk '/^=== START/{run=""} {run=run"\n"$0} /^=== END/{last=run} END{if(last)printf "%s\n",last}' "$FILE"
+    ;;
+  "")
+    sed -rn 's/^### ?//p' "$0"
+    exit 1
+    ;;
+  *)
+    printf '\n=== START %s ===\n' "$(date '+%Y-%m-%d %H:%M:%S')"
+    CODE=0
+    "$@" 2>&1 || CODE=$?
+    printf '=== END %s (exit %d) ===\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$CODE"
+    exit "$CODE"
+    ;;
+esac
