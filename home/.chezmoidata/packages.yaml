@@ -21,6 +21,8 @@ brews:
     - fd
     - ffmpeg-full
     # - figlet
+    # - fish
+    # - fisher
     # - fx
     - fzf
     - gdu
@@ -39,6 +41,7 @@ brews:
     - gup
     - herdr
     - httpie
+    - hugo
     - imagemagick-full
     - jj
     - jless
@@ -56,6 +59,7 @@ brews:
     # - resterm
     - resvg
     - ripgrep
+    - rmtrash
     - rustup
     - sevenzip
     - shellcheck
@@ -77,7 +81,6 @@ brews:
     - zoxide
   personal:
     - filen-cli
-    - hugo
     - pandoc
     # - syncthing
   work:

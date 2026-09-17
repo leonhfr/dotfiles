@@ -5,7 +5,10 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 echo "[dotfiles] Installing packages"
 
-brew bundle --cleanup --force --file=/dev/stdin <<EOF
+BREWFILE=$(mktemp)
+trap 'rm -f "$BREWFILE"' EXIT
+
+cat > "$BREWFILE" <<EOF
 {{ $brews := concat (.brews.common | default (list)) (index .brews .machine | default (list)) | sortAlpha | uniq -}}
 {{ $casks := concat (.casks.common | default (list)) (index .casks .machine | default (list)) | sortAlpha | uniq -}}
 {{ $vscode := concat (.vscode.common | default (list)) (index .vscode .machine | default (list)) | sortAlpha | uniq -}}
@@ -19,3 +22,9 @@ cask {{ . | quote }}{{ if contains "/" . }}, trusted: true{{ end }}
 vscode {{ . | quote }}
 {{ end -}}
 EOF
+
+brew bundle --force --file="$BREWFILE"
+
+echo "[dotfiles] Cleaning up packages"
+
+brew bundle cleanup --force --file="$BREWFILE" || true

@@ -1,0 +1,8 @@
+{
+  "plugin": [
+    "@devtheops/opencode-plugin-otel@1.1.0"
+  ],
+  "enabled_providers": [
+    "edgee"
+  ]
+}

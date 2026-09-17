@@ -38,6 +38,9 @@ worknotes
 {{   end -}}
 {{ end -}}
 
+# work-managed
+.zshrc_qonto
+
 # script-managed skills (not in source)
 .claude/skills/herdr/
 
@@ -91,7 +94,7 @@ worknotes
 
 # macOS system files and dirs
 .CFUserTextEncoding
-.DS_Store
+**/.DS_Store
 .Trash/**
 Library/**/*
 !Library/LaunchAgents

@@ -87,7 +87,8 @@ defaults write com.apple.controlcenter BatteryShowPercentage -bool true
 
 # Energy saving
 sudo pmset -a lidwake 1
-sudo pmset -a displaysleep 15
+sudo pmset -b displaysleep 5
+sudo pmset -c displaysleep 15
 
 # Kill affected applications
 echo "[dotfiles] Kill applications affected by settings"
