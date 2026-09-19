@@ -42,7 +42,7 @@ brews:
     - herdr
     - httpie
     - hugo
-    - imagemagick-full
+    - imagemagick
     - jj
     - jless
     - jq

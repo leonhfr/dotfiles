@@ -4,6 +4,10 @@
 ### Usage:
 ###   claude-skills invocations [filter]   count skill invocations across transcripts
 ###   claude-skills budget                 check whether descriptions fit the context window
+###   claude-skills list [--enabled]        list all plugin capabilities as CSV
+###   claude-skills list --path <dir>       list capabilities from a marketplace repo
+###   claude-skills usage                  count all skill/agent/mcp invocations as CSV
+###   claude-skills prune [--force]        remove cached data for uninstalled plugins
 ###
 ### Options:
 ###   -h   Show this message.
@@ -160,6 +164,325 @@ print()
 print("  Skills by origin:")
 for origin in sorted(by_origin):
     print(f"    {origin} ({len(by_origin[origin])}): {', '.join(sorted(by_origin[origin]))}")
+PYEOF
+    ;;
+
+  list)
+    ENABLED_ONLY=""
+    PATH_ARG=""
+    if [ "${2:-}" = "--path" ]; then
+      PATH_ARG="${3:-}"
+    else
+      ENABLED_ONLY="${2:-}"
+    fi
+    python3 << PYEOF
+import csv, json, os, re, sys
+from pathlib import Path
+
+CLAUDE_DIR = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+SETTINGS_FILE = CLAUDE_DIR / "settings.json"
+CACHE = CLAUDE_DIR / "plugins" / "cache"
+ENABLED_ONLY = "${ENABLED_ONLY}" == "--enabled"
+PATH_ARG = "${PATH_ARG}"
+
+enabled_plugins = set()
+if SETTINGS_FILE.exists():
+    with open(SETTINGS_FILE) as f:
+        settings = json.load(f)
+    enabled_plugins = {k for k, v in settings.get("enabledPlugins", {}).items() if v}
+
+def parse_desc(fm, first_line):
+    """Parse a YAML description value, handling > and >- fold indicators."""
+    val = first_line.strip().strip('"\'')
+    if val in ('>', '>-', '|-', '|'):
+        lines = []
+        for line in fm.split('\n'):
+            if re.match(r'^  \S', line):
+                lines.append(line.strip())
+            elif line.strip() and not re.match(r'^  ', line):
+                break
+        return ' '.join(lines)
+    return val
+
+def frontmatter(path, name_fallback):
+    try:
+        content = path.read_text()
+        if not content.startswith("---"):
+            return name_fallback, ""
+        parts = content.split("---", 2)
+        if len(parts) < 3:
+            return name_fallback, ""
+        fm = parts[1]
+        name_m = re.search(r'^name:\s*(.+)$', fm, re.MULTILINE)
+        desc_m = re.search(r'^description:\s*(.+)$', fm, re.MULTILINE)
+        name = name_m.group(1).strip().strip('"\'') if name_m else name_fallback
+        desc = ""
+        if desc_m:
+            # pass the text that follows the description line for fold parsing
+            after = fm[desc_m.end():]
+            desc = parse_desc(after, desc_m.group(1))
+        return name, desc
+    except Exception:
+        return name_fallback, ""
+
+def plugin_key(p):
+    parts = p.parts
+    try:
+        idx = list(parts).index("cache")
+        return f"{parts[idx+2]}@{parts[idx+1]}"
+    except (ValueError, IndexError):
+        return None
+
+CONTENT_TYPES = [
+    ("skill",          "skills/*/SKILL.md",          lambda p: p.parent.name),
+    ("workflow-skill", "workflow-skills/*/SKILL.md",  lambda p: p.parent.name),
+    ("agent",          "agents/*.md",                 lambda p: p.stem),
+    ("command",        "commands/*.md",               lambda p: p.stem),
+]
+
+writer = csv.writer(sys.stdout)
+writer.writerow(["type", "plugin", "name", "description", "enabled"])
+
+if PATH_ARG:
+    root = Path(PATH_ARG).expanduser()
+    if (root / "plugins").is_dir():
+        root = root / "plugins"
+    rows = {}
+    for plugin_dir in sorted(root.iterdir()):
+        if not plugin_dir.is_dir() or plugin_dir.name.startswith("."):
+            continue
+        pname = plugin_dir.name
+        for kind, pattern, fallback in CONTENT_TYPES:
+            for p in sorted(plugin_dir.glob(pattern)):
+                if p.name == ".gitkeep":
+                    continue
+                name, desc = frontmatter(p, fallback(p))
+                rows[(kind, pname, name)] = [kind, pname, name, desc, ""]
+        mcp_file = plugin_dir / ".mcp.json"
+        if mcp_file.exists():
+            try:
+                data = json.loads(mcp_file.read_text())
+                for server_name, cfg in data.get("mcpServers", {}).items():
+                    url = cfg.get("url", cfg.get("command", ""))
+                    stype = cfg.get("type", "")
+                    desc = f"{stype} {url}".strip() if stype else url
+                    rows[("mcp", pname, server_name)] = ["mcp", pname, server_name, desc, ""]
+            except Exception:
+                pass
+        hooks_file = plugin_dir / "hooks" / "hooks.json"
+        if hooks_file.exists():
+            try:
+                data = json.loads(hooks_file.read_text())
+                desc = data.get("description", "")
+                for event_name in data.get("hooks", {}):
+                    rows[("hook", pname, event_name)] = ["hook", pname, event_name, desc, ""]
+            except Exception:
+                pass
+    for row in sorted(rows.values(), key=lambda r: (r[0], r[1], r[2])):
+        writer.writerow(row)
+else:
+    # user skills
+    for p in sorted(CLAUDE_DIR.glob("skills/*/SKILL.md")):
+        name, desc = frontmatter(p, p.parent.name)
+        writer.writerow(["skill", "user", name, desc, True])
+
+    rows = {}
+    for kind, pattern, fallback in CONTENT_TYPES:
+        for p in sorted(CACHE.glob(f"*/*/*/{pattern}")):
+            if p.name == ".gitkeep":
+                continue
+            key = plugin_key(p)
+            if not key:
+                continue
+            enabled = key in enabled_plugins
+            if ENABLED_ONLY and not enabled:
+                continue
+            name, desc = frontmatter(p, fallback(p))
+            rows[(kind, key, name)] = [kind, key, name, desc, enabled]
+
+    for p in sorted(CACHE.glob("*/*/*/.mcp.json")):
+        key = plugin_key(p)
+        if not key:
+            continue
+        enabled = key in enabled_plugins
+        if ENABLED_ONLY and not enabled:
+            continue
+        try:
+            data = json.loads(p.read_text())
+            for server_name, cfg in data.get("mcpServers", {}).items():
+                url = cfg.get("url", cfg.get("command", ""))
+                stype = cfg.get("type", "")
+                desc = f"{stype} {url}".strip() if stype else url
+                rows[("mcp", key, server_name)] = ["mcp", key, server_name, desc, enabled]
+        except Exception:
+            pass
+
+    for p in sorted(CACHE.glob("*/*/*/hooks/hooks.json")):
+        key = plugin_key(p)
+        if not key:
+            continue
+        enabled = key in enabled_plugins
+        if ENABLED_ONLY and not enabled:
+            continue
+        try:
+            data = json.loads(p.read_text())
+            desc = data.get("description", "")
+            for event_name in data.get("hooks", {}):
+                rows[("hook", key, event_name)] = ["hook", key, event_name, desc, enabled]
+        except Exception:
+            pass
+
+    for row in sorted(rows.values(), key=lambda r: (r[0], r[1], r[2])):
+        writer.writerow(row)
+PYEOF
+    ;;
+
+  usage)
+    python3 << 'PYEOF'
+import csv, json, os, re, sys
+from collections import Counter
+from pathlib import Path
+
+CLAUDE_DIR = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+CACHE = CLAUDE_DIR / "plugins" / "cache"
+PROJECTS = CLAUDE_DIR / "projects"
+
+def fm_name(path, fallback):
+    try:
+        content = path.read_text()
+        if not content.startswith("---"):
+            return fallback
+        parts = content.split("---", 2)
+        if len(parts) < 3:
+            return fallback
+        m = re.search(r'^name:\s*(.+)$', parts[1], re.MULTILINE)
+        return m.group(1).strip().strip('"\'') if m else fallback
+    except Exception:
+        return fallback
+
+def plugin_key(p):
+    parts = p.parts
+    try:
+        idx = list(parts).index("cache")
+        return f"{parts[idx+2]}@{parts[idx+1]}"
+    except (ValueError, IndexError):
+        return None
+
+# skill name → plugin key
+skill_plugin = {}
+for p in sorted(CACHE.glob("*/*/*/skills/*/SKILL.md")):
+    key = plugin_key(p)
+    if key:
+        skill_plugin[fm_name(p, p.parent.name)] = key
+for p in sorted(CLAUDE_DIR.glob("skills/*/SKILL.md")):
+    skill_plugin[fm_name(p, p.parent.name)] = "user"
+
+# plugin short-name → plugin key (for resolving agent subagent_type prefix)
+plugin_by_shortname = {}
+for p in CACHE.glob("*/*/"):
+    parts = p.parts
+    try:
+        idx = list(parts).index("cache")
+        name, market = parts[idx+2], parts[idx+1]
+        plugin_by_shortname[name] = f"{name}@{market}"
+    except (ValueError, IndexError):
+        pass
+
+def agent_origin(subtype):
+    if ":" in subtype:
+        return plugin_by_shortname.get(subtype.split(":")[0], "unknown")
+    return "built-in"
+
+# count invocations
+skills  = Counter()
+agents  = Counter()
+mcps    = Counter()
+
+for jsonl in PROJECTS.rglob("*.jsonl"):
+    try:
+        with open(jsonl) as f:
+            for line in f:
+                obj = json.loads(line)
+                if obj.get("type") != "assistant":
+                    continue
+                for m in obj.get("message", {}).get("content", []):
+                    if not isinstance(m, dict) or m.get("type") != "tool_use":
+                        continue
+                    tool = m.get("name", "")
+                    inp  = m.get("input", {})
+                    if tool == "Skill":
+                        skills[inp.get("skill", "")] += 1
+                    elif tool == "Agent":
+                        agents[inp.get("subagent_type") or "general-purpose"] += 1
+                    elif tool.startswith("mcp__"):
+                        parts = tool.split("__", 2)
+                        server   = parts[1] if len(parts) >= 2 else tool
+                        toolname = parts[2] if len(parts) >= 3 else ""
+                        mcps[(server, toolname)] += 1
+    except Exception:
+        pass
+
+rows = []
+for name, count in skills.items():
+    rows.append(("skill", skill_plugin.get(name, "unknown"), name, count))
+for subtype, count in agents.items():
+    rows.append(("agent", agent_origin(subtype), subtype, count))
+for (server, tool), count in mcps.items():
+    rows.append(("mcp", server, tool, count))
+
+writer = csv.writer(sys.stdout)
+writer.writerow(["type", "origin", "name", "count"])
+for row in sorted(rows, key=lambda r: -r[3]):
+    writer.writerow(row)
+PYEOF
+    ;;
+
+  prune)
+    FORCE="${2:-}"
+    python3 << PYEOF
+import json, os, shutil, sys
+from pathlib import Path
+
+CLAUDE_DIR = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude"))
+SETTINGS_FILE = CLAUDE_DIR / "settings.json"
+CACHE = CLAUDE_DIR / "plugins" / "cache"
+FORCE = "${FORCE}" == "--force"
+
+enabled_plugins = set()
+if SETTINGS_FILE.exists():
+    with open(SETTINGS_FILE) as f:
+        settings = json.load(f)
+    enabled_plugins = {k for k, v in settings.get("enabledPlugins", {}).items() if v}
+
+to_remove = []
+for marketplace_dir in sorted(CACHE.iterdir()):
+    if not marketplace_dir.is_dir():
+        continue
+    for plugin_dir in sorted(marketplace_dir.iterdir()):
+        if not plugin_dir.is_dir():
+            continue
+        key = f"{plugin_dir.name}@{marketplace_dir.name}"
+        if key not in enabled_plugins:
+            size = sum(f.stat().st_size for f in plugin_dir.rglob("*") if f.is_file())
+            to_remove.append((key, plugin_dir, size))
+
+if not to_remove:
+    print("Nothing to prune.")
+    sys.exit(0)
+
+if FORCE:
+    for key, path, _ in to_remove:
+        shutil.rmtree(path)
+        print(f"removed  {key}")
+    print(f"\nPruned {len(to_remove)} plugin(s).")
+else:
+    print("Uninstalled plugins in cache (dry run — pass --force to delete):\n")
+    total = 0
+    for key, path, size in to_remove:
+        print(f"  {size // 1024:6d} KB  {key}")
+        total += size
+    print(f"\n  {total // 1024} KB total, {len(to_remove)} plugin(s).")
+    print("\nRun with --force to delete.")
 PYEOF
     ;;
 

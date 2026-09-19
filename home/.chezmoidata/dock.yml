@@ -15,6 +15,7 @@ dock:
   work:
     mode: manage
     add:
+      - Firefox
       - Ghostty
       - Obsidian
       - Zed
