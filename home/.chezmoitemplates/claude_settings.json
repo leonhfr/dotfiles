@@ -80,6 +80,8 @@
     "allow": [
       "Read(~/src/**)",
       "Read(~/go/**)",
+      "Read(~/notes/agents/**)",
+      "Edit(~/notes/agents/**)",
       "Grep",
       "Glob",
       "Skill",

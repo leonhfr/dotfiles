@@ -1,12 +1,12 @@
 ["notes"]
 type = "git-repo"
-url = "git@github.com:leonhfr/notes.git"
+url = "git@github.com:{{ .personal.github }}/notes.git"
 refreshPeriod = "8760h"
 
 {{ if eq .machine "work" }}
 ["worknotes"]
 type = "git-repo"
-url = "git@github.com:leon-hollender_qonto/worknotes.git"
+url = "git@github.com:{{ .work.github }}/worknotes.git"
 refreshPeriod = "8760h"
 {{ end }}
 
