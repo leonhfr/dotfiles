@@ -42,6 +42,10 @@ echo "[dotfiles] Installing Claude user-scope MCPs"
 {{ range $mcps -}}
 if ! mcp_user_installed {{ .name | quote }}; then
   echo "  Adding {{ .name }}"
+{{ if index . "url" -}}
   claude mcp add {{ .name | quote }} --scope user --transport http {{ .url | quote }}{{ range index . "args" }} {{ . | quote }}{{ end }}
+{{ else -}}
+  claude mcp add {{ .name | quote }} --scope user -- {{ (index . "command") | quote }}{{ range index . "args" }} {{ . | quote }}{{ end }}
+{{ end -}}
 fi
 {{ end -}}

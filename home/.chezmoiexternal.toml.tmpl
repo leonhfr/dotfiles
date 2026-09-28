@@ -13,3 +13,10 @@ refreshPeriod = "8760h"
 [".config/yazi/flavors/tokyo-night.yazi"]
 type = "git-repo"
 url = "git@github.com:BennyOe/tokyo-night.yazi.git"
+
+[".local/bin/codebase-memory-mcp"]
+type = "archive-file"
+url = "https://github.com/DeusData/codebase-memory-mcp/releases/latest/download/codebase-memory-mcp-darwin-{{ .chezmoi.arch }}.tar.gz"
+path = "codebase-memory-mcp"
+executable = true
+refreshPeriod = "168h"

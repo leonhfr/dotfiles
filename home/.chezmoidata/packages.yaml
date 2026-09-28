@@ -168,6 +168,7 @@ casks:
 gobin:
   common:
     - github.com/leonhfr/gum
+    - golang.org/x/tools/cmd/deadcode
   personal: []
   work: []
 
