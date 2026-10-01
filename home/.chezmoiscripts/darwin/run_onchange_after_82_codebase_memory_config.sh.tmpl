@@ -5,4 +5,5 @@ set -euo pipefail
 CBM="$HOME/.local/bin/codebase-memory-mcp"
 [ -x "$CBM" ] || exit 0
 
+echo "[dotfiles] Configuring codebase-memory-mcp"
 "$CBM" config set auto_index true

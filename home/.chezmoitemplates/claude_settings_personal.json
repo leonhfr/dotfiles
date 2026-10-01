@@ -1,1 +1,13 @@
-{}
+{
+  "enabledPlugins": {
+    "tui-design@tui-design-skill": true
+  },
+  "extraKnownMarketplaces": {
+    "tui-design-skill": {
+      "source": {
+        "source": "github",
+        "repo": "leonhfr/tui-design-skill"
+      }
+    }
+  }
+}

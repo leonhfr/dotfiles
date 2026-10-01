@@ -32,7 +32,7 @@ brews:
     - git-delta
     - git-lfs
     - git-who
-    # - glow
+    - glow
     # - gnupg
     - go #skill:gopilot
     - golangci-lint #skill:gopilot
@@ -116,7 +116,7 @@ casks:
   common:
     - 1password-cli
     # - betterdisplay
-    - crmne/tap/fastpotify
+    - crmne/tap/spotifast
     # - dockdoor
     - firefox
     # - flux-app
@@ -137,6 +137,7 @@ casks:
     # - redis-insight
     - spotify
     - the-unarchiver
+    - typora
     - visual-studio-code
     - zed
   personal:
@@ -155,7 +156,6 @@ casks:
   work:
     - adobe-acrobat-pro
     - conductor
-    - discord
     - figma
     - gcloud-cli
     - google-drive

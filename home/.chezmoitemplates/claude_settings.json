@@ -17,20 +17,13 @@
   "enableWorkflows": true,
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
-    "worktrunk@worktrunk": true,
-    "tui-design@tui-design-skill": true
+    "worktrunk@worktrunk": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
       "source": {
         "source": "github",
         "repo": "max-sixty/worktrunk"
-      }
-    },
-    "tui-design-skill": {
-      "source": {
-        "source": "github",
-        "repo": "leonhfr/tui-design-skill"
       }
     }
   },
@@ -48,7 +41,6 @@
     "CLAUDE_CODE_EFFORT_LEVEL": "xhigh",
     "CLAUDE_CODE_ENABLE_AWAY_SUMMARY": "0",
     "CLAUDE_CODE_NO_FLICKER": "1",
-    "DISABLE_AUTOUPDATER": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
@@ -68,21 +60,11 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/leon/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           }
         ]
@@ -91,7 +73,11 @@
   },
   "includeGitInstructions": false,
   "minimumVersion": "2.1.168",
-  "model": "sonnet-4-6",
+  "modelSettings": {
+    "claude-sonnet-5": {
+      "effortLevel": "high"
+    }
+  },
   "outputStyle": "Simplified Technical English",
   "permissions": {
     "allow": [
@@ -183,7 +169,9 @@
       "Bash(wc *)",
       "Bash(which *)",
       "Bash(xargs cat)",
-      "Bash(yq *)"
+      "Bash(yq *)",
+      "mcp__codebase-memory-mcp__list_projects",
+      "mcp__codebase-memory-mcp__index_status"
     ],
     "defaultMode": "plan",
     "deny": [
@@ -217,10 +205,5 @@
   "voice": {
     "enabled": true,
     "mode": "hold"
-  },
-  "modelSettings": {
-    "claude-sonnet-5": {
-      "effortLevel": "high"
-    }
   }
 }

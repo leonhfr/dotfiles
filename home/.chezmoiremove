@@ -7,7 +7,6 @@
 .profile
 bin
 
-.config/fish
 .config/gh-dash/config.yaml
 .config/worktrunk/copy-claude-settings
 .local/bin/git-wt
