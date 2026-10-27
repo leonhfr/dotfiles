@@ -5,6 +5,7 @@ brews:
     - bat
     - btop
     - ccusage
+    - charmbracelet/tap/crush
     # - chenyukang/tap/ghr-cli
     - chezmoi
     # - choose-gui
@@ -52,7 +53,9 @@ brews:
     - mise
     - mole
     - navi
+    - opencode
     # - pastel
+    - pi-coding-agent
     - poppler #skill?
     # - procs
     # - posting
@@ -117,6 +120,7 @@ casks:
     - 1password-cli
     # - betterdisplay
     - crmne/tap/spotifast
+    - devdotfast/tap/whiteboard
     # - dockdoor
     - firefox
     # - flux-app
@@ -136,6 +140,7 @@ casks:
     - rectangle
     # - redis-insight
     - spotify
+    - stablyai/orca/orca
     - the-unarchiver
     - typora
     - visual-studio-code
@@ -144,6 +149,7 @@ casks:
     - 1password
     - calibre
     - claude-code
+    - codex
     - filen
     - google-chrome
     - mochi
