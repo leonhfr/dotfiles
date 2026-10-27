@@ -1,0 +1,314 @@
+#!/usr/bin/env bash
+### mergeq — keep PRs moving through the GitHub merge queue until they merge
+###
+### Usage:
+###   mergeq [-i seconds] [-r retries] [<pr>...]
+###
+### Arguments:
+###   <pr>          A PR URL, owner/repo#123, or a bare number (uses the repo of
+###                 the current directory). Stacked PRs are detected automatically.
+###                 With no <pr>, mergeq watches the unmerged PRs of the stack that
+###                 the current branch belongs to, or else the PR of the current branch.
+###
+### Options:
+###   -i <seconds>  Seconds between polls. Default 180.
+###   -r <retries>  Max requeues per PR before giving up. Default 5.
+###   -h            Show this message.
+###
+### Every poll, for each PR:
+###   merged                 stop watching it.
+###   closed, draft, or has
+###   merge conflicts        stop watching it and report a failure.
+###   in the queue           print the queue state, keep waiting.
+###   not in the queue       add it. If the queue removed it, add it again,
+###                          unless it was removed manually (then stop watching).
+###
+### Stacked PRs are added with `gh stack merge`, which also adds the PRs below.
+### When several PRs of one stack need adding, only the topmost one is sent.
+###
+### To add PRs, press Ctrl+C and run again. Ctrl+C prints the command to resume.
+### Exits 0 when all PRs merged, 1 if any PR was dropped without merging.
+
+set -euo pipefail
+
+INTERVAL=180
+MAX_RETRIES=5
+
+while getopts "i:r:h" opt; do
+  case $opt in
+    i) INTERVAL=$OPTARG ;;
+    r) MAX_RETRIES=$OPTARG ;;
+    h) sed -rn 's/^### ?//p' "$0"; exit 0 ;;
+    *) exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ -t 1 ]; then
+  C_OK=$(printf '\033[32m'); C_WARN=$(printf '\033[33m'); C_FAIL=$(printf '\033[31m'); C_OFF=$(printf '\033[0m')
+else
+  C_OK=; C_WARN=; C_FAIL=; C_OFF=
+fi
+
+command -v gh >/dev/null 2>&1 || { echo "Error: gh is not installed" >&2; exit 1; }
+
+# Per-PR state, indexed 0..N-1.
+N=0
+REPO=() NUM=() ACTIVE=() SEEN=() RETRIES=() LAST=() WANT=() STACK=()
+MERGED=0
+FAILED=0
+
+log() {
+  printf '[%s] %s\n' "$(date +%H:%M:%S)" "$*"
+}
+
+# say <index> <color> <message>: print only when the message changed.
+say() {
+  if [ "${LAST[$1]}" != "$3" ]; then
+    LAST[$1]=$3
+    log "${2}${REPO[$1]}#${NUM[$1]}${C_OFF} $3"
+  fi
+}
+
+drop() { # <index> <message>
+  say "$1" "$C_FAIL" "$2"
+  ACTIVE[$1]=0
+  FAILED=$((FAILED + 1))
+}
+
+add_pr() {
+  local arg=$1 repo num p i
+  case $arg in
+    https://github.com/*/pull/*)
+      p=${arg#https://github.com/}
+      repo=${p%%/pull/*}
+      num=${p##*/pull/}
+      num=${num%%[!0-9]*}
+      ;;
+    */*#*)
+      repo=${arg%%#*}
+      num=${arg##*#}
+      ;;
+    *)
+      num=${arg#\#}
+      repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+      ;;
+  esac
+  case $num in
+    '' | *[!0-9]*) echo "Error: cannot parse PR '$arg'" >&2; exit 1 ;;
+  esac
+  for ((i = 0; i < N; i++)); do
+    if [ "${REPO[$i]}" = "$repo" ] && [ "${NUM[$i]}" = "$num" ]; then
+      return
+    fi
+  done
+  REPO[$N]=$repo NUM[$N]=$num ACTIVE[$N]=1 SEEN[$N]=0 RETRIES[$N]=0 LAST[$N]='' WANT[$N]='' STACK[$N]=''
+  N=$((N + 1))
+}
+
+QUERY='query($owner:String!,$name:String!,$n:Int!){repository(owner:$owner,name:$name){pullRequest(number:$n){
+  state isDraft mergeable isInMergeQueue mergeQueueEntry{state position} autoMergeRequest{enabledAt}
+  timelineItems(last:1,itemTypes:[ADDED_TO_MERGE_QUEUE_EVENT,REMOVED_FROM_MERGE_QUEUE_EVENT]){
+    nodes{__typename ... on RemovedFromMergeQueueEvent{reason}}}}}}'
+
+# fetch <repo> <number>: one tab-separated row, "-" for empty fields.
+fetch() {
+  gh api graphql -f query="$QUERY" -f owner="${1%%/*}" -f name="${1##*/}" -F n="$2" \
+    --jq '.data.repository.pullRequest | [
+      .state, .isDraft, .mergeable, .isInMergeQueue,
+      (.mergeQueueEntry.state // "-"), (.mergeQueueEntry.position // "-"),
+      (.autoMergeRequest != null),
+      (.timelineItems.nodes[0] | if .__typename == "RemovedFromMergeQueueEvent" then .reason else "-" end)
+    ] | @tsv'
+}
+
+# Decide what to do with PR <index>. Sets WANT[index] to enqueue or requeue.
+check_pr() {
+  local i=$1 row label
+  local state draft mergeable inq qstate qpos auto reason
+  WANT[$i]=
+  STACK[$i]=
+  if ! row=$(fetch "${REPO[$i]}" "${NUM[$i]}" 2>&1); then
+    say "$i" "$C_WARN" "poll failed, will retry: ${row##*$'\n'}"
+    return
+  fi
+  IFS=$'\t' read -r state draft mergeable inq qstate qpos auto reason <<<"$row"
+
+  case $state in
+    MERGED)
+      say "$i" "$C_OK" "merged"
+      ACTIVE[$i]=0
+      MERGED=$((MERGED + 1))
+      return
+      ;;
+    CLOSED)
+      drop "$i" "closed without merging"
+      return
+      ;;
+  esac
+
+  if [ "$inq" = true ]; then
+    SEEN[$i]=1
+    case $qstate in
+      AWAITING_CHECKS) label="checks running" ;;
+      QUEUED) label="waiting in line" ;;
+      MERGEABLE) label="checks passed, merging" ;;
+      UNMERGEABLE) label="checks failed, will be removed" ;;
+      LOCKED) label="locked" ;;
+      *) label=$qstate ;;
+    esac
+    say "$i" "" "in queue: $label (position $qpos)"
+    return
+  fi
+
+  if [ "$auto" = true ]; then
+    say "$i" "" "auto-merge on, waiting for required checks before queueing"
+    return
+  fi
+  if [ "$draft" = true ]; then
+    drop "$i" "draft, cannot be queued"
+    return
+  fi
+  if [ "$mergeable" = CONFLICTING ]; then
+    drop "$i" "has merge conflicts"
+    return
+  fi
+
+  if [ "${SEEN[$i]}" = 0 ]; then
+    WANT[$i]=enqueue
+  elif [ "$reason" = manual ]; then
+    drop "$i" "removed from the queue manually, no longer watching"
+    return
+  elif [ "${RETRIES[$i]}" -ge "$MAX_RETRIES" ]; then
+    drop "$i" "removed from the queue ($reason), gave up after $MAX_RETRIES requeues"
+    return
+  else
+    RETRIES[$i]=$((RETRIES[i] + 1))
+    say "$i" "$C_WARN" "removed from the queue ($reason), requeue ${RETRIES[$i]}/$MAX_RETRIES"
+    WANT[$i]=requeue
+  fi
+
+  # "<stack number> <position>", empty when the PR is not stacked.
+  STACK[$i]=$(gh api "repos/${REPO[$i]}/pulls/${NUM[$i]}" --jq '.stack // empty | "\(.number) \(.position)"' 2>/dev/null || true)
+}
+
+# covered <index>: true if another PR wanting action sits higher in the same stack.
+covered() {
+  local i=$1 j sn sp tn tp
+  read -r sn sp <<<"${STACK[$i]}"
+  for ((j = 0; j < N; j++)); do
+    if [ "$j" != "$i" ] && [ -n "${WANT[$j]}" ] && [ "${REPO[$j]}" = "${REPO[$i]}" ]; then
+      read -r tn tp <<<"${STACK[$j]}"
+      if [ "$tn" = "$sn" ] && [ "$tp" -gt "$sp" ]; then
+        return 0
+      fi
+    fi
+  done
+  return 1
+}
+
+merge_cmd() { # <index>
+  if [ -n "${STACK[$1]}" ]; then
+    GH_REPO=${REPO[$1]} gh stack merge "${NUM[$1]}" --yes
+  else
+    gh pr merge "${NUM[$1]}" -R "${REPO[$1]}"
+  fi
+}
+
+act() {
+  local i=$1 out
+  if [ -n "${STACK[$i]}" ] && covered "$i"; then
+    say "$i" "" "queued together with a higher PR in stack #${STACK[$i]%% *}"
+    return
+  fi
+  if out=$(merge_cmd "$i" 2>&1); then
+    SEEN[$i]=1
+    say "$i" "$C_OK" "${WANT[$i]}d${STACK[$i]:+ with stack #${STACK[$i]%% *}}"
+  else
+    say "$i" "$C_FAIL" "queue command failed: ${out##*$'\n'}"
+    if [ "${WANT[$i]}" = enqueue ]; then
+      RETRIES[$i]=$((RETRIES[i] + 1))
+    fi
+  fi
+}
+
+active_prs() {
+  local i out=
+  for ((i = 0; i < N; i++)); do
+    if [ "${ACTIVE[$i]}" = 1 ]; then
+      out="$out ${REPO[$i]}#${NUM[$i]}"
+    fi
+  done
+  printf '%s' "${out# }"
+}
+
+active_count() {
+  local i c=0
+  for ((i = 0; i < N; i++)); do
+    if [ "${ACTIVE[$i]}" = 1 ]; then
+      c=$((c + 1))
+    fi
+  done
+  echo "$c"
+}
+
+on_interrupt() {
+  echo
+  log "stopped. Resume with:"
+  echo "  mergeq -i $INTERVAL -r $MAX_RETRIES $(active_prs)"
+  exit 130
+}
+trap on_interrupt INT
+
+# Without arguments, watch the unmerged PRs of the current stack, else the current branch's PR.
+detect_prs() {
+  local repo nums n
+  repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+  if nums=$(gh stack view --json 2>/dev/null | jq -r '.branches[] | select(.pr != null and .pr.state != "MERGED") | .pr.number') && [ -n "$nums" ]; then
+    log "no arguments, using the stack of the current branch"
+  elif nums=$(gh pr view --json number -q .number 2>/dev/null) && [ -n "$nums" ]; then
+    log "no arguments, using the PR of the current branch"
+  else
+    echo "Error: no PR argument, and no open PR or stack for the current branch" >&2
+    exit 1
+  fi
+  for n in $nums; do
+    add_pr "$repo#$n"
+  done
+}
+
+if [ $# -eq 0 ]; then
+  command -v jq >/dev/null 2>&1 || { echo "Error: jq is not installed" >&2; exit 1; }
+  detect_prs
+else
+  for arg in "$@"; do
+    add_pr "$arg"
+  done
+fi
+
+log "watching $(active_prs), polling every ${INTERVAL}s, max $MAX_RETRIES requeues each"
+
+while :; do
+  for ((i = 0; i < N; i++)); do
+    if [ "${ACTIVE[$i]}" = 1 ]; then
+      check_pr "$i"
+    fi
+  done
+  for ((i = 0; i < N; i++)); do
+    if [ "${ACTIVE[$i]}" = 1 ] && [ -n "${WANT[$i]}" ]; then
+      act "$i"
+    fi
+  done
+
+  left=$(active_count)
+  if [ "$left" -eq 0 ]; then
+    break
+  fi
+  log "$left PR(s) left, next poll in ${INTERVAL}s"
+  sleep "$INTERVAL"
+done
+
+log "done: $MERGED merged, $FAILED dropped"
+if [ "$FAILED" -gt 0 ]; then
+  exit 1
+fi

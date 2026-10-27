@@ -13,7 +13,7 @@ cd "$(git rev-parse --show-toplevel)"
 YAML="home/.chezmoidata/encrypted_claude.yaml"
 BASE_SETTINGS="home/.chezmoitemplates/claude_settings.json"
 PERSONAL_SETTINGS="home/.chezmoitemplates/claude_settings_personal.json"
-WORK_SETTINGS="home/.chezmoitemplates/encrypted_claude_settings_work.json"
+WORK_SETTINGS="home/.chezmoitemplates/encrypted_claude_settings_work.json.tmpl"
 
 normalize() {
     printf '%s' "$1" | sed 's|git@github\.com:||; s|\.git$||'

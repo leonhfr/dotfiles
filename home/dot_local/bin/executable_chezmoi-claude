@@ -78,7 +78,7 @@ cmd_sync() {
 
   case "$MACHINE" in
     personal) MACHINE_FILE="$SOURCE/.chezmoitemplates/claude_settings_personal.json" ;;
-    work)     MACHINE_FILE="$SOURCE/.chezmoitemplates/encrypted_claude_settings_work.json" ;;
+    work)     MACHINE_FILE="$SOURCE/.chezmoitemplates/encrypted_claude_settings_work.json.tmpl" ;;
     *)
       gum style --foreground 196 "Error: unknown machine type '$MACHINE'"
       return 1

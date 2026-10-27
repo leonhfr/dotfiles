@@ -107,7 +107,7 @@ When you edit a script, keep or add the correct trigger comment. Without it the 
 
 ## Claude settings management
 
-- `~/.claude/settings.json` is built by `home/dot_claude/settings.json.tmpl`. It reads the base `home/.chezmoitemplates/claude_settings.json`, deep-merges a per-machine fragment (`claude_settings_personal.json` or `encrypted_claude_settings_work.json`) via `claude_settings_deepmerge.tmpl` (lists concat and dedupe, maps recurse, scalars overwrite).
+- `~/.claude/settings.json` is built by `home/dot_claude/settings.json.tmpl`. It reads the base `home/.chezmoitemplates/claude_settings.json`, deep-merges a per-machine fragment (`claude_settings_personal.json` or `encrypted_claude_settings_work.json.tmpl`) via `claude_settings_deepmerge.tmpl` (lists concat and dedupe, maps recurse, scalars overwrite).
 - `~/.claude/CLAUDE.md` is built by `home/dot_claude/CLAUDE.md.tmpl`. Its Tools section is generated from `claude_tools` for brews installed on this machine. On work it appends `@CLAUDE_WORK.md`.
 - Claude edits `settings.json` at runtime, so the on-disk file drifts from the source. Two tools reconcile the drift:
   - `bin/check-claude-settings.sh` (the `apply.pre` hook) blocks apply when the on-disk file has real drift, and offers to overwrite it with the rendered version.

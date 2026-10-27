@@ -50,6 +50,7 @@ encryption = "transparent"
   ssh_public_key = "op://{{ $workOpVault }}/GitHub SSH Key/public key"
   ssh_private_key = "op://{{ $workOpVault }}/GitHub SSH Key/private key"
   chezmoi_token = "op://{{ $workOpVault }}/chezmoi GitHub API Token/credential"
+  typesafe_key = "op://{{ $workOpVault }}/TypeSafe API Key/credential"
 
 [hooks.apply.pre]
   command = ".local/share/chezmoi/bin/check-claude-settings.sh"
