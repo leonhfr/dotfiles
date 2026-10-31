@@ -1,0 +1,114 @@
+bash:
+  patterns:
+    - match: "brew config"
+      approval: allow
+    - match: "brew doctor"
+      approval: allow
+    - match: "brew info *"
+      approval: allow
+    - match: "brew list *"
+      approval: allow
+    - match: "brew search *"
+      approval: allow
+    - match: "docker compose build *"
+      approval: allow
+    - match: "docker compose config *"
+      approval: allow
+    - match: "docker compose down *"
+      approval: allow
+    - match: "docker compose exec *"
+      approval: allow
+    - match: "docker compose logs *"
+      approval: allow
+    - match: "docker compose ps *"
+      approval: allow
+    - match: "docker compose pull *"
+      approval: allow
+    - match: "docker compose restart *"
+      approval: allow
+    - match: "docker compose start *"
+      approval: allow
+    - match: "docker compose stop *"
+      approval: allow
+    - match: "docker compose up *"
+      approval: allow
+    - match: "docker images *"
+      approval: allow
+    - match: "docker inspect *"
+      approval: allow
+    - match: "docker logs *"
+      approval: allow
+    - match: "docker ps *"
+      approval: allow
+    - match: "gh pr diff *"
+      approval: allow
+    - match: "gh pr list *"
+      approval: allow
+    - match: "gh pr comment *"
+      approval: allow
+    - match: "gh pr create *"
+      approval: allow
+    - match: "gh pr view *"
+      approval: allow
+    - match: "gh repo view *"
+      approval: allow
+    - match: "gh run list *"
+      approval: allow
+    - match: "gh run view *"
+      approval: allow
+    - match: "gh search *"
+      approval: allow
+    - match: "gh stack view *"
+      approval: allow
+    - match: "gh workflow-stats *"
+      approval: allow
+    - match: "git branch *"
+      approval: allow
+    - match: "git diff *"
+      approval: allow
+    - match: "git fetch *"
+      approval: allow
+    - match: "git log *"
+      approval: allow
+    - match: "git remote *"
+      approval: allow
+    - match: "git show *"
+      approval: allow
+    - match: "git stash list*"
+      approval: allow
+    - match: "git status*"
+      approval: allow
+    - match: "go build *"
+      approval: allow
+    - match: "go doc *"
+      approval: allow
+    - match: "go env *"
+      approval: allow
+    - match: "go list *"
+      approval: allow
+    - match: "go mod *"
+      approval: allow
+    - match: "go run *"
+      approval: allow
+    - match: "go test *"
+      approval: allow
+    - match: "go version*"
+      approval: allow
+    - match: "go vet *"
+      approval: allow
+    - match: "golangci-lint *"
+      approval: allow
+    - match: "hugo *"
+      approval: allow
+    - match: "make *"
+      approval: allow
+    - match: "pdfcpu *"
+      approval: allow
+    - match: "pdfinfo *"
+      approval: allow
+    - match: "pdftotext *"
+      approval: allow
+    - match: "xan *"
+      approval: allow
+    - match: "yq *"
+      approval: allow

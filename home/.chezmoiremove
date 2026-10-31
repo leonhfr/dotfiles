@@ -11,6 +11,13 @@ bin
 .config/worktrunk/copy-claude-settings
 .local/bin/git-wt
 .local/bin/codebase-memory-mcp
+.omp/profiles/personal/agent/packages/tui-design-skill
+.omp/profiles/personal/agent/skills
+.omp/profiles/work/agent/skills
+.omp/profiles/personal/agent/RULES.md
+.omp/profiles/work/agent/RULES.md
+.claude/CLAUDE_WORK.md
+agents
 .ghr
 
 .claude/skills/pr-create

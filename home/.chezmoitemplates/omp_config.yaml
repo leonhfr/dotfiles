@@ -1,0 +1,75 @@
+disabledProviders:
+  - claude
+  - claude-plugins
+
+defaultThinkingLevel: high
+
+plan:
+  defaultOnStartup: true
+
+checkpoint:
+  enabled: true
+
+memory:
+  backend: local
+
+autolearn:
+  enabled: true
+  autoContinue: false
+
+secrets:
+  enabled: true
+
+tools:
+  approvalMode: always-ask
+
+bash:
+  allowCompoundCommands: false
+  gitGuard: true
+  patterns:
+    - match: "git push *"
+      approval: prompt
+    - match: "git * push *"
+      approval: prompt
+    - match: "gh stack push *"
+      approval: prompt
+    - match: "gh stack submit *"
+      approval: prompt
+    - match: "gh stack sync *"
+      approval: prompt
+    - match: "gh stack link *"
+      approval: prompt
+    - match: "gh stack merge *"
+      approval: prompt
+    - match: "rm -rf *"
+      approval: prompt
+
+bashInterceptor:
+  enabled: true
+
+commands:
+  enableClaudeUser: false
+  enableClaudeProject: false
+
+skills:
+  enableClaudeUser: false
+  enableClaudeProject: false
+  enableAgentsUser: true
+
+telemetry:
+  otlpExportEnabled: false
+
+display:
+  showTurnTime: true
+
+gc:
+  stale: true
+  staleRetainDays: 180
+
+symbolPreset: nerd
+composer:
+  shape: box
+theme:
+  dark: titanium
+  light: light
+setupVersion: 2

@@ -1,0 +1,78 @@
+#!/bin/bash
+# weekly: {{ now | date "2006-W01" }}
+# {{ list .omp_marketplaces .omp_plugins | toJson | sha256sum }}
+set -euo pipefail
+
+{{ if eq .machine "work" -}}
+
+PROFILE="work"
+PROFILE_ROOT="$HOME/.omp/profiles/$PROFILE"
+MARKETPLACES="$PROFILE_ROOT/marketplaces.json"
+INSTALLED_PLUGINS="$PROFILE_ROOT/plugins/installed_plugins.json"
+
+command -v omp >/dev/null || { echo "[dotfiles] omp not found, skipping plugins"; exit 0; }
+command -v jq  >/dev/null || { echo "[dotfiles] jq not found, skipping plugins"; exit 0; }
+
+marketplace_known() {
+  local name="$1"
+  local source="$2"
+  [ -f "$MARKETPLACES" ] || return 1
+  jq -e --arg name "$name" --arg source "$source" \
+    '([.. | strings] | any(. == $name or . == $source))' \
+    "$MARKETPLACES" >/dev/null 2>&1
+}
+
+plugin_installed() {
+  [ -f "$INSTALLED_PLUGINS" ] || return 1
+  jq -e --arg plugin "$1" '.plugins | has($plugin)' \
+    "$INSTALLED_PLUGINS" >/dev/null 2>&1
+}
+
+{{ $marketplaces := index .omp_marketplaces "work" | default (list) -}}
+{{ $plugins := index .omp_plugins "work" | default (list) | sortAlpha | uniq -}}
+
+echo "[dotfiles] Setting up OMP work marketplaces"
+
+{{ range $marketplaces -}}
+if ! marketplace_known {{ .name | quote }} {{ .source | quote }}; then
+  echo "  Adding marketplace {{ .name }}"
+  omp --profile "$PROFILE" plugin marketplace add {{ .source | quote }}
+fi
+{{ end }}
+echo "[dotfiles] Removing unmanaged OMP work plugins"
+
+desired_plugins=(
+{{- range $plugins }}
+  {{ . | quote }}
+{{- end }}
+)
+
+if [ -f "$INSTALLED_PLUGINS" ]; then
+  while IFS= read -r installed; do
+    keep=false
+    for plugin in "${desired_plugins[@]}"; do
+      [ "$plugin" = "$installed" ] && keep=true && break
+    done
+    if [ "$keep" = "false" ]; then
+      echo "  Uninstalling $installed"
+      omp --profile "$PROFILE" plugin uninstall --scope user "$installed"
+    fi
+  done < <(jq -r '.plugins | keys[]' "$INSTALLED_PLUGINS")
+fi
+
+echo "[dotfiles] Installing OMP work plugins"
+
+{{ range $plugins -}}
+if ! plugin_installed {{ . | quote }}; then
+  echo "  Installing {{ . }}"
+  omp --profile "$PROFILE" plugin install --scope user {{ . | quote }}
+fi
+{{ end }}
+echo "[dotfiles] Updating OMP work plugins"
+
+{{ range $plugins -}}
+if plugin_installed {{ . | quote }}; then
+  omp --profile "$PROFILE" plugin upgrade --scope user {{ . | quote }}
+fi
+{{ end -}}
+{{ end -}}

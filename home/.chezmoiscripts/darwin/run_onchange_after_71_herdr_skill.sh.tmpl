@@ -1,0 +1,13 @@
+#!/bin/bash
+# herdr version: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr --version || echo 'herdr not installed'" | trim }}
+set -euo pipefail
+
+skill_dir="$HOME/.agents/skills/herdr"
+skill_file="$skill_dir/SKILL.md"
+
+mkdir -p "$skill_dir"
+tmp=$(mktemp "$skill_dir/.SKILL.md.XXXXXX")
+trap 'rm -f "$tmp"' EXIT
+herdr --skill > "$tmp"
+mv "$tmp" "$skill_file"
+trap - EXIT

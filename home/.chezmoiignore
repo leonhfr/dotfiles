@@ -4,6 +4,10 @@
 
 {{ if ne .machine "personal" }}
 .local/share/navi/cheats/personal
+.claude/skills/tui-design
+.agents/packages/tui-design-skill
+.agents/skills/personalnote
+.agents/skills/tui-design
 {{ end }}
 
 {{ if ne .machine "personal" }}
@@ -11,7 +15,7 @@
 {{ end }}
 
 {{ if ne .machine "work" }}
-.claude/CLAUDE_WORK.md
+.agents/AGENTS_WORK.md
 .local/share/navi/cheats/work
 .ssh/id_ed25519_work
 .ssh/id_ed25519_work.pub
@@ -20,6 +24,12 @@ work
 work/.envrc
 work/.gitconfig
 worknotes
+.claude/skills/open-pr
+.claude/skills/review-pr
+.claude/skills/worknote
+.agents/skills/open-pr
+.agents/skills/review-pr
+.agents/skills/worknote
 {{ end }}
 
 {{ if ne .machine "work" }}
@@ -42,6 +52,7 @@ worknotes
 {{     range $pkgs -}}
 {{       $name := . | splitList "/" | last }}
 .claude/skills/{{ $name }}/
+.agents/skills/{{ $name }}/
 {{     end -}}
 {{   end -}}
 {{ end -}}
@@ -50,7 +61,8 @@ worknotes
 .zshrc_qonto
 
 # script-managed skills (not in source)
-.claude/skills/herdr/
+.agents/skills/herdr/
+.agents/skills/gh-stack/
 
 # runtime noise (caches, logs, history, sessions, backups)
 .cache/**

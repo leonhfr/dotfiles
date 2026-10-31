@@ -217,6 +217,6 @@
     "enabled": true,
     "mode": "hold"
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "model": "opus"
 }

@@ -3,6 +3,13 @@ type = "git-repo"
 url = "git@github.com:{{ .personal.github }}/notes.git"
 refreshPeriod = "8760h"
 
+{{ if eq .machine "personal" }}
+[".agents/packages/tui-design-skill"]
+type = "git-repo"
+url = "https://github.com/leonhfr/tui-design-skill.git"
+refreshPeriod = "168h"
+{{ end }}
+
 {{ if eq .machine "work" }}
 ["worknotes"]
 type = "git-repo"

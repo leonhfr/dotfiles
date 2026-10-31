@@ -1,0 +1,12 @@
+#!/bin/bash
+# gh-stack: {{ output "sh" "-c" "gh stack --version 2>/dev/null || printf missing" }}
+set -euo pipefail
+
+skill_root="$HOME/.agents/skills"
+skill_file="$skill_root/gh-stack/SKILL.md"
+
+if [[ -f "$skill_file" ]]; then
+  gh skill update gh-stack --dir "$skill_root"
+else
+  gh skill install github/gh-stack gh-stack --dir "$skill_root"
+fi

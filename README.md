@@ -44,10 +44,13 @@ uses the matching named profile:
 - `personal` → `~/.omp/profiles/personal/agent`
 - `work` → `~/.omp/profiles/work/agent`
 
-Chezmoi deploys each profile only on its matching machine. Profile settings are
-stored under `home/dot_omp/profiles/<machine>/agent/`; authentication and
-sessions remain local runtime state. On a new machine, apply the dotfiles and
-run `omp login` for that machine's providers.
+Chezmoi deploys only the matching isolated profile. Shared instructions and
+skills live under `~/.agents` and are symlinked into Claude; OMP discovers the
+common agent layout natively without importing Claude configuration.
+
+Profile settings are managed, while authentication, sessions, caches, and
+memory remain local. On a new machine, apply the dotfiles and run `omp login`;
+work setup also reconciles plugins and requires MCP authorization in OMP.
 
 ## Install manually
 

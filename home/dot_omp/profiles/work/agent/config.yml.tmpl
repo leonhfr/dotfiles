@@ -1,0 +1,7 @@
+{{- $base := include ".chezmoitemplates/omp_config.yaml" | fromYaml -}}
+{{- $machine := include ".chezmoitemplates/encrypted_omp_config_work.yaml" | fromYaml -}}
+{{- $allow := include ".chezmoitemplates/omp_config_allow.yaml" | fromYaml -}}
+{{- $merged := deepCopy $base -}}
+{{- template "omp_config_deepmerge.tmpl" (list $merged $machine) -}}
+{{- template "omp_config_deepmerge.tmpl" (list $merged $allow) -}}
+{{ $merged | toYaml }}
