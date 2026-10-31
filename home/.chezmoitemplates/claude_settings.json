@@ -174,9 +174,7 @@
       "Bash(wc *)",
       "Bash(which *)",
       "Bash(xargs cat)",
-      "Bash(yq *)",
-      "mcp__codebase-memory-mcp__list_projects",
-      "mcp__codebase-memory-mcp__index_status"
+      "Bash(yq *)"
     ],
     "defaultMode": "plan",
     "deny": [

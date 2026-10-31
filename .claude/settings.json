@@ -1,17 +1,20 @@
 {
   "permissions": {
     "allow": [
+      "Bash(brew info *)",
+      "Bash(brew search *)",
       "Bash(chezmoi cat *)",
       "Bash(chezmoi decrypt *)",
-      "Bash(chezmoi encrypt *)",
       "Bash(chezmoi diff *)",
+      "Bash(chezmoi encrypt *)",
       "Bash(chezmoi execute-template *)",
       "Bash(chezmoi ignored *)",
-      "Bash(claude mcp *)",
-      "Bash(claude plugin *)",
       "Bash(chezmoi source-path *)",
       "Bash(chezmoi status *)",
-      "Bash(chezmoi target-path *)"
+      "Bash(chezmoi target-path *)",
+      "Bash(claude mcp *)",
+      "Bash(claude plugin *)",
+      "Bash(jq *)"
     ]
   }
 }

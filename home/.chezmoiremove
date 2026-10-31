@@ -10,6 +10,7 @@ bin
 .config/gh-dash/config.yaml
 .config/worktrunk/copy-claude-settings
 .local/bin/git-wt
+.local/bin/codebase-memory-mcp
 .ghr
 
 .claude/skills/pr-create

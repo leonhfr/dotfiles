@@ -6,6 +6,10 @@
 .local/share/navi/cheats/personal
 {{ end }}
 
+{{ if ne .machine "personal" }}
+.omp/profiles/personal
+{{ end }}
+
 {{ if ne .machine "work" }}
 .claude/CLAUDE_WORK.md
 .local/share/navi/cheats/work
@@ -16,6 +20,10 @@ work
 work/.envrc
 work/.gitconfig
 worknotes
+{{ end }}
+
+{{ if ne .machine "work" }}
+.omp/profiles/work
 {{ end }}
 
 {{ range $bucket := list .brews .casks -}}

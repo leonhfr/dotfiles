@@ -36,6 +36,19 @@ mise run setup
 - Calibre
 - Mochi
 
+## OMP profiles
+
+`~/.zprofile` sets `OMP_PROFILE` to the chezmoi machine type, so plain `omp`
+uses the matching named profile:
+
+- `personal` → `~/.omp/profiles/personal/agent`
+- `work` → `~/.omp/profiles/work/agent`
+
+Chezmoi deploys each profile only on its matching machine. Profile settings are
+stored under `home/dot_omp/profiles/<machine>/agent/`; authentication and
+sessions remain local runtime state. On a new machine, apply the dotfiles and
+run `omp login` for that machine's providers.
+
 ## Install manually
 
 - [CGoban](https://www.gokgs.com/download.jsp)
