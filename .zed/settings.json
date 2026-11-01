@@ -40,5 +40,19 @@
         },
       },
     },
+    "yaml-language-server": {
+      "settings": {
+        "yaml": {
+          "schemas": {
+            "./.zed/omp-config-schema.json": [
+              "home/.chezmoitemplates/omp_config.yaml",
+              "home/.chezmoitemplates/omp_config_personal.yaml",
+              "home/.chezmoitemplates/omp_config_bash_patterns.yaml",
+              "home/.chezmoitemplates/encrypted_omp_config_work.yaml",
+            ],
+          },
+        },
+      },
+    },
   },
 }

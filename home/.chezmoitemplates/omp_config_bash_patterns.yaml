@@ -1,5 +1,21 @@
 bash:
   patterns:
+    - match: "gh stack link *"
+      approval: prompt
+    - match: "gh stack merge *"
+      approval: prompt
+    - match: "gh stack push *"
+      approval: prompt
+    - match: "gh stack submit *"
+      approval: prompt
+    - match: "gh stack sync *"
+      approval: prompt
+    - match: "git * push *"
+      approval: prompt
+    - match: "git push *"
+      approval: prompt
+    - match: "rm -rf *"
+      approval: prompt
     - match: "brew config"
       approval: allow
     - match: "brew doctor"
@@ -40,13 +56,13 @@ bash:
       approval: allow
     - match: "docker ps *"
       approval: allow
-    - match: "gh pr diff *"
-      approval: allow
-    - match: "gh pr list *"
-      approval: allow
     - match: "gh pr comment *"
       approval: allow
     - match: "gh pr create *"
+      approval: allow
+    - match: "gh pr diff *"
+      approval: allow
+    - match: "gh pr list *"
       approval: allow
     - match: "gh pr view *"
       approval: allow
@@ -74,9 +90,9 @@ bash:
       approval: allow
     - match: "git show *"
       approval: allow
-    - match: "git stash list*"
+    - match: "git stash *"
       approval: allow
-    - match: "git status*"
+    - match: "git status *"
       approval: allow
     - match: "go build *"
       approval: allow
@@ -92,7 +108,7 @@ bash:
       approval: allow
     - match: "go test *"
       approval: allow
-    - match: "go version*"
+    - match: "go version *"
       approval: allow
     - match: "go vet *"
       approval: allow

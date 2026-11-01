@@ -10,6 +10,15 @@ plan:
 checkpoint:
   enabled: true
 
+github:
+  enabled: true
+
+steeringMode: one-at-a-time
+followUpMode: one-at-a-time
+
+task:
+  maxConcurrency: 8
+
 memory:
   backend: local
 
@@ -26,23 +35,6 @@ tools:
 bash:
   allowCompoundCommands: false
   gitGuard: true
-  patterns:
-    - match: "git push *"
-      approval: prompt
-    - match: "git * push *"
-      approval: prompt
-    - match: "gh stack push *"
-      approval: prompt
-    - match: "gh stack submit *"
-      approval: prompt
-    - match: "gh stack sync *"
-      approval: prompt
-    - match: "gh stack link *"
-      approval: prompt
-    - match: "gh stack merge *"
-      approval: prompt
-    - match: "rm -rf *"
-      approval: prompt
 
 bashInterceptor:
   enabled: true
@@ -69,6 +61,7 @@ gc:
 symbolPreset: nerd
 composer:
   shape: box
+  tokenRate: false
 theme:
   dark: titanium
   light: light

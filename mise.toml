@@ -7,6 +7,10 @@ pkl = "0.32.1"
 description = "Show the current chezmoi config"
 run = "bat ~/.config/chezmoi/chezmoi.toml"
 
+[tasks.omp-schema]
+description = "Regenerate the OMP config schema for Zed"
+run = "bin/generate-omp-config-schema.sh > .zed/omp-config-schema.json"
+
 [tasks.new-script]
 description = "Create a new script in ~/.local/bin"
 run = """

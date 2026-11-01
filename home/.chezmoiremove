@@ -11,6 +11,7 @@ bin
 .config/worktrunk/copy-claude-settings
 .local/bin/git-wt
 .local/bin/codebase-memory-mcp
+.omp/agent/config.yml
 .omp/profiles/personal/agent/packages/tui-design-skill
 .omp/profiles/personal/agent/skills
 .omp/profiles/work/agent/skills

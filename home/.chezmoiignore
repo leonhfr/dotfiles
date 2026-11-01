@@ -65,6 +65,7 @@ worknotes
 .agents/skills/gh-stack/
 
 # runtime noise (caches, logs, history, sessions, backups)
+.omp/agent/**
 .cache/**
 .claude/.last-cleanup
 .claude/backups/**
