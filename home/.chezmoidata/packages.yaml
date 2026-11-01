@@ -171,6 +171,7 @@ casks:
     # - notion
     # - pomatez
     # - postman
+    - thebrowsercompany-dia
 
 gobin:
   common:

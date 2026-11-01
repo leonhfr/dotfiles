@@ -9,7 +9,7 @@ echo "[dotfiles] Updating Homebrew"
 brew update
 
 echo "[dotfiles] Upgrading existing casks and formulae"
-brew upgrade
+brew upgrade --yes || echo "[dotfiles] brew upgrade failed, continuing" >&2
 
 echo "[dotfiles] Cleaning up"
 brew cleanup

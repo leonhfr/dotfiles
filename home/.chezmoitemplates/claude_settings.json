@@ -21,8 +21,8 @@
   "extraKnownMarketplaces": {
     "worktrunk": {
       "source": {
-        "source": "github",
-        "repo": "max-sixty/worktrunk"
+        "repo": "max-sixty/worktrunk",
+        "source": "github"
       }
     }
   },
@@ -56,27 +56,27 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
-            "type": "command",
             "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
-            "timeout": 10
+            "timeout": 10,
+            "type": "command"
           }
-        ]
+        ],
+        "matcher": "^(startup|resume|clear|compact|fork)$"
       }
     ]
   },
   "includeGitInstructions": false,
   "minimumVersion": "2.1.168",
   "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
     "claude-sonnet-5": {
       "effortLevel": "high"
     },
     "claude-sonnet-5-5": {
-      "effortLevel": "high"
-    },
-    "claude-opus-5-5": {
       "effortLevel": "high"
     }
   },
@@ -208,8 +208,8 @@
     ]
   },
   "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
+    "command": "~/.claude/statusline.sh",
+    "type": "command"
   },
   "theme": "auto",
   "tui": "fullscreen",
