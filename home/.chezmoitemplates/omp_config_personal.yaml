@@ -7,6 +7,8 @@ modelRoles:
   commit: openai-codex/gpt-6-luna
   tiny: openai-codex/gpt-6-luna
   memory: openai-codex/gpt-6-luna
+  judge: openai-codex/gpt-6-luna
+  advisor: openai-codex/gpt-6.1-sol
 
 enabledModels:
   - anthropic/claude-opus-5-5
@@ -28,3 +30,11 @@ retry:
 
 compaction:
   thresholdPercent: 80
+
+prewalk:
+  auto: suggest
+
+advisor:
+  enabled: false
+  reviewMode: agent-end
+  continueSeverity: blocker
