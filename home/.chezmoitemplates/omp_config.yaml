@@ -2,10 +2,10 @@ disabledProviders:
   - claude
   - claude-plugins
 
-defaultThinkingLevel: high
+defaultThinkingLevel: medium
 
 plan:
-  defaultOnStartup: true
+  defaultOnStartup: false
 
 checkpoint:
   enabled: true
@@ -30,7 +30,16 @@ secrets:
   enabled: true
 
 tools:
-  approvalMode: always-ask
+  approvalMode: yolo
+  restrictedFolders:
+    - ~/.ssh
+    - ~/.aws
+    - ~/.gnupg
+    - ~/.config/gh
+    - ~/.kube
+    - ~/.config/gcloud
+    - ~/.azure
+    - ~/Library/Keychains
 
 bash:
   allowCompoundCommands: false

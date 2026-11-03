@@ -151,4 +151,8 @@ case ":$PATH:" in
   *) export PATH="$HOME/.edgee/bin:$PATH" ;;
 esac
 # <<< edgee launch aliases <<<
+
+# The generated block skips ~/.edgee/bin when PATH already has it, even behind
+# /opt/homebrew/bin (brew shellenv in .zprofile). Move it to the front.
+path=("$HOME/.edgee/bin" ${path:#$HOME/.edgee/bin})
 {{- end }}

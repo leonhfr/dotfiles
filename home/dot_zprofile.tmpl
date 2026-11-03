@@ -22,6 +22,11 @@ export PAGER=less
 
 # OMP
 export OMP_PROFILE="{{ .machine }}"
+{{- if eq .machine "work" }}
+
+# Edgee (updated by Homebrew)
+export EDGEE_NO_UPDATE_CHECK=1
+{{- end }}
 
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 export TLRC_CONFIG="$XDG_CONFIG_HOME/tlrc/config.toml"
