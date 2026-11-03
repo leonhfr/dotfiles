@@ -1,0 +1,1 @@
+{{- output "date" "+%G-W%V" | trim -}}

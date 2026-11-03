@@ -97,7 +97,7 @@ Scripts live in `home/.chezmoiscripts/darwin/`, named `run_onchange_{before,afte
 
 `run_onchange_` scripts rerun only when their **rendered content changes**. chezmoi stores a hash of the rendered script. To force a rerun on a schedule or when data changes, the script embeds a comment whose rendered value changes:
 
-- `# weekly: {{ now | date "2006-W01" }}` reruns when the ISO week changes (weekly cadence).
+- `# weekly: {{ template "iso_week" }}` reruns when the ISO week changes (weekly cadence). The template is `home/.chezmoitemplates/iso_week`.
 - `# monthly: {{ now | date "2006-01" }}` reruns monthly.
 - `# {{ list .brews .casks .gobin .cargo | toJson | sha256sum }}` reruns when that data changes.
 - `# MacOS build version: {{ output "sw_vers" "--buildVersion" }}` reruns after a macOS update.

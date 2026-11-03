@@ -1,5 +1,5 @@
 #!/bin/bash
-# weekly: {{ now | date "2006-W01" }}
+# weekly: {{ template "iso_week" }}
 # {{ list .omp_marketplaces .omp_plugins | toJson | sha256sum }}
 set -euo pipefail
 

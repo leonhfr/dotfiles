@@ -1,5 +1,5 @@
 #!/bin/bash
-# weekly: {{ now | date "2006-W01" }}
+# weekly: {{ template "iso_week" }}
 set -euo pipefail
 
 extensions=(

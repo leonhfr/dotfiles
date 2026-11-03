@@ -1,5 +1,5 @@
 #!/bin/bash
-# weekly: {{ now | date "2006-W01" }}
+# weekly: {{ template "iso_week" }}
 # {{ list .claude_marketplaces .claude_plugins | toJson | sha256sum }}
 set -euo pipefail
 

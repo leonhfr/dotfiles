@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # herdr claude integration: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr integration status 2>/dev/null | grep '^claude:' || echo 'herdr not installed'" | trim }}
-# herdr plugin update week: {{ now | date "2006-W01" }}
+# herdr plugin update week: {{ template "iso_week" }}
 # herdr version: {{ output "sh" "-c" "command -v herdr >/dev/null 2>&1 && herdr --version || echo 'herdr not installed'" | trim }}
 
 plugins=(
