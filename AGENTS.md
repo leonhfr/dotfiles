@@ -114,6 +114,12 @@ When you edit a script, keep or add the correct trigger comment. Without it the 
   - `chezmoi claude diff` shows a normalized diff. `chezmoi claude sync` writes on-disk values back into the source fragments, routing each key to the base or machine file and re-encrypting the work fragment.
 - After changing settings in the Claude UI, run `chezmoi claude sync` to persist them to source.
 
+## OMP profiles
+
+- `~/.zprofile` sets `OMP_PROFILE={{ .machine }}`, so `omp` uses `~/.omp/profiles/<machine>/agent`. `.chezmoiignore` deploys only the matching profile.
+- Source: `home/dot_omp/profiles/<machine>/private_agent/`. Each profile's `AGENTS.md` symlinks into `~/.agents`, shared with Claude.
+- Managed: profile config, `AGENTS.md`, work MCP and models. Local only: auth, sessions, caches, memory (`~/.omp/agent/**` is ignored).
+
 ## Custom scripts (`home/dot_local/bin/`)
 
 Deployed to `~/.local/bin`. `executable_` prefix makes them runnable.

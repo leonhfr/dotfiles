@@ -26,6 +26,9 @@ export OMP_PROFILE="{{ .machine }}"
 
 # Edgee (updated by Homebrew)
 export EDGEE_NO_UPDATE_CHECK=1
+
+# TypeSafe (omp judge model)
+export TYPESAFE_API_KEY="{{ onepasswordRead .work.op.typesafe_key .work.op.account }}"
 {{- end }}
 
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
