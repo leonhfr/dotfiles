@@ -5,6 +5,11 @@ set -euo pipefail
 
 {{ if eq .machine "work" -}}
 
+# Disabled: OMP prepends the marketplace pluginRoot to sources that already
+# contain it (qonto-claude-plugins resolves to plugins/plugins/<name>).
+echo "[dotfiles] OMP plugins disabled, skipping"
+exit 0
+
 PROFILE="work"
 PROFILE_ROOT="$HOME/.omp/profiles/$PROFILE"
 MARKETPLACES="$PROFILE_ROOT/marketplaces.json"
