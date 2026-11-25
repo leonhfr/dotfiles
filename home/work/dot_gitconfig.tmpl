@@ -2,3 +2,11 @@
   name = {{ .work.name }}
   email = {{ .work.email }}
   signingkey = {{ onepasswordRead .work.op.ssh_public_key .work.op.account }}
+
+# Every GitHub remote under ~/work goes through the work SSH key, whatever its
+# owner (other enterprise users, other orgs). Included from the global config
+# before its personal https rewrite, so it wins on equal-length prefixes.
+[url "git@github-work:"]
+  insteadOf = https://github.com/
+  insteadOf = ssh://git@github.com/
+  insteadOf = git@github.com:

@@ -36,7 +36,7 @@ Prefixes stack, for example `home/encrypted_dot_zshrc_work.zsh.tmpl` -> `~/.zshr
 
 Template data comes from `home/.chezmoi.toml.tmpl` (`[data]`, prompted once on init) and every file under `home/.chezmoidata/`.
 
-- `.machine`, `.personal.*`, `.work.*`, `.work_github_org`, and 1Password references live in the config.
+- `.machine`, `.personal.*`, `.work.*`, `.work_github_orgs` (list), `.work_github_suffix` (the `_<shortcode>` suffix of `.work_github`, shared by every enterprise managed user), and 1Password references live in the config.
 - The standard scope-merge idiom, used across scripts and templates:
   ```
   concat (.X.common | default (list)) (index .X .machine | default (list)) | sortAlpha | uniq
@@ -80,7 +80,8 @@ Git identity depends on the repo's directory.
 
 - `home/private_dot_config/git/config.tmpl` -> `~/.config/git/config` sets the personal identity by default (name, email, SSH `signingkey` from 1Password).
 - On work it adds `includeIf "gitdir:~/work/"` -> `~/work/.gitconfig` (from `home/work/dot_gitconfig.tmpl`, ignored on personal). So a repo under `~/work/` uses the work identity; a repo anywhere else uses the personal one.
-- On work, git rewrites `git@github.com:<org>` remotes to the `github-work` SSH host (`insteadOf`), so work repos authenticate with the work key. ghq clones work org and user repos under `~/work`, everything else under `~/src`.
+- On work, git rewrites `git@github.com:<owner>` remotes to the `github-work` SSH host (`insteadOf`) for each org in `.work_github_orgs` and for `.work_github`. `~/work/.gitconfig` also rewrites every GitHub remote under `~/work` to `github-work`, so repos of other enterprise users authenticate with the work key too.
+- Work repos are those owned by a work org, the work user, or any user ending in `.work_github_suffix`. `repo add|create` and the repos sync script clone them with `GHQ_ROOT=~/work`; everything else goes under `~/src`. Git `insteadOf` and ghq roots only match literal prefixes, which is why the suffix check lives in the scripts.
 
 ## Data-driven config (`home/.chezmoidata/`)
 

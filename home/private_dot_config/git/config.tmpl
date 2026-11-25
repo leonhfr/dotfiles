@@ -117,29 +117,18 @@
 [ghq]
   root = ~/src
 {{ if eq .machine "work" -}}
-[ghq "https://github.com/{{ .work_github_org }}"]
+{{ range (append .work_github_orgs .work_github) -}}
+[ghq "https://github.com/{{ . }}"]
   root = ~/work
-[ghq "ssh://git@github.com/{{ .work_github_org }}"]
+[ghq "ssh://git@github.com/{{ . }}"]
   root = ~/work
-[ghq "git@github.com:{{ .work_github_org }}"]
+[ghq "git@github.com:{{ . }}"]
   root = ~/work
-[ghq "https://github.com/{{ .work_github }}"]
-  root = ~/work
-[ghq "ssh://git@github.com/{{ .work_github }}"]
-  root = ~/work
-[ghq "git@github.com:{{ .work_github }}"]
-  root = ~/work
+[url "git@github-work:{{ . }}/"]
+  insteadOf = https://github.com/{{ . }}/
+  insteadOf = ssh://git@github.com/{{ . }}/
+  insteadOf = git@github.com:{{ . }}/
 {{ end -}}
-
-{{ if eq .machine "work" -}}
-[url "git@github-work:{{ .work_github_org }}/"]
-  insteadOf = https://github.com/{{ .work_github_org }}/
-  insteadOf = ssh://git@github.com/{{ .work_github_org }}/
-  insteadOf = git@github.com:{{ .work_github_org }}/
-[url "git@github-work:{{ .work_github }}/"]
-  insteadOf = https://github.com/{{ .work_github }}/
-  insteadOf = ssh://git@github.com/{{ .work_github }}/
-  insteadOf = git@github.com:{{ .work_github }}/
 {{ end -}}
 
 [url "git@github.com:"]

@@ -8,8 +8,31 @@ echo "[dotfiles] Syncing repos"
 
 #shellcheck disable=1090,1073,1054,1009,1036,1056,1072
 {{- $repos := concat .repos.common (index .repos .machine) }}
-printf '%s\n' \
+{{- $workRepos := list }}
+{{- $otherRepos := list }}
+{{- $workOwners := list }}
+{{- if eq .machine "work" }}
+{{-   $workOwners = append .work_github_orgs .work_github }}
+{{- end }}
 {{- range $repos }}
+{{-   $owner := regexReplaceAll "^(?:[a-z]+://)?(?:git@)?[^/:]+[:/]([^/]+)/.*$" . "${1}" }}
+{{-   if or (has $owner $workOwners) (and $.work_github_suffix (hasSuffix $.work_github_suffix $owner)) }}
+{{-     $workRepos = append $workRepos . }}
+{{-   else }}
+{{-     $otherRepos = append $otherRepos . }}
+{{-   end }}
+{{- end }}
+printf '%s\n' \
+{{- range $otherRepos }}
   {{ . | squote }} \
 {{- end }}
 | ghq get --parallel --silent
+{{- if $workRepos }}
+
+# Work repos (any owner) go under ~/work, where the work SSH key applies.
+printf '%s\n' \
+{{- range $workRepos }}
+  {{ . | squote }} \
+{{- end }}
+| GHQ_ROOT="$HOME/work" ghq get --parallel --silent
+{{- end }}

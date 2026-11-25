@@ -22,16 +22,31 @@ usage() {
 }
 
 YAML="$(chezmoi source-path)/.chezmoidata/encrypted_repos.yaml"
-WORK_ORG="{{ .work_github_org }}"
+WORK_ORGS="{{ .work_github_orgs | join " " }}"
 WORK_USER="{{ .work_github }}"
+WORK_SUFFIX="{{ .work_github_suffix }}"
 
+# Owner of a git URL or ghq target, e.g.
+#   git@github.com:leonhfr/notes.git -> leonhfr
+#   leonhfr/notes                    -> leonhfr
+repo_owner() {
+  P=$(normalize_url "$1")
+  case "$P" in */*/*) P="${P#*/}" ;; esac
+  printf '%s' "${P%%/*}"
+}
+
+# Work repos: owned by a work org, by the work user, or by any enterprise
+# managed user (same username suffix as the work user).
 is_work_repo() {
-  if [ -n "$WORK_ORG" ]; then
-    case "$1" in *"$WORK_ORG"*) return 0 ;; esac
+  OWNER=$(repo_owner "$1")
+  [ -n "$OWNER" ] || return 1
+  [ -n "$WORK_USER" ] && [ "$OWNER" = "$WORK_USER" ] && return 0
+  if [ -n "$WORK_SUFFIX" ]; then
+    case "$OWNER" in *"$WORK_SUFFIX") return 0 ;; esac
   fi
-  if [ -n "$WORK_USER" ]; then
-    case "$1" in *"$WORK_USER"*) return 0 ;; esac
-  fi
+  for ORG in $WORK_ORGS; do
+    [ "$OWNER" = "$ORG" ] && return 0
+  done
   return 1
 }
 
@@ -77,10 +92,11 @@ EOF
 
 process_add() {
   REPO="$1"
-  ghq get "$REPO"
   if is_work_repo "$REPO"; then
+    GHQ_ROOT="$HOME/work" ghq get "$REPO"
     CAT="work"
   else
+    ghq get "$REPO"
     CAT=$(gum choose --header "Category for $REPO" "common" "personal") || exit 0
   fi
   yaml_track "$REPO" "$CAT"
@@ -117,7 +133,11 @@ cmd_create() {
   ROOT="$HOME/src"
   [ "$CAT" = "work" ] && ROOT="$HOME/work"
   gum confirm "Create $TARGET in $ROOT?" || exit 0
-  ghq create "$TARGET"
+  if [ "$CAT" = "work" ]; then
+    GHQ_ROOT="$ROOT" ghq create "$TARGET"
+  else
+    ghq create "$TARGET"
+  fi
   yaml_track "$TARGET" "$CAT"
   gum style --foreground 42 "Created $TARGET → repos.${CAT}"
 }
